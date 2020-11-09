@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.google.cloud:google-cloud-firestore:2.1.0"
+    implementation "com.google.cloud:google-cloud-storage:1.113.2"
+    implementation "io.javalin:javalin:3.11.0"
+}
