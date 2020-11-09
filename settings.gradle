@@ -9,4 +9,4 @@
 
 rootProject.name = 'Magikarp'
 
-include ':app'
+include ':app', ':server'
