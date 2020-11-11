@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Use DrawerLayout as root container for activity -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.app.HelpFragment">
+
+    <TextView
+        android:id="@+id/text_call"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_call"
+        app:drawableStartCompat="@drawable/ic_call"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_email"
+        app:drawableStartCompat="@drawable/ic_email"
+        app:layout_constraintTop_toBottomOf="@id/text_call" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
