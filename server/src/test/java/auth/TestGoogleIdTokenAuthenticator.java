@@ -15,7 +15,7 @@ import java.security.GeneralSecurityException;
 public class TestGoogleIdTokenAuthenticator {
 
     @Test
-    public void testValidGetOwnerId() throws GeneralSecurityException, IOException, InvalidTokenException {
+    public void testValidGetUserId() throws GeneralSecurityException, IOException, InvalidTokenException {
         String ownerId = "chesterTester";
         String idTokenString = "test123";
 
@@ -30,11 +30,11 @@ public class TestGoogleIdTokenAuthenticator {
 
         GoogleIdTokenAuthenticator authenticator = new GoogleIdTokenAuthenticator(mockVerifier);
 
-        assertEquals(ownerId, authenticator.getOwnerId(idTokenString));
+        assertEquals(ownerId, authenticator.getUserId(idTokenString));
     }
 
     @Test
-    public void testInvalidInvalidGetOwnerId() throws GeneralSecurityException, IOException {
+    public void testInvalidInvalidGetUserId() throws GeneralSecurityException, IOException {
         String idTokenString = "test456";
 
         GoogleIdTokenVerifier mockVerifier = mock(GoogleIdTokenVerifier.class);
@@ -43,7 +43,7 @@ public class TestGoogleIdTokenAuthenticator {
         GoogleIdTokenAuthenticator authenticator = new GoogleIdTokenAuthenticator(mockVerifier);
 
         assertThrows(InvalidTokenException.class, () -> {
-            authenticator.getOwnerId(idTokenString);
+            authenticator.getUserId(idTokenString);
         });
     }
 }

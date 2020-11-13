@@ -17,7 +17,7 @@ public class GoogleIdTokenAuthenticator {
         this.verifier = verifier;
     }
 
-    public String getOwnerId(String idTokenString) throws GeneralSecurityException, IOException, InvalidTokenException {
+    public String getUserId(String idTokenString) throws GeneralSecurityException, IOException, InvalidTokenException {
         GoogleIdToken idToken = verifier.verify(idTokenString);
 
         if (idToken != null) {
