@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("edu.columbia.magikarp", appContext.getPackageName());
+        assertEquals("com.magikarp.android", appContext.getPackageName());
     }
 }
