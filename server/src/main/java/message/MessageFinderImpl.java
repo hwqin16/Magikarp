@@ -36,13 +36,23 @@ public class MessageFinderImpl implements MessageFinder {
             int maxRecords
     ) throws ExecutionException, InterruptedException {
         QuerySnapshot querySnapshot = this.messagesCollection
-                .whereGreaterThan(Message.FS_GEOTAG_FIELD_NAME, lesserPoint)
-                .whereLessThan(Message.FS_GEOTAG_FIELD_NAME, greaterPoint)
+                .whereGreaterThanOrEqualTo(Message.FS_GEOTAG_FIELD_NAME, lesserPoint)
+                .whereLessThanOrEqualTo(Message.FS_GEOTAG_FIELD_NAME, greaterPoint)
                 .limit(maxRecords)
                 .get()
                 .get();
 
-        return getMessagesFromQuerySnapshot(querySnapshot);
+        List<Message> messages = getMessagesFromQuerySnapshot(querySnapshot);
+
+        // Perform additional filter in-memory because Firestore doesn't actually handle GeoPoint comparisons well
+        return messages
+                .stream()
+                .filter(message -> (message.getLatitude() > lesserPoint.getLatitude()) &&
+                        (message.getLatitude() < greaterPoint.getLatitude()) &&
+                        (message.getLongitude() > lesserPoint.getLongitude()) &&
+                        (message.getLongitude() < greaterPoint.getLongitude())
+                )
+                .collect(Collectors.toList());
     }
 
     @VisibleForTesting
