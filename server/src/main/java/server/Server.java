@@ -12,10 +12,7 @@ import com.google.firebase.cloud.FirestoreClient;
 import com.google.gson.Gson;
 import constants.Constants;
 import io.javalin.Javalin;
-import message.Message;
-import message.MessageFinder;
-import message.MessageFinderImpl;
-import message.MessagePoster;
+import message.*;
 import responses.MessagesResponse;
 import responses.NewPostResponse;
 
@@ -68,7 +65,7 @@ public class Server {
 
         app = Javalin.create().start(Constants.PORT);
         messageFinder = new MessageFinderImpl(firestore);
-        messagePoster = new MessagePoster(firestore, storage);
+        messagePoster = new MessagePosterImpl(firestore, storage);
     }
 
     public static void start() {
