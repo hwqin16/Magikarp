@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import static helper.TestHelper.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -92,13 +93,8 @@ public class TestMessageFinderImpl {
         }
     }
 
-    /**
-     * Test that a findByLongitudeAndLatitude query returns Messages as expected.
-     * Note: This doesn't actually test the full filtering logic.
-     *   The actual findByLongitudeAndLatitude logic is tested via integration testing on a real Firestore instance.
-     */
     @Test
-    public void testFindByLongitudeAndLatitude() throws ExecutionException, InterruptedException {
+    public void testFindByBoundingBoxAllFound() throws ExecutionException, InterruptedException {
         int limit = getRandomInt();
         List<Map<String, Object>> documentDataList = Arrays.asList(
                 getRandomDocumentData(),
@@ -122,9 +118,9 @@ public class TestMessageFinderImpl {
 
         MessageFinderImpl messageFinder = new MessageFinderImpl(mockFirestore);
 
-        List<Message> messages = messageFinder.findByLongitudeAndLatitude(
-                new GeoPoint(getRandomLatitude(), getRandomLongitude()),
-                new GeoPoint(getRandomLatitude(), getRandomLongitude()),
+        List<Message> messages = messageFinder.findByBoundingBox(
+                new GeoPoint(-90, -180),
+                new GeoPoint(90, 180),
                 limit
         );
 
@@ -132,6 +128,40 @@ public class TestMessageFinderImpl {
         for (int i = 0; i < messages.size(); i++) {
             assertMessageEqualToDocumentData(messages.get(i), documentDataList.get(i));
         }
+    }
+
+    @Test
+    public void testFindByBoundingBoxNoneFound() throws ExecutionException, InterruptedException {
+        int limit = getRandomInt();
+        List<Map<String, Object>> documentDataList = Arrays.asList(
+                getRandomDocumentData(),
+                getRandomDocumentData(),
+                getRandomDocumentData()
+        );
+        List<QueryDocumentSnapshot> mockQueryDocumentSnapshots =
+                getMockQueryDocumentSnapshotsFromDocumentDataList(documentDataList);
+        QuerySnapshot mockQuerySnapshot = mock(QuerySnapshot.class);
+        when(mockQuerySnapshot.getDocuments()).thenReturn(mockQueryDocumentSnapshots);
+        SettableApiFuture<QuerySnapshot> futureMockQuerySnapshot = SettableApiFuture.create();
+        futureMockQuerySnapshot.set(mockQuerySnapshot);
+        Query mockQuery = mock(Query.class);
+        when(mockQuery.whereLessThan(eq(Message.FS_GEOTAG_FIELD_NAME), any())).thenReturn(mockQuery);
+        when(mockQuery.limit(limit)).thenReturn(mockQuery);
+        when(mockQuery.get()).thenReturn(futureMockQuerySnapshot);
+        CollectionReference mockMessageCollection = mock(CollectionReference.class);
+        when(mockMessageCollection.whereGreaterThan(eq(Message.FS_GEOTAG_FIELD_NAME), any())).thenReturn(mockQuery);
+        Firestore mockFirestore = mock(Firestore.class);
+        when(mockFirestore.collection(MessageFinderImpl.COLLECTION_PATH)).thenReturn(mockMessageCollection);
+
+        MessageFinderImpl messageFinder = new MessageFinderImpl(mockFirestore);
+
+        List<Message> messages = messageFinder.findByBoundingBox(
+                new GeoPoint(42, 42),
+                new GeoPoint(42, 42),
+                limit
+        );
+
+        assertTrue(messages.isEmpty());
     }
 
     /**
@@ -158,7 +188,7 @@ public class TestMessageFinderImpl {
     private static Map<String, Object> getRandomDocumentData() {
         Map<String, Object> documentData = new HashMap<>();
 
-        documentData.put(Message.FS_GEOTAG_FIELD_NAME, new GeoPoint(getRandomDouble(), getRandomDouble()));
+        documentData.put(Message.FS_GEOTAG_FIELD_NAME, new GeoPoint(getRandomLatitude(), getRandomLongitude()));
         documentData.put(Message.FS_ID_FIELD_NAME, getRandomString(20));
         documentData.put(Message.FS_IMAGE_URL_FIELD_NAME, getRandomString(20));
         documentData.put(Message.FS_TIMESTAMP_FIELD_NAME, Timestamp.of(getRandomDate()));

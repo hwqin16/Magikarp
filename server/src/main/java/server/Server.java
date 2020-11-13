@@ -2,7 +2,6 @@ package server;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.GeoPoint;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -79,12 +78,12 @@ public class Server {
                 GeoPoint lesserPoint = new GeoPoint(latitudeBottom, longitudeLeft);
                 GeoPoint greaterPoint = new GeoPoint(latitudeTop, longitudeRight);
 
-                if (lesserPoint.getLatitude() > greaterPoint.getLatitude()) {
+                if (lesserPoint.getLatitude() >= greaterPoint.getLatitude()) {
                     ctx.result("Passed bottom_latitude that is greater than top_latitude");
-                } else if (lesserPoint.getLongitude() > greaterPoint.getLongitude()) {
+                } else if (lesserPoint.getLongitude() >= greaterPoint.getLongitude()) {
                     ctx.result("Passed left_longitude that is greater than right_latitude");
                 } else {
-                    List<Message> messages = messageFinder.findByLongitudeAndLatitude(
+                    List<Message> messages = messageFinder.findByBoundingBox(
                             lesserPoint,
                             greaterPoint,
                             maxRecords

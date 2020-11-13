@@ -23,10 +23,6 @@ public class TestHelper {
         return new Date(millis);
     }
 
-    public static Double getRandomDouble() {
-        return RANDOM.nextDouble();
-    }
-
     public static Double getRandomLatitude() {
         return MIN_LATITUDE_LIMIT + (Math.random() * (MAX_LATITUDE_LIMIT - MIN_LATITUDE_LIMIT));
     }

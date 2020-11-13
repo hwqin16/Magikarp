@@ -21,7 +21,7 @@ public interface MessageFinder {
      * @param maxRecords Maximum number of records to return
      * @return List of Messages within the bounding box limited by the maximum number of records.
      */
-    List<Message> findByLongitudeAndLatitude(
+    List<Message> findByBoundingBox(
             GeoPoint lesserPoint,
             GeoPoint greaterPoint,
             int maxRecords

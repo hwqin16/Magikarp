@@ -12,9 +12,10 @@ import org.junit.jupiter.api.Test;
  * But, right now, when we don't have any of the write paths, we'll just use the production db.
  */
 public class TestServerComponent {
+//    TODO: how can we safely start server from testing suite without having a token checked into public github?
     @BeforeAll
     public static void setup() {
-        Server.start();
+//        Server.start();
     }
 
     @Test
@@ -24,6 +25,6 @@ public class TestServerComponent {
 
     @AfterAll
     public static void stop() {
-        Server.stop();
+//        Server.stop();
     }
 }

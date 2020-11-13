@@ -30,14 +30,14 @@ public class MessageFinderImpl implements MessageFinder {
     }
 
     @Override
-    public List<Message> findByLongitudeAndLatitude(
+    public List<Message> findByBoundingBox(
             GeoPoint lesserPoint,
             GeoPoint greaterPoint,
             int maxRecords
     ) throws ExecutionException, InterruptedException {
         QuerySnapshot querySnapshot = this.messagesCollection
-                .whereGreaterThanOrEqualTo(Message.FS_GEOTAG_FIELD_NAME, lesserPoint)
-                .whereLessThanOrEqualTo(Message.FS_GEOTAG_FIELD_NAME, greaterPoint)
+                .whereGreaterThan(Message.FS_GEOTAG_FIELD_NAME, lesserPoint)
+                .whereLessThan(Message.FS_GEOTAG_FIELD_NAME, greaterPoint)
                 .limit(maxRecords)
                 .get()
                 .get();
