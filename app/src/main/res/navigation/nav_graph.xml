@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_maps" />
 
     <fragment
+        android:id="@+id/create_post"
+        android:name="com.magikarp.android.ui.posts.PostFragment"
+        android:label="Create Post"
+        tools:layout="@layout/fragment_post" />
+
+    <fragment
         android:id="@+id/nav_settings"
         android:name="com.magikarp.android.ui.app.SettingsFragment"
         android:label="@string/title_fragment_settings"
