@@ -8,5 +8,4 @@ import java.util.concurrent.ExecutionException;
 
 public interface MessagePoster {
     NewPostResponse postNewMessage(String userID, byte[] image, String text, double lat, double lon, String fileType);
-
 }

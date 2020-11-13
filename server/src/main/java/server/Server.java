@@ -1,7 +1,7 @@
 package server;
 
+import com.google.api.client.util.IOUtils;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.ByteArray;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.GeoPoint;
 import com.google.cloud.storage.Storage;
@@ -12,11 +12,11 @@ import com.google.firebase.cloud.FirestoreClient;
 import com.google.gson.Gson;
 import constants.Constants;
 import io.javalin.Javalin;
+import io.javalin.http.UploadedFile;
 import message.*;
 import responses.MessagesResponse;
 import responses.NewPostResponse;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -120,16 +120,16 @@ public class Server {
         });
 
         app.post("/message/:user_id/new", ctx -> {
-           String userID = ctx.pathParam("user_id");
-           System.out.println(userID);
 
-           byte[] imageData = ctx.formParam("image").getBytes();
+           String userID = ctx.pathParam("user_id");
+           UploadedFile picture = ctx.uploadedFile("image");
+
            String text = ctx.formParam("text");
            double lat = Double.parseDouble(ctx.formParam("latitude"));
            double lon = Double.parseDouble(ctx.formParam("longitude"));
            String fileType = ctx.formParam("file_type");
 
-           NewPostResponse response = messagePoster.postNewMessage(userID, imageData, text, lat, lon, fileType);
+           NewPostResponse response = messagePoster.postNewMessage(userID, IOUtils.deserialize(picture.getContent()), text, lat, lon, picture.getExtension());
 
            ctx.result(gson.toJson(response));
 
