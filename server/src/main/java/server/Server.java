@@ -1,8 +1,11 @@
 package server;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.ByteArray;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.GeoPoint;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -12,8 +15,11 @@ import io.javalin.Javalin;
 import message.Message;
 import message.MessageFinder;
 import message.MessageFinderImpl;
+import message.MessagePoster;
 import responses.MessagesResponse;
+import responses.NewPostResponse;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,18 +30,29 @@ public class Server {
 
     private static Javalin app;
     private static MessageFinder messageFinder;
+    private static MessagePoster messagePoster;
 
     private static void setup() {
         FileInputStream serviceAccount;
         FirebaseOptions firebaseOptions;
+        StorageOptions storageOptions;
 
         try {
+
             serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
             firebaseOptions = FirebaseOptions
                     .builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl(Constants.FIRESTORE_URL)
                     .build();
+
+            serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
+            storageOptions = StorageOptions
+                    .newBuilder()
+                    .setProjectId("magikarp-295201")
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .build();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to find ServiceAccount file");
@@ -47,9 +64,11 @@ public class Server {
         FirebaseApp.initializeApp(firebaseOptions);
 
         Firestore firestore = FirestoreClient.getFirestore();
+        Storage storage = storageOptions.getService();
 
         app = Javalin.create().start(Constants.PORT);
         messageFinder = new MessageFinderImpl(firestore);
+        messagePoster = new MessagePoster(firestore, storage);
     }
 
     public static void start() {
@@ -102,6 +121,23 @@ public class Server {
 
             ctx.result(gson.toJson(new MessagesResponse(messages)));
         });
+
+        app.post("/message/:user_id/new", ctx -> {
+           String userID = ctx.pathParam("user_id");
+           System.out.println(userID);
+
+           byte[] imageData = ctx.formParam("image").getBytes();
+           String text = ctx.formParam("text");
+           double lat = Double.parseDouble(ctx.formParam("latitude"));
+           double lon = Double.parseDouble(ctx.formParam("longitude"));
+           String fileType = ctx.formParam("file_type");
+
+           NewPostResponse response = messagePoster.postNewMessage(userID, imageData, text, lat, lon, fileType);
+
+           ctx.result(gson.toJson(response));
+
+        });
+
     }
 
     public static void stop() {
