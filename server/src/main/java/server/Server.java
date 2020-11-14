@@ -14,8 +14,10 @@ import constants.Constants;
 import io.javalin.Javalin;
 import io.javalin.http.UploadedFile;
 import message.*;
+import responses.DeletePostResponse;
 import responses.MessagesResponse;
 import responses.NewPostResponse;
+import responses.UpdatePostResponse;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -131,6 +133,30 @@ public class Server {
            NewPostResponse response = messagePoster.postNewMessage(userID, IOUtils.toByteArray(picture.getContent()), text, lat, lon, picture.getExtension());
 
            ctx.result(gson.toJson(response));
+
+        });
+
+        app.post(" /messages/:user_id/update/:record_id", ctx -> {
+
+            String userID = ctx.pathParam("user_id");
+            String recordID = ctx.pathParam("record_id");
+            UploadedFile picture = ctx.uploadedFile("image");
+
+            String text = ctx.formParam("text");
+            double lat = Double.parseDouble(ctx.formParam("latitude"));
+            double lon = Double.parseDouble(ctx.formParam("longitude"));
+
+            UpdatePostResponse response = messagePoster.updateMessage(recordID, userID, IOUtils.toByteArray(picture.getContent()), text, lat, lon, picture.getExtension());
+
+            ctx.result(gson.toJson(response));
+
+        });
+
+        app.post("/message/:user_id/delete/:record_id", ctx -> {
+
+            DeletePostResponse response = messagePoster.deleteMessage(ctx.pathParam("record_id"));
+
+            ctx.result(gson.toJson(response));
 
         });
 

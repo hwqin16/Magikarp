@@ -59,7 +59,17 @@ public class TestServerComponent {
 //
 //        JSONObject postBodyJson = new JSONObject(postBody);
 //
+//        String recordID = (String) postBodyJson.get("record_id");
+//
+//        HttpResponse<String> deleteResponse = Unirest.post("http://localhost:7000/message/123123/delete/" + recordID)
+//                .asString();
+//
+//        String postDeleteBody = (String) deleteResponse.getBody();
+//
+//        JSONObject postDeleteBodyJson = new JSONObject(postDeleteBody);
+//
 //        // Make sure the move validity is false
+//        assertEquals(201, postDeleteBodyJson.get("status"));
 //        assertEquals(201, postBodyJson.get("status"));
 //    }
 
