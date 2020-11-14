@@ -29,14 +29,14 @@ public class TestServerComponent {
 //        Server.start();
     }
 
-    /**
-     * Runs only once before the testing starts.
-     */
-    @BeforeAll
-    public static void init() {
-        // Start Server
-        Server.main(null);
-    }
+//    /**
+//     * Runs only once before the testing starts.
+//     */
+//    @BeforeAll
+//    public static void init() {
+//        // Start Server
+//        Server.main(null);
+//    }
 
 
     /**
