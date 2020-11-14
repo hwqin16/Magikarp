@@ -44,7 +44,7 @@ public class TestServerComponent {
      */
     @Test
     @Order(1)
-    public void newGameTest() throws Exception{
+    public void newPostTest() throws Exception{
 
         InputStream file = new FileInputStream(new File("/tmp/karp.png"));
         // Create HTTP request and get response
