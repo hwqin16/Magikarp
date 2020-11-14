@@ -10,7 +10,7 @@ import com.magikarp.android.R;
 /**
  * A class for creating network requests.
  */
-public class VolleySingleton implements VolleyUtils {
+public class VolleySingleton implements ImageLoaderFactory, RequestQueueFactory {
 
     private static VolleySingleton instance;
 
