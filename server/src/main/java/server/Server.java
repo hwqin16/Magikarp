@@ -1,6 +1,6 @@
 package server;
 
-import com.google.api.client.util.IOUtils;
+import org.apache.commons.io.IOUtils;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.GeoPoint;
@@ -127,9 +127,8 @@ public class Server {
            String text = ctx.formParam("text");
            double lat = Double.parseDouble(ctx.formParam("latitude"));
            double lon = Double.parseDouble(ctx.formParam("longitude"));
-           String fileType = ctx.formParam("file_type");
 
-           NewPostResponse response = messagePoster.postNewMessage(userID, IOUtils.deserialize(picture.getContent()), text, lat, lon, picture.getExtension());
+           NewPostResponse response = messagePoster.postNewMessage(userID, IOUtils.toByteArray(picture.getContent()), text, lat, lon, picture.getExtension());
 
            ctx.result(gson.toJson(response));
 

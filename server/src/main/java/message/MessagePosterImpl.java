@@ -33,7 +33,7 @@ public class MessagePosterImpl implements MessagePoster {
         try{
 
             UUID uuid = UUID.randomUUID();
-            BlobId blobId = BlobId.of("magikarp-images", uuid.toString() + "." + fileType);
+            BlobId blobId = BlobId.of("magikarp-images", uuid.toString() + fileType);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
             storage.create(blobInfo, image);
 
@@ -47,7 +47,7 @@ public class MessagePosterImpl implements MessagePoster {
             update.put("text", text);
             update.put("geotag", point);
             update.put("id", uuid.toString());
-            update.put("url", "https://storage.googleapis.com/" + "magikarp-images/" + uuid.toString() + "." + fileType);
+            update.put("url", "https://storage.googleapis.com/" + "magikarp-images/" + uuid.toString()  + fileType);
             update.put("timestamp", Timestamp.now());
 
             ApiFuture<WriteResult> writeResult = messagesCollection.document(uuid.toString()).set(update, SetOptions.merge());

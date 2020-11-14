@@ -1,9 +1,20 @@
 package server;
 
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import com.google.api.client.util.IOUtils;
+import io.javalin.http.UploadedFile;
+import kong.unirest.Unirest;
+import kong.unirest.HttpResponse;
+import kong.unirest.json.JSONObject;
+import org.junit.jupiter.api.*;
+import responses.NewPostResponse;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 /**
  * Right now this runs against our production database on real data. So the tests will start failing
@@ -16,6 +27,40 @@ public class TestServerComponent {
     @BeforeAll
     public static void setup() {
 //        Server.start();
+    }
+
+    /**
+     * Runs only once before the testing starts.
+     */
+    @BeforeAll
+    public static void init() {
+        // Start Server
+        Server.main(null);
+    }
+
+
+    /**
+     * This is a test case to evaluate the newgame endpoint.
+     */
+    @Test
+    @Order(1)
+    public void newGameTest() throws Exception{
+
+        InputStream file = new FileInputStream(new File("/tmp/karp.png"));
+        // Create HTTP request and get response
+        HttpResponse<String> response = Unirest.post("http://localhost:7000/message/123123/new")
+                .field("image", file, "karp.png")
+                .field("text", "test hello world")
+                .field("latitude", "3.999")
+                .field("longitude","9.222")
+                .asString();
+        // Get the response and parse the JSON
+        String postBody = (String) response.getBody();
+
+        JSONObject postBodyJson = new JSONObject(postBody);
+
+        // Make sure the move validity is false
+        assertEquals(201, postBodyJson.get("status"));
     }
 
     @Test
