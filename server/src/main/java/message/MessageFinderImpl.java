@@ -3,6 +3,7 @@ package message;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.common.annotations.VisibleForTesting;
+import constants.Constants;
 
 import java.util.List;
 import java.util.Map;
@@ -10,13 +11,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class MessageFinderImpl implements MessageFinder {
-    @VisibleForTesting
-    static final String COLLECTION_PATH = "messages";
 
     private final CollectionReference messagesCollection;
 
     public MessageFinderImpl(Firestore firestore) {
-        this.messagesCollection = firestore.collection(COLLECTION_PATH);
+        this.messagesCollection = firestore.collection(Constants.COLLECTION_PATH);
     }
 
     @Override

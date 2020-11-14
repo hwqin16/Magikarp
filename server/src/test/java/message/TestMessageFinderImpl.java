@@ -3,6 +3,7 @@ package message;
 import com.google.api.core.SettableApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
+import constants.Constants;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -81,7 +82,7 @@ public class TestMessageFinderImpl {
         CollectionReference mockMessageCollection = mock(CollectionReference.class);
         when(mockMessageCollection.whereEqualTo(eq(Message.FS_USER_ID_FIELD_NAME), any())).thenReturn(mockQuery);
         Firestore mockFirestore = mock(Firestore.class);
-        when(mockFirestore.collection(MessageFinderImpl.COLLECTION_PATH)).thenReturn(mockMessageCollection);
+        when(mockFirestore.collection(Constants.COLLECTION_PATH)).thenReturn(mockMessageCollection);
 
         MessageFinderImpl messageFinder = new MessageFinderImpl(mockFirestore);
 
@@ -114,7 +115,7 @@ public class TestMessageFinderImpl {
         CollectionReference mockMessageCollection = mock(CollectionReference.class);
         when(mockMessageCollection.whereGreaterThan(eq(Message.FS_GEOTAG_FIELD_NAME), any())).thenReturn(mockQuery);
         Firestore mockFirestore = mock(Firestore.class);
-        when(mockFirestore.collection(MessageFinderImpl.COLLECTION_PATH)).thenReturn(mockMessageCollection);
+        when(mockFirestore.collection(Constants.COLLECTION_PATH)).thenReturn(mockMessageCollection);
 
         MessageFinderImpl messageFinder = new MessageFinderImpl(mockFirestore);
 
@@ -151,7 +152,7 @@ public class TestMessageFinderImpl {
         CollectionReference mockMessageCollection = mock(CollectionReference.class);
         when(mockMessageCollection.whereGreaterThan(eq(Message.FS_GEOTAG_FIELD_NAME), any())).thenReturn(mockQuery);
         Firestore mockFirestore = mock(Firestore.class);
-        when(mockFirestore.collection(MessageFinderImpl.COLLECTION_PATH)).thenReturn(mockMessageCollection);
+        when(mockFirestore.collection(Constants.COLLECTION_PATH)).thenReturn(mockMessageCollection);
 
         MessageFinderImpl messageFinder = new MessageFinderImpl(mockFirestore);
 
