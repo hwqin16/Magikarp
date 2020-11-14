@@ -1,5 +1,7 @@
 package constants;
 
+import com.google.common.annotations.VisibleForTesting;
+
 public class Constants {
     // TODO use this to build GoogleIdTokenVerifier
     public static final String OAUTH_CLIENT_ID =
@@ -10,4 +12,11 @@ public class Constants {
     // rename to magikarp.json and stick it in /tmp
     public static final String FIREBASE_SERVICE_ACCOUNT_FILE = "/tmp/magikarp.json";
     public static final String FIRESTORE_URL = "https://magikarp-295201.firebaseio.com";
+
+    @VisibleForTesting
+    public static final String COLLECTION_PATH = "messages";
+
+    public static final String PROJECT_ID = "magikarp-295201";
+    public static final String PROJECT_BUCKET = "magikarp-images";
+
 }

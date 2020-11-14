@@ -46,7 +46,7 @@ public class Server {
             serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
             storageOptions = StorageOptions
                     .newBuilder()
-                    .setProjectId("magikarp-295201")
+                    .setProjectId(Constants.PROJECT_ID)
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
 

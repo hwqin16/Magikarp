@@ -12,19 +12,17 @@ import java.util.UUID;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
+import constants.Constants;
 import responses.NewPostResponse;
 
 
 public class MessagePosterImpl implements MessagePoster {
 
-    @VisibleForTesting
-    static final String COLLECTION_PATH = "messages";
-
     private final CollectionReference messagesCollection;
     private final Storage storage;
 
     public MessagePosterImpl(Firestore firestore, Storage storage){
-        this.messagesCollection = firestore.collection(COLLECTION_PATH);
+        this.messagesCollection = firestore.collection(Constants.COLLECTION_PATH);
         this.storage = storage;
     }
 
@@ -33,7 +31,7 @@ public class MessagePosterImpl implements MessagePoster {
         try{
 
             UUID uuid = UUID.randomUUID();
-            BlobId blobId = BlobId.of("magikarp-images", uuid.toString() + fileType);
+            BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, uuid.toString() + fileType);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
             storage.create(blobInfo, image);
 
