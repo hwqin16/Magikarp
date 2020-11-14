@@ -31,8 +31,16 @@ public class MessagePosterImpl implements MessagePoster {
     public DeletePostResponse deleteMessage(String recordID){
         DeletePostResponse response;
         try{
+            ApiFuture<DocumentSnapshot> future = messagesCollection.document(recordID).get();
+
+            DocumentSnapshot document = future.get();
+            String url = document.getString("url");
+            String[] urlSplit = url.split("/");
+            String fileName = urlSplit[urlSplit.length-1];
 
             messagesCollection.document(recordID).delete();
+            BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, fileName);
+            storage.delete(blobId);
 
             response = new DeletePostResponse(201, null);
         }catch(Exception e){
@@ -53,20 +61,21 @@ public class MessagePosterImpl implements MessagePoster {
             storage.create(blobInfo, image);
 
 
-            Map<String, Object> update = new HashMap<>();
+            Map<String, Object> newPost = new HashMap<>();
 
             GeoPoint point = new GeoPoint(lat, lon);
 
 
-            update.put("user_id", userID);
-            update.put("text", text);
-            update.put("geotag", point);
-            update.put("id", uuid.toString());
-            update.put("url", "https://storage.googleapis.com/" + "magikarp-images/" + uuid.toString()  + fileType);
-            update.put("timestamp", Timestamp.now());
+            newPost.put("user_id", userID);
+            newPost.put("text", text);
+            newPost.put("geotag", point);
+            newPost.put("id", uuid.toString());
+            newPost.put("url", "https://storage.googleapis.com/" + "magikarp-images/" + uuid.toString()  + fileType);
+            newPost.put("timestamp", Timestamp.now());
 
-            ApiFuture<WriteResult> writeResult = messagesCollection.document(uuid.toString()).set(update, SetOptions.merge());
-            System.out.println("Update time : " + writeResult.get().getUpdateTime());
+            ApiFuture<WriteResult> writeResult = messagesCollection.document(uuid.toString()).set(newPost, SetOptions.merge());
+
+            writeResult.get();
 
             response = new NewPostResponse(201, uuid.toString(), null);
         }catch(Exception e){
@@ -81,6 +90,8 @@ public class MessagePosterImpl implements MessagePoster {
     public UpdatePostResponse updateMessage(String record_id, String userID, byte[] image, String text, double lat, double lon, String fileType){
         UpdatePostResponse response;
         try{
+
+            this.deleteMessage(record_id);
 
             BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, record_id + fileType);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
@@ -100,7 +111,7 @@ public class MessagePosterImpl implements MessagePoster {
             update.put("timestamp", Timestamp.now());
 
             ApiFuture<WriteResult> writeResult = messagesCollection.document(record_id).set(update, SetOptions.merge());
-            System.out.println("Update time : " + writeResult.get().getUpdateTime());
+            writeResult.get();
 
             response = new UpdatePostResponse(201, null);
         }catch(Exception e){

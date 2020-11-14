@@ -154,7 +154,7 @@ public class Server {
 
         app.post("/message/:user_id/delete/:record_id", ctx -> {
 
-            DeletePostResponse response = messagePoster.deleteMessage(ctx.formParam("record_id"));
+            DeletePostResponse response = messagePoster.deleteMessage(ctx.pathParam("record_id"));
 
             ctx.result(gson.toJson(response));
 
