@@ -75,12 +75,8 @@ public class Server {
         setup();
 
         app.get("/messages", ctx -> {
-            String body = ctx.body();
-
-            System.out.println(body);
-
             FindMessagesByBoundingBoxRequest request = gson.fromJson(
-                    body,
+                    ctx.body(),
                     FindMessagesByBoundingBoxRequest.class
             );
 
