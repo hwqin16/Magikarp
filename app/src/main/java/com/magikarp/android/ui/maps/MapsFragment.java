@@ -8,35 +8,37 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterItem;
 import com.magikarp.android.R;
 
-public class MapsFragment extends Fragment {
+import java.util.List;
 
-    private final OnMapReadyCallback callback = new OnMapReadyCallback() {
+import dagger.hilt.android.AndroidEntryPoint;
 
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        }
-    };
+/**
+ * A fragment for providing a map interface.
+ */
+@AndroidEntryPoint
+public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener,
+        Observer<List<? extends ClusterItem>> {
+
+    private GoogleMap googleMap;
+
+    private MapsViewModel mapsViewModel;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mapsViewModel = new ViewModelProvider(this).get(MapsViewModel.class);
+    }
 
     @Nullable
     @Override
@@ -51,7 +53,28 @@ public class MapsFragment extends Fragment {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentByTag(getResources().getString(R.string.fragment_tag_maps));
         if (mapFragment != null) {
-            mapFragment.getMapAsync(callback);
+            mapFragment.getMapAsync(this);
         }
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        mapsViewModel.getMapItems().observe(this, this);
+    }
+
+    @Override
+    public void onCameraIdle() {
+        mapsViewModel.setLatLngBounds(googleMap.getProjection().getVisibleRegion().latLngBounds);
+    }
+
+    @Override
+    public void onChanged(List<? extends ClusterItem> clusterItems) {
+        googleMap.clear();
+        for (ClusterItem item : clusterItems) {
+            googleMap.addMarker(new MarkerOptions().position(item.getPosition())
+                    .title(item.getTitle()));
+        }
+    }
+
 }
