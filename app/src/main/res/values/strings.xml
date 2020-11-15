@@ -23,6 +23,11 @@
     <string name="text_call">Call</string>
     <string name="text_email">Email</string>
 
+    <!-- Server endpoints -->
+    <string name="server_url">https://35.190.179.162:7000</string>
+    <string name="server_get_messages">/messages</string>
+    <string name="server_get_user_messages">/messages/?</string>
+
 
     <!-- TODO: Everything below here was created by auto-generated templates -->
 

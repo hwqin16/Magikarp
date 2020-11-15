@@ -1,32 +1,66 @@
 package com.magikarp.android.ui.maps;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
-import com.magikarp.android.MapItem;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.VolleyError;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.maps.android.clustering.ClusterItem;
+import com.magikarp.android.data.MapsRepository;
+import com.magikarp.android.data.MapsRepository.MapClusterItemResponseListener;
 
+import java.util.Collections;
 import java.util.List;
 
-public class MapsViewModel extends ViewModel {
+/**
+ * Class to provide map items from the map item repository.
+ */
+public class MapsViewModel extends ViewModel implements MapClusterItemResponseListener,
+        ErrorListener {
 
-    private static final String KEY_SAVED_STATE = "savedState";
+    private static final int MAX_RECORDS = 20;
 
-    private final SavedStateHandle savedStateHandle;
+    private final MapsRepository mapsRepository;
 
-    private MutableLiveData<List<MapItem>> mapItems;
+    private final MutableLiveData<List<? extends ClusterItem>> clusterItems
+            = new MutableLiveData<>();
 
-    public MapsViewModel(SavedStateHandle savedStateHandle) {
-        this.savedStateHandle = savedStateHandle;
+    /**
+     * Create a new map view model.
+     *
+     * @param mapRepository repository for accessing data
+     */
+    @ViewModelInject
+    public MapsViewModel(@NonNull MapsRepository mapRepository) {
+        this.mapsRepository = mapRepository;
     }
 
-    public LiveData<List<MapItem>> getMapItems() {
-        return mapItems;
+    @NonNull
+    public LiveData<List<? extends ClusterItem>> getMapItems() {
+        return clusterItems;
     }
 
-    public void setSavedState(String savedState) {
-        savedStateHandle.set(KEY_SAVED_STATE, savedState);
+    public void setLatLngBounds(@Nullable LatLngBounds bounds) {
+        if (bounds == null) {
+            clusterItems.setValue(Collections.emptyList());
+        } else {
+            mapsRepository.getMapItems(bounds, MAX_RECORDS, this, this);
+        }
+    }
+
+    @Override
+    public void onMapClusterItemResponse(List<? extends ClusterItem> messages) {
+        clusterItems.setValue(messages);
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        clusterItems.setValue(Collections.emptyList());
     }
 
 }
