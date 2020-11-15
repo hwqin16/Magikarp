@@ -13,6 +13,7 @@ jobs:
         strategy:
             matrix:
                 os: [ ubuntu-18.04, ubuntu-20.04 ]
+                build: [ Debug, Release ]
 
         steps:
             - uses: actions/checkout@v2
@@ -32,9 +33,13 @@ jobs:
                 restore-keys: ${{ matrix.os }}-gradle-
 
             - name: Build Application
-              run: ./gradlew build -x test
+              run: ./gradlew build :app:assemble${{ matrix.build }} -x test
 
             - name: Run Tests
               run: ./gradlew test
 
-            # TODO: Code Coverage and SCA
+            - name: Run Checkstyle
+              run: ./gradlew :app:checkstyle${{ matrix.build }} :server:checkstyleMain
+
+            - name: Run Spotbugs
+              run: ./gradlew :app:spotbugs${{ matrix.build }} :server:spotbugsMain
