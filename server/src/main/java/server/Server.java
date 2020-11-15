@@ -14,6 +14,7 @@ import constants.Constants;
 import io.javalin.Javalin;
 import io.javalin.http.UploadedFile;
 import message.*;
+import requests.FindMessagesByBoundingBoxRequest;
 import responses.DeletePostResponse;
 import responses.MessagesResponse;
 import responses.NewPostResponse;
@@ -74,27 +75,34 @@ public class Server {
         setup();
 
         app.get("/messages", ctx -> {
-            Double latitudeTop = ctx.queryParam("latitude_top", Double.class).get();
-            Double longitudeLeft = ctx.queryParam("longitude_left", Double.class).get();
-            Double latitudeBottom = ctx.queryParam("latitude_bottom", Double.class).get();
-            Double longitudeRight = ctx.queryParam("longitude_right", Double.class).get();
-            Integer maxRecords = ctx.queryParam("max_records", Integer.class).get();
+            FindMessagesByBoundingBoxRequest request = gson.fromJson(
+                    ctx.body(),
+                    FindMessagesByBoundingBoxRequest.class
+            );
+
+            Double latitudeTop = request.getLatitudeTop();
+            Double latitudeBottom = request.getLatitudeBottom();
+            Double longitudeLeft = request.getLongitudeLeft();
+            Double longitudeRight = request.getLongitudeRight();
+            Integer maxRecords = request.getMaxRecords();
 
             System.out.println("Getting messages for latitude_top " + latitudeTop + ", latitude_bottom " +
                     latitudeBottom + ", longitude_left " + longitudeLeft + ", latitude_bottom " + latitudeBottom +
                     ", max_records " + maxRecords);
 
-            if (latitudeBottom < -90 || latitudeBottom > 90) {
+            if (latitudeBottom == null || latitudeBottom < -90 || latitudeBottom > 90) {
                 ctx.result("Invalid latitude_bottom");
-            } else if (latitudeTop < -90 || latitudeTop > 90) {
+            } else if (latitudeTop == null || latitudeTop < -90 || latitudeTop > 90) {
                 ctx.result("Invalid latitude_top");
-            } else if (longitudeLeft < -180 || longitudeLeft > 180) {
+            } else if (longitudeLeft == null || longitudeLeft < -180 || longitudeLeft > 180) {
                 ctx.result("Invalid longitude_left");
-            } else if (longitudeRight < -180 || longitudeRight > 180) {
+            } else if (longitudeRight == null || longitudeRight < -180 || longitudeRight > 180) {
                 ctx.result("Invalid longitude_right");
+            } else if (maxRecords == null || maxRecords < 0) {
+                ctx.result("Invalid max_records");
             } else {
-                GeoPoint lesserPoint = new GeoPoint(latitudeBottom, longitudeLeft);
-                GeoPoint greaterPoint = new GeoPoint(latitudeTop, longitudeRight);
+                GeoPoint lesserPoint = new GeoPoint(request.getLatitudeBottom(), request.getLongitudeLeft());
+                GeoPoint greaterPoint = new GeoPoint(request.getLatitudeTop(), request.getLongitudeRight());
 
                 if (lesserPoint.getLatitude() >= greaterPoint.getLatitude()) {
                     ctx.result("Passed bottom_latitude that is greater than top_latitude");
