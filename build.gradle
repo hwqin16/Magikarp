@@ -1,12 +1,18 @@
+apply from: 'checkstyle.gradle'
+
 buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.1"
         classpath 'com.android.tools.build:gradle:4.1.1'
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.29.1-alpha'
+        classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.6.0"
     }
 }
 
@@ -14,5 +20,23 @@ allprojects {
     repositories {
         google()
         jcenter()
+    }
+
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+        version '8.0'
+    }
+
+    apply plugin: 'com.github.spotbugs'
+}
+
+subprojects {
+    afterEvaluate {
+        project ->
+            if (project.hasProperty('android') && project.plugins.hasPlugin('checkstyle')) {
+                addCheckStyleTaskForAndroidVariants(project)
+            }
     }
 }

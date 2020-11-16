@@ -1,0 +1,40 @@
+/*
+ * Copyright to GH user idyatlov
+ *
+ * https://gist.github.com/idyatlov/11d4e65ec43d54ac71c15f088707a236
+ * https://medium.com/@ivan.dyatlov/using-checkstyle-in-multi-project-android-builds-7f4083c393fc
+ */
+
+ext {
+    addCheckStyleTaskForAndroidVariants = this.&addCheckStyleTaskForAndroidVariants
+}
+
+def addCheckStyleTaskForAndroidVariants(project) {
+    if (project.android.hasProperty('libraryVariants')) {
+        project.android.libraryVariants.all { variant ->
+            addCheckStyleTask(project, variant)
+        }
+    }
+    if (project.android.hasProperty('applicationVariants')) {
+        project.android.applicationVariants.all { variant ->
+            addCheckStyleTask(project, variant)
+        }
+    }
+}
+
+def addCheckStyleTask(project, variant) {
+    def checkstyleTask = project.tasks.maybeCreate("checkstyle${variant.name.capitalize()}", Checkstyle)
+    checkstyleTask.configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    checkstyleTask.source variant.javaCompile.source
+    checkstyleTask.include '**/*.java'
+    checkstyleTask.exclude '**/gen/**', '**/BuildConfig.java', '**/R.java', '**/DataBindingInfo.java'
+    checkstyleTask.ignoreFailures false
+    checkstyleTask.showViolations true
+    checkstyleTask.classpath = project.files("src/main/java")
+
+    def baseCheckTask = project.tasks.getByName("check")
+    if (baseCheckTask != null) {
+        baseCheckTask.dependsOn(checkstyleTask);
+        baseCheckTask.shouldRunAfter(checkstyleTask);
+    }
+}
