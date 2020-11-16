@@ -19,10 +19,6 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteResult;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
 import constants.Constants;
 import java.util.Collections;
 import java.util.HashMap;
@@ -73,11 +69,8 @@ public class TestMessagePosterImpl {
     when(mockFirestore.collection(Constants.COLLECTION_PATH)
         .document((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME)).delete())
         .thenReturn(write);
-    BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, "Test.png");
 
-    Storage mockStorage = mock(Storage.class);
-    when(mockStorage.delete(blobId)).thenReturn(true);
-    MessagePosterImpl messagePoster = new MessagePosterImpl(mockFirestore, mockStorage);
+    MessagePosterImpl messagePoster = new MessagePosterImpl(mockFirestore);
 
 
     DeletePostResponse test =
@@ -122,7 +115,7 @@ public class TestMessagePosterImpl {
     double lon = 90.0;
     double lat = 90.0;
     String text = "test";
-    String fileType = ".png";
+    String imageUrl = "https://www.example.com/testimage.png";
 
     Map<String, Object> newPost = new HashMap<>();
 
@@ -134,8 +127,7 @@ public class TestMessagePosterImpl {
     newPost.put(Message.FS_TEXT_FIELD_NAME, text);
     newPost.put(Message.FS_GEOTAG_FIELD_NAME, point);
     newPost.put(Message.FS_ID_FIELD_NAME, documentData.get(Message.FS_ID_FIELD_NAME));
-    newPost.put(Message.FS_IMAGE_URL_FIELD_NAME, Constants.FULL_PROJECT_BUCKET
-        + documentData.get(Message.FS_ID_FIELD_NAME) + fileType);
+    newPost.put(Message.FS_IMAGE_URL_FIELD_NAME, imageUrl);
     newPost.put(Message.FS_TIMESTAMP_FIELD_NAME, now);
 
 
@@ -147,19 +139,11 @@ public class TestMessagePosterImpl {
         .document((String) documentData.get(Message.FS_ID_FIELD_NAME))
         .set(newPost, SetOptions.merge())).thenReturn(write);
 
-    Blob blob = mock(Blob.class);
-    Storage mockStorage = mock(Storage.class);
-    byte[] image = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-    BlobId blobId =
-        BlobId.of(Constants.PROJECT_BUCKET, documentData.get(Message.FS_ID_FIELD_NAME) + fileType);
-    BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
-
-    when(mockStorage.create(blobInfo, image)).thenReturn(blob);
-    MessagePosterImpl messagePoster = new MessagePosterImpl(mockFirestore, mockStorage);
+    MessagePosterImpl messagePoster = new MessagePosterImpl(mockFirestore);
 
     NewPostResponse test = messagePoster
         .postNewMessage((String) documentData.get(Message.FS_ID_FIELD_NAME), userID,
-            image, text, lat, lon, fileType, now);
+            imageUrl, text, lat, lon, now);
 
     assertEquals(test.getResponseCode(), 201);
 
@@ -202,7 +186,7 @@ public class TestMessagePosterImpl {
     double lon = 90.0;
     double lat = 90.0;
     String text = "test";
-    String fileType = ".png";
+    String imageUrl = "https://www.example.com/testimage.png";
 
 
     Map<String, Object> newPost = new HashMap<>();
@@ -215,8 +199,7 @@ public class TestMessagePosterImpl {
     newPost.put(Message.FS_TEXT_FIELD_NAME, text);
     newPost.put(Message.FS_GEOTAG_FIELD_NAME, point);
     newPost.put(Message.FS_ID_FIELD_NAME, documentData.get(Message.FS_ID_FIELD_NAME));
-    newPost.put(Message.FS_IMAGE_URL_FIELD_NAME, Constants.FULL_PROJECT_BUCKET
-        + documentData.get(Message.FS_ID_FIELD_NAME) + fileType);
+    newPost.put(Message.FS_IMAGE_URL_FIELD_NAME, imageUrl);
     newPost.put(Message.FS_TIMESTAMP_FIELD_NAME, now);
 
     when(mockFirestore.collection(Constants.COLLECTION_PATH)
@@ -226,36 +209,13 @@ public class TestMessagePosterImpl {
         .document((String) documentData.get(Message.FS_ID_FIELD_NAME))
         .set(newPost, SetOptions.merge())).thenReturn(write);
 
-    Blob blob = mock(Blob.class);
-    Storage mockStorage = mock(Storage.class);
-    byte[] image = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-    BlobId blobId =
-        BlobId.of(Constants.PROJECT_BUCKET, documentData.get(Message.FS_ID_FIELD_NAME) + fileType);
-    BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
-
-    when(mockStorage.create(blobInfo, image)).thenReturn(blob);
-    MessagePosterImpl messagePoster = new MessagePosterImpl(mockFirestore, mockStorage);
+    MessagePosterImpl messagePoster = new MessagePosterImpl(mockFirestore);
 
     UpdatePostResponse test = messagePoster
         .updateMessage((String) documentData.get(Message.FS_ID_FIELD_NAME), userID,
-            image, text, lat, lon, fileType, now);
+            imageUrl, text, lat, lon, now);
 
     assertEquals(test.getResponseCode(), 201);
 
-  }
-
-  /**
-   * Convert hex string to byte array.
-   * @param s String to be converted
-   * @return byte[] converted byte array
-   */
-  public static byte[] hexStringToByteArray(String s) {
-    int len = s.length();
-    byte[] data = new byte[len / 2];
-    for (int i = 0; i < len; i += 2) {
-      data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-          + Character.digit(s.charAt(i + 1), 16));
-    }
-    return data;
   }
 }
