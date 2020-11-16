@@ -32,26 +32,62 @@ public class MessageFinderImpl implements MessageFinder {
     public List<Message> findByBoundingBox(
             GeoPoint lesserPoint,
             GeoPoint greaterPoint,
-            int maxRecords
+            int maxRecords,
+            boolean isCrossing90Latitude,
+            boolean isCrossing180Longitude
     ) throws ExecutionException, InterruptedException {
-        QuerySnapshot querySnapshot = this.messagesCollection
-                .whereGreaterThan(Message.FS_GEOTAG_FIELD_NAME, lesserPoint)
-                .whereLessThan(Message.FS_GEOTAG_FIELD_NAME, greaterPoint)
-                .limit(maxRecords)
-                .get()
-                .get();
+        // Firestore doesn't handle GeoPoint queries very well (only filters by longitude, doesn't handle wrap-around),
+        // so perform actual filtering in-memory. Clearly this doesn't scale well, but should be good enough for MVP.
+        QuerySnapshot querySnapshot = this.messagesCollection.get().get();
 
         List<Message> messages = getMessagesFromQuerySnapshot(querySnapshot);
 
-        // Perform additional filter in-memory because Firestore doesn't actually handle GeoPoint comparisons well
         return messages
                 .stream()
-                .filter(message -> (message.getLatitude() > lesserPoint.getLatitude()) &&
-                        (message.getLatitude() < greaterPoint.getLatitude()) &&
-                        (message.getLongitude() > lesserPoint.getLongitude()) &&
-                        (message.getLongitude() < greaterPoint.getLongitude())
-                )
+                .filter(message -> filterMessage(
+                        message,
+                        lesserPoint,
+                        greaterPoint,
+                        isCrossing90Latitude,
+                        isCrossing180Longitude
+                ))
+                .limit(maxRecords)
                 .collect(Collectors.toList());
+    }
+
+    @VisibleForTesting
+    static boolean filterMessage(
+            Message message,
+            GeoPoint lesserPoint,
+            GeoPoint greaterPoint,
+            boolean isCrossing90Latitude,
+            boolean isCrossing180Longitude
+    ) {
+        return isInsideBoundedBox(
+                message.getLatitude(),
+                lesserPoint.getLatitude(),
+                greaterPoint.getLatitude(),
+                isCrossing90Latitude
+        ) && isInsideBoundedBox(
+                message.getLongitude(),
+                lesserPoint.getLongitude(),
+                greaterPoint.getLongitude(),
+                isCrossing180Longitude
+        );
+    }
+
+    @VisibleForTesting
+    static boolean isInsideBoundedBox(
+            Double messageValue,
+            Double lesserValue,
+            Double greaterValue,
+            boolean wrapsAroundMaxLine
+    ) {
+        if (wrapsAroundMaxLine) {
+            return messageValue <= lesserValue || messageValue >= greaterValue;
+        } else {
+            return messageValue >= lesserValue && messageValue <= greaterValue;
+        }
     }
 
     @VisibleForTesting
