@@ -33,10 +33,6 @@ public class TestHelper {
     return MIN_LONGITUDE_LIMIT + (Math.random() * (MAX_LONGITUDE_LIMIT - MIN_LONGITUDE_LIMIT));
   }
 
-  public static int getRandomInt() {
-    return RANDOM.nextInt();
-  }
-
   /**
    * Get random alphabetical String of a particular length.
    * Inspired by https://www.baeldung.com/java-random-string

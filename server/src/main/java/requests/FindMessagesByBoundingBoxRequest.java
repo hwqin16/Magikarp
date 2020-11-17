@@ -14,6 +14,15 @@ public class FindMessagesByBoundingBoxRequest {
   @SerializedName("max_records")
   private final Integer maxRecords;
 
+  /**
+   * Request content for hitting the /messages endpoint.
+   *
+   * @param latitudeBottom Double bottom-most latitude to be considered
+   * @param latitudeTop    Double top-most latitude to be considered
+   * @param longitudeLeft  Double left-most longitude to be considered
+   * @param longitudeRight Double right-most longitude to be considered
+   * @param maxRecords     Double max number of records to return
+   */
   public FindMessagesByBoundingBoxRequest(
       Double latitudeBottom,
       Double latitudeTop,

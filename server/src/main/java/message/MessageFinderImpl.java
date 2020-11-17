@@ -1,7 +1,11 @@
 package message;
 
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.GeoPoint;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.common.annotations.VisibleForTesting;
 import constants.Constants;
 
@@ -36,8 +40,9 @@ public class MessageFinderImpl implements MessageFinder {
       boolean isCrossing90Latitude,
       boolean isCrossing180Longitude
   ) throws ExecutionException, InterruptedException {
-    // Firestore doesn't handle GeoPoint queries very well (only filters by longitude, doesn't handle wrap-around),
-    // so perform actual filtering in-memory. Clearly this doesn't scale well, but should be good enough for MVP.
+    // Firestore doesn't handle GeoPoint queries very well (only filters by longitude, doesn't
+    // handle wrap-around), so perform actual filtering in-memory. Clearly this doesn't scale well,
+    // but should be good enough for MVP.
     QuerySnapshot querySnapshot = this.messagesCollection.get().get();
 
     List<Message> messages = getMessagesFromQuerySnapshot(querySnapshot);
