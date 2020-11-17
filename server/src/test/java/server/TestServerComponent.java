@@ -73,7 +73,7 @@ public class TestServerComponent {
 //        assertEquals(201, postBodyJson.get("status"));
 //    }
   @Test
-  public void TestUserMessagesEmpty() {
+  public void testUserMessagesEmpty() {
 
   }
 

@@ -34,20 +34,19 @@ public class Server {
   private static MessageFinder messageFinder;
   private static MessagePoster messagePoster;
 
-  private static void setup() {
+  private static void setup() throws IOException{
     FileInputStream serviceAccount;
     FirebaseOptions firebaseOptions;
     StorageOptions storageOptions;
+    serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
 
     try {
 
-      serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
       firebaseOptions = FirebaseOptions
           .builder()
           .setCredentials(GoogleCredentials.fromStream(serviceAccount))
           .setDatabaseUrl(Constants.FIRESTORE_URL)
           .build();
-
       serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
       storageOptions = StorageOptions
           .newBuilder()
@@ -61,6 +60,8 @@ public class Server {
     } catch (IOException e) {
       e.printStackTrace();
       throw new RuntimeException("Failed to initialize Firestore");
+    } finally{
+      serviceAccount.close();
     }
 
     FirebaseApp.initializeApp(firebaseOptions);
@@ -73,7 +74,7 @@ public class Server {
     messagePoster = new MessagePosterImpl(firestore, storage);
   }
 
-  public static void start() {
+  public static void start() throws IOException{
     setup();
 
     app.post("/messages", ctx -> {
@@ -189,7 +190,7 @@ public class Server {
     app.stop();
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException{
     start();
   }
 }
