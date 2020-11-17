@@ -3,6 +3,7 @@
     package="com.magikarp.android">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -15,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Magikarp"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".ui.app.MainActivity"
             android:theme="@style/Theme.Magikarp.NoActionBar">
@@ -24,6 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".service.LocationService"
+            android:foregroundServiceType="location" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

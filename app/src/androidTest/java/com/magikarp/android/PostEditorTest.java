@@ -64,8 +64,8 @@ public class PostEditorTest {
    */
   @Test
   public void testToolbarButtonsVisible() {
-    onView(withId(R.id.post_content)).check(matches(isDisplayed()));
-    onView(withId(R.id.location_button)).check(matches(isDisplayed()));
+    onView(withId(R.id.menu_upload_content)).check(matches(isDisplayed()));
+    onView(withId(R.id.menu_get_location)).check(matches(isDisplayed()));
   }
 
   /**
@@ -74,8 +74,8 @@ public class PostEditorTest {
   @Test
   public void testTypeInContent() {
     final String content = "Some Content Here";
-    onView(withId(R.id.post_content)).check(matches(isDisplayed()));
-    onView(withId(R.id.location_button)).check(matches(isDisplayed()));
+    onView(withId(R.id.menu_upload_content)).check(matches(isDisplayed()));
+    onView(withId(R.id.menu_get_location)).check(matches(isDisplayed()));
     onView(withId(R.id.create_post_caption)).perform(typeText(content))
         .check(matches(isDisplayed())).check(matches(withText(content)));
   }
@@ -85,8 +85,8 @@ public class PostEditorTest {
    */
   @Test
   public void testTypeClickImage() {
-    onView(withId(R.id.post_content)).check(matches(isDisplayed()));
-    onView(withId(R.id.location_button)).check(matches(isDisplayed()));
+    onView(withId(R.id.menu_upload_content)).check(matches(isDisplayed()));
+    onView(withId(R.id.menu_get_location)).check(matches(isDisplayed()));
     onView(withId(R.id.create_post_image_preview)).perform(click());
     intended(allOf(hasAction(Intent.ACTION_PICK)));
   }
