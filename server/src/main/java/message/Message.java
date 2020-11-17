@@ -32,7 +32,7 @@ public class Message {
     this.latitude = latitude;
     this.longitude = longitude;
     this.text = text;
-    this.timestamp = timestamp;
+    this.timestamp = (Date) timestamp.clone();
     this.userId = userId;
   }
 
@@ -57,7 +57,8 @@ public class Message {
   }
 
   public Date getTimestamp() {
-    return timestamp;
+    Date copy = (Date) this.timestamp.clone();
+    return copy;
   }
 
   public String getUserId() {
