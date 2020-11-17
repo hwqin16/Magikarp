@@ -12,16 +12,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.clustering.ClusterItem;
 import com.magikarp.android.R;
+import com.magikarp.android.data.model.Message;
 import dagger.hilt.android.AndroidEntryPoint;
 import java.util.List;
 
@@ -30,9 +32,11 @@ import java.util.List;
  */
 @AndroidEntryPoint
 public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener,
-    Observer<List<? extends ClusterItem>> {
+    Observer<List<Message>>, OnMarkerClickListener {
 
   private boolean isUserData;
+
+  // private ClusterManager<Message> clusterManager;
 
   private GoogleMap googleMap;
 
@@ -63,8 +67,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     final int itemId = item.getItemId();
     if (itemId == R.id.nav_post_editor) {
-      NavController navController = NavHostFragment.findNavController(this);
-      return NavigationUI.onNavDestinationSelected(item, navController);
+//      NavController navController = NavHostFragment.findNavController(this);
+//      return NavigationUI.onNavDestinationSelected(item, navController);
+      NavDirections directions =
+          MapsFragmentDirections.actionNavMapsToPostEditor(null, null, null);
+      NavHostFragment.findNavController(this).navigate(directions);
+      return true;
     }
     return super.onOptionsItemSelected(item);
   }
@@ -83,23 +91,42 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public void onMapReady(GoogleMap googleMap) {
     this.googleMap = googleMap;
     //googleMap.setMyLocationEnabled(true);
+    // clusterManager = new ClusterManager<>(requireContext(), googleMap);
     googleMap.setOnCameraIdleListener(this);
-    mapsViewModel.getMapItems().observe(this, this);
+    googleMap.setOnMarkerClickListener(this);
+    // clusterManager.setOnClusterItemClickListener();
+    mapsViewModel.getMessages().observe(this, this);
   }
 
   @Override
   public void onCameraIdle() {
     mapsViewModel.setMapsQuery(isUserData,
-        googleMap.getProjection().getVisibleRegion().latLngBounds);
+        googleMap.getProjection().getVisibleRegion().latLngBounds, 20); // TODO records
   }
 
   @Override
-  public void onChanged(List<? extends ClusterItem> clusterItems) {
+  public void onChanged(List<Message> clusterItems) {
     googleMap.clear();
-    for (ClusterItem item : clusterItems) {
-      googleMap.addMarker(new MarkerOptions().position(item.getPosition())
-          .title(item.getTitle()));
+    for (Message message : clusterItems) {
+      Marker marker = googleMap.addMarker(
+          new MarkerOptions().position(new LatLng(message.getLatitude(), message.getLongitude())));
     }
+  }
+
+  @Override
+  public boolean onMarkerClick(Marker marker) {
+    LatLng latLng = marker.getPosition();
+
+    NavDirections directions;
+    if (isUserData) {
+      directions =
+          MapsFragmentDirections.actionNavMapsToPostEditor(latLng.latitude, latLng.longitude, "");
+    } else {
+      directions = MapsFragmentWrapperDirections
+          .actionNavMapsToPostViewer(latLng.latitude, latLng.longitude, "");
+    }
+    NavHostFragment.findNavController(this).navigate(directions);
+    return true;
   }
 
 }

@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_maps"
-        android:name="com.magikarp.android.ui.maps.MapsFragment"
+        android:name="com.magikarp.android.ui.maps.MapsFragmentWrapper"
         android:label="@string/title_fragment_maps"
         tools:layout="@layout/fragment_maps">
         <argument
@@ -21,7 +21,7 @@
             android:defaultValue="false"
             app:argType="boolean" />
         <action
-            android:id="@+id/action_nav_maps_to_postFragment"
+            android:id="@+id/action_nav_maps_to_post_viewer"
             app:destination="@id/nav_post_viewer" />
     </fragment>
 
@@ -35,7 +35,7 @@
             android:defaultValue="true"
             app:argType="boolean" />
         <action
-            android:id="@+id/action_nav_my_posts_to_postFragment"
+            android:id="@+id/action_nav_maps_to_post_editor"
             app:destination="@id/nav_post_editor" />
     </fragment>
 
@@ -61,16 +61,16 @@
             app:argType="boolean" />
         <argument
             android:name="@string/args_latitude"
-            android:defaultValue="999.0"
-            app:argType="float" />
+            app:argType="java.lang.Double"
+            app:nullable="true" />
         <argument
             android:name="@string/args_longitude"
-            android:defaultValue="999.0"
-            app:argType="float" />
+            app:argType="java.lang.Double"
+            app:nullable="true" />
         <argument
             android:name="@string/args_image_uri"
-            android:defaultValue="@null"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -84,16 +84,14 @@
             app:argType="boolean" />
         <argument
             android:name="@string/args_latitude"
-            android:defaultValue="999.0"
-            app:argType="float" />
+            app:argType="java.lang.Double" />
         <argument
             android:name="@string/args_longitude"
-            android:defaultValue="999.0"
-            app:argType="float" />
+            app:argType="java.lang.Double" />
         <argument
             android:name="@string/args_image_uri"
-            android:defaultValue="@null"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
     <fragment
