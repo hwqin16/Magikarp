@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Server endpoints -->
+    <string name="server_url">http://35.190.179.162:7000</string>
+    <string name="server_get_messages">/messages</string>
+    <string name="server_get_user_messages">/messages/?</string>
+
+    <!-- Strings that should not be translated. -->
+    <string name="fragment_args_user_data">user_data</string>
     <string name="fragment_tag_maps">tag_maps</string>
 
 </resources>

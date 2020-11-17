@@ -2,15 +2,19 @@ package com.magikarp.android.ui.maps;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -18,10 +22,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterItem;
 import com.magikarp.android.R;
-
-import java.util.List;
-
 import dagger.hilt.android.AndroidEntryPoint;
+import java.util.List;
 
 /**
  * A fragment for providing a map interface.
@@ -29,6 +31,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener,
     Observer<List<? extends ClusterItem>> {
+
+  private boolean isUserData;
 
   private GoogleMap googleMap;
 
@@ -38,6 +42,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mapsViewModel = new ViewModelProvider(this).get(MapsViewModel.class);
+    isUserData = getArguments().getBoolean(getString(R.string.fragment_args_user_data));
+    setHasOptionsMenu(isUserData);
+  }
+
+  @Override
+  public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    super.onCreateOptionsMenu(menu, inflater);
+    inflater.inflate(R.menu.menu_maps, menu);
   }
 
   @Nullable
@@ -45,6 +57,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_maps, container, false);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    final int itemId = item.getItemId();
+    if (itemId == R.id.nav_post_editor) {
+      NavController navController = NavHostFragment.findNavController(this);
+      return NavigationUI.onNavDestinationSelected(item, navController);
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override
@@ -60,12 +82,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   @Override
   public void onMapReady(GoogleMap googleMap) {
     this.googleMap = googleMap;
+    googleMap.setOnCameraIdleListener(this);
     mapsViewModel.getMapItems().observe(this, this);
   }
 
   @Override
   public void onCameraIdle() {
-    mapsViewModel.setLatLngBounds(googleMap.getProjection().getVisibleRegion().latLngBounds);
+    mapsViewModel.setMapsQuery(isUserData,
+        googleMap.getProjection().getVisibleRegion().latLngBounds);
   }
 
   @Override

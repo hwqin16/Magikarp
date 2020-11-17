@@ -1,7 +1,6 @@
 package com.magikarp.android.network;
 
 import androidx.annotation.Nullable;
-
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
@@ -11,7 +10,6 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-
 import java.io.UnsupportedEncodingException;
 
 public class GsonRequest<T> extends JsonRequest<T> {
@@ -38,10 +36,10 @@ public class GsonRequest<T> extends JsonRequest<T> {
   @Override
   protected Response<T> parseNetworkResponse(NetworkResponse response) {
     try {
-      final String json = new String(response.data,
-          HttpHeaderParser.parseCharset(response.headers));
-      return Response.success(new Gson().fromJson(json, clazz),
-          HttpHeaderParser.parseCacheHeaders(response));
+      final String json =
+          new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+      return Response
+          .success(new Gson().fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(response));
     } catch (UnsupportedEncodingException exception) {
       return Response.error(new ParseError(exception));
     } catch (JsonSyntaxException exception) {

@@ -15,24 +15,54 @@
         android:id="@+id/nav_maps"
         android:name="com.magikarp.android.ui.maps.MapsFragment"
         android:label="@string/title_fragment_maps"
-        tools:layout="@layout/fragment_maps" />
+        tools:layout="@layout/fragment_maps">
+        <argument
+            android:name="@string/fragment_args_user_data"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </fragment>
 
     <fragment
-        android:id="@+id/create_post"
-        android:name="com.magikarp.android.ui.posts.PostFragment"
-        android:label="Create Post"
-        tools:layout="@layout/fragment_post" />
+        android:id="@+id/nav_my_posts"
+        android:name="com.magikarp.android.ui.maps.MapsFragment"
+        android:label="@string/title_fragment_my_posts"
+        tools:layout="@layout/fragment_maps">
+        <argument
+            android:name="@string/fragment_args_user_data"
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_nav_my_posts_to_postFragment"
+            app:destination="@id/nav_post_editor" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.magikarp.android.ui.app.SettingsFragment"
-        android:label="@string/title_fragment_settings"
-        tools:layout="@layout/fragment_maps" />
+        android:label="@string/title_fragment_settings" />
 
     <fragment
         android:id="@+id/nav_help"
         android:name="com.magikarp.android.ui.app.HelpFragment"
         android:label="@string/title_fragment_help"
+        tools:layout="@layout/fragment_help" />
+
+    <fragment
+        android:id="@+id/nav_post_editor"
+        android:name="com.magikarp.android.ui.posts.PostFragment"
+        android:label="@string/title_fragment_edit_post"
+        tools:layout="@layout/fragment_post" />
+
+    <fragment
+        android:id="@+id/nav_post_viewer"
+        android:name="com.magikarp.android.ui.posts.PostFragment"
+        android:label="@string/title_fragment_view_post"
+        tools:layout="@layout/fragment_post" />
+
+    <fragment
+        android:id="@+id/nav_blank_fragment"
+        android:name="com.magikarp.android.BlankFragment"
+        android:label="Blank Fragment"
         tools:layout="@layout/fragment_blank" />
 
 </navigation>
