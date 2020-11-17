@@ -1,42 +1,28 @@
 package com.magikarp.android.ui.posts;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import com.magikarp.android.R;
-
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link PostFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment for viewing and editing posts.
  */
 public class PostFragment extends Fragment {
 
@@ -51,19 +37,6 @@ public class PostFragment extends Fragment {
   private double longitude = Double.NEGATIVE_INFINITY;
   private String imagePath = null;
   private String content = null;
-
-  /**
-   * Use this factory method to create a new instance of
-   * this fragment using the provided parameters.
-   *
-   * @return A new instance of fragment CreatePostFragment.
-   */
-  public static PostFragment newInstance() {
-    PostFragment fragment = new PostFragment();
-    Bundle args = new Bundle();
-    fragment.setArguments(args);
-    return fragment;
-  }
 
   /**
    * Use this factory method to create a new instance of
@@ -91,13 +64,16 @@ public class PostFragment extends Fragment {
   @Override
   public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
-    inflater.inflate(R.menu.menu_post_content, menu);
+    if (getArguments().getBoolean(getResources().getString(R.string.args_is_editable))) {
+      inflater.inflate(R.menu.menu_post_edit, menu);
+    } else {
+      inflater.inflate(R.menu.menu_post_view, menu);
+    }
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
     return inflater.inflate(R.layout.fragment_post, container, false);
   }
 

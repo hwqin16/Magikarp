@@ -42,7 +42,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mapsViewModel = new ViewModelProvider(this).get(MapsViewModel.class);
-    isUserData = getArguments().getBoolean(getString(R.string.fragment_args_user_data));
+    isUserData = getArguments().getBoolean(getString(R.string.args_is_user_data));
     setHasOptionsMenu(isUserData);
   }
 
@@ -82,6 +82,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   @Override
   public void onMapReady(GoogleMap googleMap) {
     this.googleMap = googleMap;
+    //googleMap.setMyLocationEnabled(true);
     googleMap.setOnCameraIdleListener(this);
     mapsViewModel.getMapItems().observe(this, this);
   }

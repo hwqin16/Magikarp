@@ -17,9 +17,12 @@
         android:label="@string/title_fragment_maps"
         tools:layout="@layout/fragment_maps">
         <argument
-            android:name="@string/fragment_args_user_data"
+            android:name="@string/args_is_user_data"
             android:defaultValue="false"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_nav_maps_to_postFragment"
+            app:destination="@id/nav_post_viewer" />
     </fragment>
 
     <fragment
@@ -28,7 +31,7 @@
         android:label="@string/title_fragment_my_posts"
         tools:layout="@layout/fragment_maps">
         <argument
-            android:name="@string/fragment_args_user_data"
+            android:name="@string/args_is_user_data"
             android:defaultValue="true"
             app:argType="boolean" />
         <action
@@ -51,13 +54,47 @@
         android:id="@+id/nav_post_editor"
         android:name="com.magikarp.android.ui.posts.PostFragment"
         android:label="@string/title_fragment_edit_post"
-        tools:layout="@layout/fragment_post" />
+        tools:layout="@layout/fragment_post">
+        <argument
+            android:name="@string/args_is_editable"
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <argument
+            android:name="@string/args_latitude"
+            android:defaultValue="999.0"
+            app:argType="float" />
+        <argument
+            android:name="@string/args_longitude"
+            android:defaultValue="999.0"
+            app:argType="float" />
+        <argument
+            android:name="@string/args_image_uri"
+            android:defaultValue="@null"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_post_viewer"
         android:name="com.magikarp.android.ui.posts.PostFragment"
         android:label="@string/title_fragment_view_post"
-        tools:layout="@layout/fragment_post" />
+        tools:layout="@layout/fragment_post">
+        <argument
+            android:name="@string/args_is_editable"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <argument
+            android:name="@string/args_latitude"
+            android:defaultValue="999.0"
+            app:argType="float" />
+        <argument
+            android:name="@string/args_longitude"
+            android:defaultValue="999.0"
+            app:argType="float" />
+        <argument
+            android:name="@string/args_image_uri"
+            android:defaultValue="@null"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_blank_fragment"
