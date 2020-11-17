@@ -1,5 +1,6 @@
 package com.magikarp.android.ui.maps;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,16 +13,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.clustering.ClusterItem;
 import com.magikarp.android.R;
+import com.magikarp.android.data.model.Message;
 import dagger.hilt.android.AndroidEntryPoint;
 import java.util.List;
 
@@ -30,9 +32,11 @@ import java.util.List;
  */
 @AndroidEntryPoint
 public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener,
-    Observer<List<? extends ClusterItem>> {
+    Observer<List<Message>>, OnMarkerClickListener {
 
   private boolean isUserData;
+
+  // private ClusterManager<Message> clusterManager;
 
   private GoogleMap googleMap;
 
@@ -63,8 +67,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     final int itemId = item.getItemId();
     if (itemId == R.id.nav_post_editor) {
-      NavController navController = NavHostFragment.findNavController(this);
-      return NavigationUI.onNavDestinationSelected(item, navController);
+      Resources resources = getResources();
+      Bundle bundle = new Bundle();
+      bundle.putBoolean(resources.getString(R.string.args_is_user_data), true);
+      bundle.putDouble(resources.getString(R.string.args_latitude), Double.NaN);
+      bundle.putDouble(resources.getString(R.string.args_longitude), Double.NaN);
+      NavHostFragment.findNavController(this).navigate(R.id.action_nav_maps_to_post_editor, bundle);
+      return true;
     }
     return super.onOptionsItemSelected(item);
   }
@@ -84,22 +93,42 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
     this.googleMap = googleMap;
     //googleMap.setMyLocationEnabled(true);
     googleMap.setOnCameraIdleListener(this);
-    mapsViewModel.getMapItems().observe(this, this);
+    googleMap.setOnMarkerClickListener(this);
+    mapsViewModel.getMessages().observe(this, this);
   }
 
   @Override
   public void onCameraIdle() {
     mapsViewModel.setMapsQuery(isUserData,
-        googleMap.getProjection().getVisibleRegion().latLngBounds);
+        googleMap.getProjection().getVisibleRegion().latLngBounds, 20); // TODO records
   }
 
   @Override
-  public void onChanged(List<? extends ClusterItem> clusterItems) {
+  public void onChanged(List<Message> clusterItems) {
     googleMap.clear();
-    for (ClusterItem item : clusterItems) {
-      googleMap.addMarker(new MarkerOptions().position(item.getPosition())
-          .title(item.getTitle()));
+    for (Message message : clusterItems) {
+      Marker marker = googleMap.addMarker(
+          new MarkerOptions().position(new LatLng(message.getLatitude(), message.getLongitude())));
+      marker.setTag(message);
     }
+  }
+
+  @Override
+  public boolean onMarkerClick(Marker marker) {
+    LatLng latLng = marker.getPosition();
+    Message message = (Message) marker.getTag();
+
+    Resources resources = getResources();
+    Bundle bundle = new Bundle();
+    bundle.putBoolean(resources.getString(R.string.args_is_user_data), isUserData);
+    bundle.putDouble(resources.getString(R.string.args_latitude), latLng.latitude);
+    bundle.putDouble(resources.getString(R.string.args_longitude), latLng.longitude);
+    bundle.putString(resources.getString(R.string.args_text), message.getText());
+    bundle.putString(resources.getString(R.string.args_image_uri), message.getImageUrl());
+    int action =
+        isUserData ? R.id.action_nav_maps_to_post_editor : R.id.action_nav_maps_to_post_viewer;
+    NavHostFragment.findNavController(this).navigate(action, bundle);
+    return true;
   }
 
 }

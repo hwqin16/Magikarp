@@ -6,11 +6,12 @@ import androidx.annotation.Nullable;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.Response.ErrorListener;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
-import com.google.maps.android.clustering.ClusterItem;
 import com.magikarp.android.data.model.GetMessagesRequest;
 import com.magikarp.android.data.model.GetMessagesResponse;
+import com.magikarp.android.data.model.Message;
 import com.magikarp.android.di.HiltQualifiers.GetMessagesUrl;
 import com.magikarp.android.di.HiltQualifiers.GetUserMessagesUrl;
 import com.magikarp.android.network.GsonRequest;
@@ -45,8 +46,8 @@ public class MapsRepository {
   }
 
   public void getMessages(boolean isUserData, @NonNull LatLngBounds bounds, int maxRecords,
-                          @NonNull MapClusterItemResponseListener listener,
-                          @Nullable Response.ErrorListener errorListener) {
+                          @NonNull MessagesListener listener,
+                          @Nullable ErrorListener errorListener) {
     final GetMessagesRequest body = new GetMessagesRequest(bounds.northeast.latitude,
         bounds.southwest.longitude, bounds.southwest.latitude, bounds.northeast.longitude,
         maxRecords);
@@ -65,35 +66,35 @@ public class MapsRepository {
   protected static class GetMessagesResponseListener implements
       Response.Listener<GetMessagesResponse> {
 
-    private final MapClusterItemResponseListener listener;
+    private final MessagesListener listener;
 
     /**
      * Create a new message response listener.
      *
      * @param listener listener for message responses
      */
-    public GetMessagesResponseListener(@NonNull MapClusterItemResponseListener listener) {
+    public GetMessagesResponseListener(@NonNull MessagesListener listener) {
       this.listener = listener;
     }
 
     @Override
     public void onResponse(GetMessagesResponse response) {
-      listener.onMapClusterItemResponse(response.getMessages());
+      listener.onMessagesChanged(response.getMessages());
     }
 
   }
 
   /**
-   * Interface for delivering message responses.
+   * Interface for delivering messages.
    */
-  public interface MapClusterItemResponseListener {
+  public interface MessagesListener {
 
     /**
-     * Listener for message responses.
+     * Listener for message changes.
      *
-     * @param messages a list of map cluster items
+     * @param messages a list of messages
      */
-    void onMapClusterItemResponse(List<? extends ClusterItem> messages);
+    void onMessagesChanged(List<Message> messages);
 
   }
 
