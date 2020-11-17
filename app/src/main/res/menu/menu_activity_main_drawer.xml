@@ -17,7 +17,7 @@
             android:title="@string/menu_maps" />
 
         <item
-            android:id="@+id/create_post"
+            android:id="@+id/nav_create_post"
             android:title="@string/create_new_post"
             />
     </group>

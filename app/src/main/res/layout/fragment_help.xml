@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.app.HelpFragment">
+    tools:context=".ui.app.HelpFragment"
+    android:id="@+id/help_container">
 
     <TextView
         android:id="@+id/text_call"
