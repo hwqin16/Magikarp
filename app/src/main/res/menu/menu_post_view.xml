@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_get_directions"
-        android:icon="@drawable/ic_baseline_gps_fixed"
+        android:icon="@drawable/ic_directions"
         android:orderInCategory="100"
         android:title="@string/get_directions"
         app:showAsAction="ifRoom" />

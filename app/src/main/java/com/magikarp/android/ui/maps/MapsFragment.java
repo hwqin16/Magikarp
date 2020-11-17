@@ -1,5 +1,6 @@
 package com.magikarp.android.ui.maps;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -67,11 +67,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     final int itemId = item.getItemId();
     if (itemId == R.id.nav_post_editor) {
-//      NavController navController = NavHostFragment.findNavController(this);
-//      return NavigationUI.onNavDestinationSelected(item, navController);
-      NavDirections directions =
-          MapsFragmentDirections.actionNavMapsToPostEditor(null, null, null);
-      NavHostFragment.findNavController(this).navigate(directions);
+      Resources resources = getResources();
+      Bundle bundle = new Bundle();
+      bundle.putBoolean(resources.getString(R.string.args_is_user_data), true);
+      bundle.putDouble(resources.getString(R.string.args_latitude), Double.NaN);
+      bundle.putDouble(resources.getString(R.string.args_longitude), Double.NaN);
+      bundle.putString(resources.getString(R.string.args_image_uri), "TEST");
+      NavHostFragment.findNavController(this).navigate(R.id.action_nav_maps_to_post_editor, bundle);
       return true;
     }
     return super.onOptionsItemSelected(item);
@@ -108,7 +110,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public void onChanged(List<Message> clusterItems) {
     googleMap.clear();
     for (Message message : clusterItems) {
-      Marker marker = googleMap.addMarker(
+      googleMap.addMarker(
           new MarkerOptions().position(new LatLng(message.getLatitude(), message.getLongitude())));
     }
   }
@@ -116,16 +118,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   @Override
   public boolean onMarkerClick(Marker marker) {
     LatLng latLng = marker.getPosition();
-
-    NavDirections directions;
-    if (isUserData) {
-      directions =
-          MapsFragmentDirections.actionNavMapsToPostEditor(latLng.latitude, latLng.longitude, "");
-    } else {
-      directions = MapsFragmentWrapperDirections
-          .actionNavMapsToPostViewer(latLng.latitude, latLng.longitude, "");
-    }
-    NavHostFragment.findNavController(this).navigate(directions);
+    Resources resources = getResources();
+    Bundle bundle = new Bundle();
+    bundle.putBoolean(resources.getString(R.string.args_is_user_data), isUserData);
+    bundle.putDouble(resources.getString(R.string.args_latitude), latLng.latitude);
+    bundle.putDouble(resources.getString(R.string.args_longitude), latLng.longitude);
+    bundle.putString(resources.getString(R.string.args_image_uri), "TEST");
+    int action =
+        isUserData ? R.id.action_nav_maps_to_post_editor : R.id.action_nav_maps_to_post_viewer;
+    NavHostFragment.findNavController(this).navigate(action, bundle);
     return true;
   }
 
