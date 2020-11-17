@@ -23,11 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * But, right now, when we don't have any of the write paths, we'll just use the production db.
  */
 public class TestServerComponent {
-//    TODO: how can we safely start server from testing suite without having a token checked into public github?
-    @BeforeAll
-    public static void setup() {
+  //    TODO: how can we safely start server from testing suite without having a token checked into public github?
+  @BeforeAll
+  public static void setup() {
 //        Server.start();
-    }
+  }
 
 //    /**
 //     * Runs only once before the testing starts.
@@ -39,9 +39,9 @@ public class TestServerComponent {
 //    }
 
 
-    /**
-     * This test works, need to figure out how to get token into test and png
-     */
+  /**
+   * This test works, need to figure out how to get token into test and png
+   */
 //    @Test
 //    @Order(1)
 //    public void newPostTest() throws Exception{
@@ -72,14 +72,13 @@ public class TestServerComponent {
 //        assertEquals(201, postDeleteBodyJson.get("status"));
 //        assertEquals(201, postBodyJson.get("status"));
 //    }
+  @Test
+  public void TestUserMessagesEmpty() {
 
-    @Test
-    public void TestUserMessagesEmpty() {
+  }
 
-    }
-
-    @AfterAll
-    public static void stop() {
+  @AfterAll
+  public static void stop() {
 //        Server.stop();
-    }
+  }
 }

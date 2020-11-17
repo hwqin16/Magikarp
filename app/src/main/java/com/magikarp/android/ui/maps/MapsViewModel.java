@@ -21,46 +21,46 @@ import java.util.List;
  * Class to provide map items from the map item repository.
  */
 public class MapsViewModel extends ViewModel implements MapClusterItemResponseListener,
-        ErrorListener {
+    ErrorListener {
 
-    private static final int MAX_RECORDS = 20;
+  private static final int MAX_RECORDS = 20;
 
-    private final MapsRepository mapsRepository;
+  private final MapsRepository mapsRepository;
 
-    private final MutableLiveData<List<? extends ClusterItem>> clusterItems
-            = new MutableLiveData<>();
+  private final MutableLiveData<List<? extends ClusterItem>> clusterItems
+      = new MutableLiveData<>();
 
-    /**
-     * Create a new map view model.
-     *
-     * @param mapRepository repository for accessing data
-     */
-    @ViewModelInject
-    public MapsViewModel(@NonNull MapsRepository mapRepository) {
-        this.mapsRepository = mapRepository;
+  /**
+   * Create a new map view model.
+   *
+   * @param mapRepository repository for accessing data
+   */
+  @ViewModelInject
+  public MapsViewModel(@NonNull MapsRepository mapRepository) {
+    this.mapsRepository = mapRepository;
+  }
+
+  @NonNull
+  public LiveData<List<? extends ClusterItem>> getMapItems() {
+    return clusterItems;
+  }
+
+  public void setLatLngBounds(@Nullable LatLngBounds bounds) {
+    if (bounds == null) {
+      clusterItems.setValue(Collections.emptyList());
+    } else {
+      mapsRepository.getMapItems(bounds, MAX_RECORDS, this, this);
     }
+  }
 
-    @NonNull
-    public LiveData<List<? extends ClusterItem>> getMapItems() {
-        return clusterItems;
-    }
+  @Override
+  public void onMapClusterItemResponse(List<? extends ClusterItem> messages) {
+    clusterItems.setValue(messages);
+  }
 
-    public void setLatLngBounds(@Nullable LatLngBounds bounds) {
-        if (bounds == null) {
-            clusterItems.setValue(Collections.emptyList());
-        } else {
-            mapsRepository.getMapItems(bounds, MAX_RECORDS, this, this);
-        }
-    }
-
-    @Override
-    public void onMapClusterItemResponse(List<? extends ClusterItem> messages) {
-        clusterItems.setValue(messages);
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        clusterItems.setValue(Collections.emptyList());
-    }
+  @Override
+  public void onErrorResponse(VolleyError error) {
+    clusterItems.setValue(Collections.emptyList());
+  }
 
 }

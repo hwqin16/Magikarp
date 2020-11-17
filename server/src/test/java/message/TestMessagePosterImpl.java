@@ -151,7 +151,7 @@ public class TestMessagePosterImpl {
     }
 
     /**
-     * Test that a message can be updated on the server 
+     * Test that a message can be updated on the server
      */
     @Test
     public void testUpdateMessage() throws ExecutionException, InterruptedException{

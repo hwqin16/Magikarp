@@ -14,36 +14,37 @@ import java.security.GeneralSecurityException;
 
 public class TestGoogleIdTokenAuthenticator {
 
-    @Test
-    public void testValidGetUserId() throws GeneralSecurityException, IOException, InvalidTokenException {
-        String ownerId = "chesterTester";
-        String idTokenString = "test123";
+  @Test
+  public void testValidGetUserId()
+      throws GeneralSecurityException, IOException, InvalidTokenException {
+    String ownerId = "chesterTester";
+    String idTokenString = "test123";
 
-        GoogleIdToken.Payload payload = new GoogleIdToken.Payload();
-        payload.setSubject(ownerId);
+    GoogleIdToken.Payload payload = new GoogleIdToken.Payload();
+    payload.setSubject(ownerId);
 
-        GoogleIdToken mockToken = mock(GoogleIdToken.class);
-        when(mockToken.getPayload()).thenReturn(payload);
+    GoogleIdToken mockToken = mock(GoogleIdToken.class);
+    when(mockToken.getPayload()).thenReturn(payload);
 
-        GoogleIdTokenVerifier mockVerifier = mock(GoogleIdTokenVerifier.class);
-        when(mockVerifier.verify(idTokenString)).thenReturn(mockToken);
+    GoogleIdTokenVerifier mockVerifier = mock(GoogleIdTokenVerifier.class);
+    when(mockVerifier.verify(idTokenString)).thenReturn(mockToken);
 
-        GoogleIdTokenAuthenticator authenticator = new GoogleIdTokenAuthenticator(mockVerifier);
+    GoogleIdTokenAuthenticator authenticator = new GoogleIdTokenAuthenticator(mockVerifier);
 
-        assertEquals(ownerId, authenticator.getUserId(idTokenString));
-    }
+    assertEquals(ownerId, authenticator.getUserId(idTokenString));
+  }
 
-    @Test
-    public void testInvalidInvalidGetUserId() throws GeneralSecurityException, IOException {
-        String idTokenString = "test456";
+  @Test
+  public void testInvalidInvalidGetUserId() throws GeneralSecurityException, IOException {
+    String idTokenString = "test456";
 
-        GoogleIdTokenVerifier mockVerifier = mock(GoogleIdTokenVerifier.class);
-        when(mockVerifier.verify(idTokenString)).thenReturn(null);
+    GoogleIdTokenVerifier mockVerifier = mock(GoogleIdTokenVerifier.class);
+    when(mockVerifier.verify(idTokenString)).thenReturn(null);
 
-        GoogleIdTokenAuthenticator authenticator = new GoogleIdTokenAuthenticator(mockVerifier);
+    GoogleIdTokenAuthenticator authenticator = new GoogleIdTokenAuthenticator(mockVerifier);
 
-        assertThrows(InvalidTokenException.class, () -> {
-            authenticator.getUserId(idTokenString);
-        });
-    }
+    assertThrows(InvalidTokenException.class, () -> {
+      authenticator.getUserId(idTokenString);
+    });
+  }
 }

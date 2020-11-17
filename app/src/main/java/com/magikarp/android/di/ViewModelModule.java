@@ -15,9 +15,9 @@ import dagger.hilt.android.components.ActivityRetainedComponent;
 @InstallIn(ActivityRetainedComponent.class)
 public class ViewModelModule {
 
-    @Provides
-    public static MapsViewModel provideMapsViewModel(MapsRepository mapRepository) {
-        return new MapsViewModel(mapRepository);
-    }
+  @Provides
+  public static MapsViewModel provideMapsViewModel(MapsRepository mapRepository) {
+    return new MapsViewModel(mapRepository);
+  }
 
 }
