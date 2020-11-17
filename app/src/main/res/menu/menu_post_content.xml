@@ -6,6 +6,7 @@
         android:title="@string/gps_location"
         android:orderInCategory="0"
         android:icon="@drawable/ic_baseline_gps_fixed"
+        android:id="@+id/location_button"
         app:showAsAction="ifRoom"/>
 
     <item
