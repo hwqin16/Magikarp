@@ -45,6 +45,16 @@ public class MapsRepository {
     this.urlGetUserMessages = urlGetUserMessages;
   }
 
+  /**
+   * Get messages from the maps repository.
+   *
+   * @param isUserData    {@code true} if querying for user data, {@code false} if querying for
+   *                      general data
+   * @param bounds        geographic bounds of query
+   * @param maxRecords    maximum records to return
+   * @param listener      listener for new messages
+   * @param errorListener error listener
+   */
   public void getMessages(boolean isUserData, @NonNull LatLngBounds bounds, int maxRecords,
                           @NonNull MessagesListener listener,
                           @Nullable ErrorListener errorListener) {

@@ -21,6 +21,12 @@ public class LoginRepository {
     this.dataSource = dataSource;
   }
 
+  /**
+   * Get an instance of a login repository.
+   *
+   * @param dataSource login data source
+   * @return a login repository
+   */
   public static LoginRepository getInstance(LoginDataSource dataSource) {
     if (instance == null) {
       instance = new LoginRepository(dataSource);
@@ -43,6 +49,13 @@ public class LoginRepository {
     // @see https://developer.android.com/training/articles/keystore
   }
 
+  /**
+   * Get a login result.
+   *
+   * @param username login username
+   * @param password login password
+   * @return a login result
+   */
   public Result<LoggedInUser> login(String username, String password) {
     // handle login
     Result<LoggedInUser> result = dataSource.login(username, password);

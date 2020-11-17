@@ -2,15 +2,18 @@ package com.magikarp.android.data.model;
 
 import androidx.annotation.NonNull;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.annotations.SerializedName;
 import com.google.maps.android.clustering.ClusterItem;
 
 public class Message implements ClusterItem {
 
   private final String id;
 
-  private final String user_id;
+  @SerializedName("user_id")
+  private final String userId;
 
-  private final String image_url;
+  @SerializedName("image_url")
+  private final String imageUrl;
 
   private final String text;
 
@@ -34,8 +37,8 @@ public class Message implements ClusterItem {
   public Message(String id, String userId, String imageUrl, String text, double latitude,
                  double longitude, String timestamp) {
     this.id = id;
-    this.user_id = userId;
-    this.image_url = imageUrl;
+    this.userId = userId;
+    this.imageUrl = imageUrl;
     this.text = text;
     this.latitude = latitude;
     this.longitude = longitude;
@@ -57,7 +60,7 @@ public class Message implements ClusterItem {
    * @return the message user ID
    */
   public String getUserId() {
-    return user_id;
+    return userId;
   }
 
   /**
@@ -66,7 +69,7 @@ public class Message implements ClusterItem {
    * @return the message image URL
    */
   public String getImageUrl() {
-    return image_url;
+    return imageUrl;
   }
 
   /**
