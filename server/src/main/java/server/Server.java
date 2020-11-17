@@ -53,7 +53,6 @@ public class Server {
           .setProjectId(Constants.PROJECT_ID)
           .setCredentials(GoogleCredentials.fromStream(serviceAccount))
           .build();
-      serviceAccount.close();
 
     } catch (FileNotFoundException e) {
       e.printStackTrace();
