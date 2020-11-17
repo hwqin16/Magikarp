@@ -6,8 +6,15 @@
     <string name="server_get_messages">/messages</string>
     <string name="server_get_user_messages">/messages/?</string>
 
-    <!-- Strings that should not be translated. -->
-    <string name="fragment_args_user_data">user_data</string>
+    <!-- Fragment arguments -->
+    <string name="args_is_editable">is_editable</string>
+    <string name="args_image_uri">image_uri</string>
+    <string name="args_latitude">latitude</string>
+    <string name="args_longitude">longitude</string>
+    <string name="args_is_user_data">is_user_data</string>
     <string name="fragment_tag_maps">tag_maps</string>
+
+    <!-- Settings UI -->
+    <string name="array_max_records">max_records</string>
 
 </resources>

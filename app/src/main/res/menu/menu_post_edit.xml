@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_get_location"
+        android:icon="@drawable/ic_baseline_gps_fixed"
+        android:orderInCategory="100"
+        android:title="@string/get_location"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_upload_content"
+        android:icon="@drawable/ic_baseline_send"
+        android:orderInCategory="101"
+        android:title="@string/upload_post"
+        app:showAsAction="ifRoom" />
+
+</menu>
