@@ -1,16 +1,23 @@
 package com.magikarp.android.data.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class GetMessagesRequest {
 
-  private final double latitude_top;
+  @SerializedName("latitude_top")
+  private final double latitudeTop;
 
-  private final double longitude_left;
+  @SerializedName("longitude_left")
+  private final double longitudeLeft;
 
-  private final double latitude_bottom;
+  @SerializedName("latitude_bottom")
+  private final double latitudeBottom;
 
-  private final double longitude_right;
+  @SerializedName("longitude_right")
+  private final double longitudeRight;
 
-  private final int max_records;
+  @SerializedName("max_records")
+  private final int maxRecords;
 
   /**
    * Create a get messages request.
@@ -23,31 +30,31 @@ public class GetMessagesRequest {
    */
   public GetMessagesRequest(double latitudeTop, double longitudeLeft, double latitudeBottom,
                             double longitudeRight, int maxRecords) {
-    latitude_top = latitudeTop;
-    longitude_left = longitudeLeft;
-    latitude_bottom = latitudeBottom;
-    longitude_right = longitudeRight;
-    max_records = maxRecords;
+    this.latitudeTop = latitudeTop;
+    this.longitudeLeft = longitudeLeft;
+    this.latitudeBottom = latitudeBottom;
+    this.longitudeRight = longitudeRight;
+    this.maxRecords = maxRecords;
   }
 
   public double getLatitudeTop() {
-    return latitude_top;
+    return latitudeTop;
   }
 
   public double getlongitudeLeft() {
-    return longitude_left;
+    return longitudeLeft;
   }
 
   public double getlatitudeBottom() {
-    return latitude_bottom;
+    return latitudeBottom;
   }
 
   public double getlongitudeRight() {
-    return longitude_right;
+    return longitudeRight;
   }
 
   public int getMaxRecords() {
-    return max_records;
+    return maxRecords;
   }
 
 }

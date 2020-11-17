@@ -1,11 +1,9 @@
 package com.magikarp.android.ui.login;
 
 import android.util.Patterns;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.magikarp.android.R;
 import com.magikarp.android.data.LoginRepository;
 import com.magikarp.android.data.Result;
@@ -29,6 +27,12 @@ public class LoginViewModel extends ViewModel {
     return loginResult;
   }
 
+  /**
+   * Log in with login repository.
+   *
+   * @param username login username
+   * @param password login password
+   */
   public void login(String username, String password) {
     // can be launched in a separate asynchronous job
     Result<LoggedInUser> result = loginRepository.login(username, password);
@@ -41,6 +45,12 @@ public class LoginViewModel extends ViewModel {
     }
   }
 
+  /**
+   * Change login data.
+   *
+   * @param username login username
+   * @param password login password
+   */
   public void loginDataChanged(String username, String password) {
     if (!isUserNameValid(username)) {
       loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));

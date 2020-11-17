@@ -3,7 +3,6 @@ package com.magikarp.android.ui.login;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.magikarp.android.data.LoginDataSource;
 import com.magikarp.android.data.LoginRepository;
 
