@@ -4,27 +4,27 @@ import java.util.List;
 
 public class GetMessagesResponse {
 
-  private final int record_count;
+  private final int recordCount;
 
-  private final List<Message> records;
+  private final List<Message> messages;
 
   /**
    * Create a get messages response.
    *
-   * @param record_count number of messages
-   * @param records      list of messages
+   * @param recordCount number of messages
+   * @param messages    list of messages
    */
-  public GetMessagesResponse(int record_count, List<Message> records) {
-    this.record_count = record_count;
-    this.records = records;
+  public GetMessagesResponse(int recordCount, List<Message> messages) {
+    this.recordCount = recordCount;
+    this.messages = messages;
   }
 
   public int getRecordCount() {
-    return record_count;
+    return recordCount;
   }
 
-  public List<Message> getRecords() {
-    return records;
+  public List<Message> getMessages() {
+    return messages;
   }
 
 }
