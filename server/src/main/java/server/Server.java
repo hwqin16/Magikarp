@@ -74,7 +74,7 @@ public class Server {
     public static void start() {
         setup();
 
-        app.get("/messages", ctx -> {
+        app.post("/messages", ctx -> {
             FindMessagesByBoundingBoxRequest request = gson.fromJson(
                     ctx.body(),
                     FindMessagesByBoundingBoxRequest.class
@@ -125,7 +125,7 @@ public class Server {
             }
         });
 
-        app.get("/messages/:user_id", ctx -> {
+        app.post("/messages/:user_id", ctx -> {
             String userId = ctx.pathParam("user_id");
 
             System.out.println("Getting messages for user_id " + userId);
