@@ -42,4 +42,4 @@ jobs:
               run: ./gradlew :app:checkstyle${{ matrix.build }} :server:checkstyleMain
 
             - name: Run Spotbugs
-              run: ./gradlew :app:spotbugs${{ matrix.build }} :server:spotbugsMain
+              run: ./gradlew :server:spotbugsMain

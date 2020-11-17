@@ -27,7 +27,7 @@ def addCheckStyleTask(project, variant) {
     checkstyleTask.configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
     checkstyleTask.source variant.javaCompile.source
     checkstyleTask.include '**/*.java'
-    checkstyleTask.exclude '**/gen/**', '**/BuildConfig.java', '**/R.java', '**/DataBindingInfo.java'
+    checkstyleTask.source = "src/main/java"
     checkstyleTask.ignoreFailures false
     checkstyleTask.showViolations true
     checkstyleTask.classpath = project.files("src/main/java")
