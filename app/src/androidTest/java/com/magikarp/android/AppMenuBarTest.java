@@ -38,13 +38,13 @@ public class AppMenuBarTest {
   }
 
   /**
-   * Tests opening the menu and clicking on the create new post menu.
+   * Tests opening the menu and clicking on my posts.
    */
   @Test
-  public void testClickOnNewPost() {
+  public void testClickOnMyPosts() {
     onView(withContentDescription(R.string.nav_app_bar_open_drawer_description)).perform(click());
-    onView(withId(R.id.nav_create_post)).perform(click());
-    onView(withId(R.id.post_container)).check(matches(isDisplayed()));
+    onView(withId(R.id.nav_my_posts)).perform(click());
+    onView(withId(R.id.map_container)).check(matches(isDisplayed()));
   }
 
   /**

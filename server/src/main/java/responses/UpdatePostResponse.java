@@ -1,28 +1,22 @@
 package responses;
 
+import com.google.gson.annotations.SerializedName;
+
 public class UpdatePostResponse {
-  private int status;
-  private String error;
+  @SerializedName("response_code")
+  private final int responseCode;
+  private final String error;
 
-  public UpdatePostResponse(int response_code, String error) {
+  public UpdatePostResponse(int responseCode, String error) {
     this.error = error;
-    this.status = response_code;
-
+    this.responseCode = responseCode;
   }
 
-  public int getResponse_code() {
-    return status;
-  }
-
-  public void setResponse_code(int response_code) {
-    this.status = response_code;
+  public int getResponseCode() {
+    return responseCode;
   }
 
   public String getError() {
     return error;
-  }
-
-  public void setError(String error) {
-    this.error = error;
   }
 }

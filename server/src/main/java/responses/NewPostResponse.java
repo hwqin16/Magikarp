@@ -1,43 +1,37 @@
 package responses;
 
-import message.Message;
-
-import java.util.List;
+import com.google.gson.annotations.SerializedName;
 
 public class NewPostResponse {
-  private int status;
-  private String record_id;
-  private String error;
+  @SerializedName("response_code")
+  private final int responseCode;
+  @SerializedName("record_id")
+  private final String recordId;
+  private final String error;
 
-  public NewPostResponse(int response_code, String record_id, String error) {
+  /**
+   * Response for posting a new message.
+   *
+   * @param responseCode int http response code
+   * @param recordId     String record ID that was created
+   * @param error        String error message if an error occurred
+   */
+  public NewPostResponse(int responseCode, String recordId, String error) {
+    this.responseCode = responseCode;
+    this.recordId = recordId;
     this.error = error;
-    this.record_id = record_id;
-    this.status = response_code;
-
-  }
-
-  public int getResponse_code() {
-    return status;
-  }
-
-  public void setResponse_code(int response_code) {
-    this.status = response_code;
-  }
-
-  public String getRecord_id() {
-    return record_id;
-  }
-
-  public void setRecord_id(String record_id) {
-    this.record_id = record_id;
   }
 
   public String getError() {
     return error;
   }
 
-  public void setError(String error) {
-    this.error = error;
+  public String getRecordId() {
+    return recordId;
+  }
+
+  public int getResponseCode() {
+    return responseCode;
   }
 }
 

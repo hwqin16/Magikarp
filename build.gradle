@@ -30,6 +30,7 @@ allprojects {
     }
 
     apply plugin: 'com.github.spotbugs'
+    
 }
 
 subprojects {

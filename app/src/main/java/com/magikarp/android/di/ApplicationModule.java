@@ -2,7 +2,6 @@ package com.magikarp.android.di;
 
 import android.content.Context;
 import android.content.res.Resources;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
@@ -11,14 +10,12 @@ import com.magikarp.android.di.HiltQualifiers.GetMessagesUrl;
 import com.magikarp.android.di.HiltQualifiers.GetUserMessagesUrl;
 import com.magikarp.android.network.ImageCache;
 import com.magikarp.android.network.LruBitmapCache;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
+import javax.inject.Singleton;
 
 /**
  * A Hilt module for dependency injections that are needed at the {@code Application} level or

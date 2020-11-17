@@ -1,7 +1,7 @@
 package server;
 
-import org.apache.commons.io.IOUtils;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.GeoPoint;
 import com.google.cloud.storage.Storage;
@@ -13,17 +13,22 @@ import com.google.gson.Gson;
 import constants.Constants;
 import io.javalin.Javalin;
 import io.javalin.http.UploadedFile;
-import message.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+import message.Message;
+import message.MessageFinder;
+import message.MessageFinderImpl;
+import message.MessagePoster;
+import message.MessagePosterImpl;
+import org.apache.commons.io.IOUtils;
 import requests.FindMessagesByBoundingBoxRequest;
 import responses.DeletePostResponse;
 import responses.MessagesResponse;
 import responses.NewPostResponse;
 import responses.UpdatePostResponse;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
 
 public class Server {
   private static final Gson gson = new Gson();
@@ -32,20 +37,19 @@ public class Server {
   private static MessageFinder messageFinder;
   private static MessagePoster messagePoster;
 
-  private static void setup() {
+  private static void setup() throws IOException {
     FileInputStream serviceAccount;
     FirebaseOptions firebaseOptions;
     StorageOptions storageOptions;
+    serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
 
     try {
 
-      serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
       firebaseOptions = FirebaseOptions
           .builder()
           .setCredentials(GoogleCredentials.fromStream(serviceAccount))
           .setDatabaseUrl(Constants.FIRESTORE_URL)
           .build();
-
       serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
       storageOptions = StorageOptions
           .newBuilder()
@@ -59,6 +63,8 @@ public class Server {
     } catch (IOException e) {
       e.printStackTrace();
       throw new RuntimeException("Failed to initialize Firestore");
+    } finally {
+      serviceAccount.close();
     }
 
     FirebaseApp.initializeApp(firebaseOptions);
@@ -71,7 +77,10 @@ public class Server {
     messagePoster = new MessagePosterImpl(firestore, storage);
   }
 
-  public static void start() {
+  /**
+   * Start the server.
+   */
+  public static void start() throws IOException {
     setup();
 
     app.post("/messages", ctx -> {
@@ -86,10 +95,9 @@ public class Server {
       Double longitudeRight = request.getLongitudeRight();
       Integer maxRecords = request.getMaxRecords();
 
-      System.out.println("Getting messages for latitude_top " + latitudeTop + ", latitude_bottom " +
-          latitudeBottom + ", longitude_left " + longitudeLeft + ", latitude_bottom " +
-          latitudeBottom +
-          ", max_records " + maxRecords);
+      System.out.println("Getting messages for latitude_top " + latitudeTop + ", latitude_bottom "
+          + latitudeBottom + ", longitude_left " + longitudeLeft + ", latitude_bottom "
+          + latitudeBottom + ", max_records " + maxRecords);
 
       if (latitudeBottom == null || latitudeBottom < -90 || latitudeBottom > 90) {
         ctx.result("Invalid latitude_bottom");
@@ -125,9 +133,7 @@ public class Server {
 
         ctx.result(gson.toJson(new MessagesResponse(messages)));
       }
-    });
-
-    app.post("/messages/:user_id", ctx -> {
+    }).post("/messages/:user_id", ctx -> {
       String userId = ctx.pathParam("user_id");
 
       System.out.println("Getting messages for user_id " + userId);
@@ -141,13 +147,29 @@ public class Server {
       String userID = ctx.pathParam("user_id");
       UploadedFile picture = ctx.uploadedFile("image");
 
-      String text = ctx.formParam("text");
-      double lat = Double.parseDouble(ctx.formParam("latitude"));
-      double lon = Double.parseDouble(ctx.formParam("longitude"));
+      NewPostResponse response;
 
-      NewPostResponse response = messagePoster
-          .postNewMessage(userID, IOUtils.toByteArray(picture.getContent()), text, lat, lon,
-              picture.getExtension());
+      if (picture != null) {
+        String text = ctx.formParam("text");
+        double lat = ctx.formParam("latitude", Double.class).get();
+        double lon = ctx.formParam("longitude", Double.class).get();
+
+        UUID uuid = UUID.randomUUID();
+
+        response = messagePoster.postNewMessage(
+            uuid.toString(),
+            userID,
+            IOUtils.toByteArray(picture.getContent()),
+            text,
+            lat,
+            lon,
+            picture.getExtension(),
+            Timestamp.now()
+        );
+      } else {
+        response = new NewPostResponse(401, null, "Missing new image");
+      }
+
 
       ctx.result(gson.toJson(response));
 
@@ -159,13 +181,26 @@ public class Server {
       String recordID = ctx.pathParam("record_id");
       UploadedFile picture = ctx.uploadedFile("image");
 
-      String text = ctx.formParam("text");
-      double lat = Double.parseDouble(ctx.formParam("latitude"));
-      double lon = Double.parseDouble(ctx.formParam("longitude"));
+      UpdatePostResponse response;
 
-      UpdatePostResponse response = messagePoster
-          .updateMessage(recordID, userID, IOUtils.toByteArray(picture.getContent()), text, lat,
-              lon, picture.getExtension());
+      if (picture != null) {
+        String text = ctx.formParam("text");
+        double lat = ctx.formParam("latitude", Double.class).get();
+        double lon = ctx.formParam("longitude", Double.class).get();
+
+        response = messagePoster.updateMessage(
+            recordID,
+            userID,
+            IOUtils.toByteArray(picture.getContent()),
+            text,
+            lat,
+            lon,
+            picture.getExtension(),
+            Timestamp.now()
+        );
+      } else {
+        response = new UpdatePostResponse(401, "Missing updated image");
+      }
 
       ctx.result(gson.toJson(response));
 
@@ -185,7 +220,7 @@ public class Server {
     app.stop();
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     start();
   }
 }

@@ -1,15 +1,14 @@
 package com.magikarp.android.data.model;
 
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
 public class Message implements ClusterItem {
 
-  private final int id;
+  private final String id;
 
-  private final int user_id;
+  private final String user_id;
 
   private final String image_url;
 
@@ -25,48 +24,83 @@ public class Message implements ClusterItem {
    * Create a new message.
    *
    * @param id        message ID
-   * @param user_id   user ID
-   * @param image_url image URL
+   * @param userId    user ID
+   * @param imageUrl  image URL
    * @param text      message text
    * @param latitude  message latitude
    * @param longitude message longitude
    * @param timestamp message timestamp
    */
-  public Message(int id, int user_id, String image_url, String text, double latitude,
+  public Message(String id, String userId, String imageUrl, String text, double latitude,
                  double longitude, String timestamp) {
     this.id = id;
-    this.user_id = user_id;
-    this.image_url = image_url;
+    this.user_id = userId;
+    this.image_url = imageUrl;
     this.text = text;
     this.latitude = latitude;
     this.longitude = longitude;
     this.timestamp = timestamp;
   }
 
-  public int getId() {
+  /**
+   * Get the message ID.
+   *
+   * @return the message ID
+   */
+  public String getId() {
     return id;
   }
 
-  public int getUserId() {
+  /**
+   * Get the message user ID.
+   *
+   * @return the message user ID
+   */
+  public String getUserId() {
     return user_id;
   }
 
+  /**
+   * Get the message image URL.
+   *
+   * @return the message image URL
+   */
   public String getImageUrl() {
     return image_url;
   }
 
+  /**
+   * Get the message text.
+   *
+   * @return the message text
+   */
   public String getText() {
     return text;
   }
 
+  /**
+   * Get the message latitude.
+   *
+   * @return the message latitude
+   */
   public double getLatitude() {
     return latitude;
   }
 
+  /**
+   * Get the message longitude.
+   *
+   * @return the message longitude
+   */
   public double getLongitude() {
     return longitude;
   }
 
+  /**
+   * Get the message timestamp.
+   *
+   * @return the message timestamp
+   */
   public String getTimestamp() {
     return timestamp;
   }

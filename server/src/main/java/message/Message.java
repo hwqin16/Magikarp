@@ -18,6 +18,17 @@ public class Message {
   private final Date timestamp;
   private final String userId;
 
+  /**
+   * Core Message structure containing the information for users' posts.
+   *
+   * @param id        String Message ID
+   * @param imageUrl  String URL for image
+   * @param latitude  Double latitude of geotag
+   * @param longitude Double longitude of geotag
+   * @param text      String description of the location
+   * @param timestamp Date time the message was posted
+   * @param userId    String user ID
+   */
   public Message(
       String id,
       String imageUrl,
@@ -32,7 +43,7 @@ public class Message {
     this.latitude = latitude;
     this.longitude = longitude;
     this.text = text;
-    this.timestamp = timestamp;
+    this.timestamp = (Date) timestamp.clone();
     this.userId = userId;
   }
 
@@ -57,7 +68,8 @@ public class Message {
   }
 
   public Date getTimestamp() {
-    return timestamp;
+    Date copy = (Date) this.timestamp.clone();
+    return copy;
   }
 
   public String getUserId() {

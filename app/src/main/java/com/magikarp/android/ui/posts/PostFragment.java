@@ -164,4 +164,5 @@ public class PostFragment extends Fragment {
       Log.e("onActivityResult", "Failed to load image.", e);
     }
   }
+
 }

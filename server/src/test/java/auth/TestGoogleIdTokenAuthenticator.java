@@ -43,8 +43,6 @@ public class TestGoogleIdTokenAuthenticator {
 
     GoogleIdTokenAuthenticator authenticator = new GoogleIdTokenAuthenticator(mockVerifier);
 
-    assertThrows(InvalidTokenException.class, () -> {
-      authenticator.getUserId(idTokenString);
-    });
+    assertThrows(InvalidTokenException.class, () -> authenticator.getUserId(idTokenString));
   }
 }
