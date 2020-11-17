@@ -20,106 +20,112 @@ import responses.UpdatePostResponse;
 
 public class MessagePosterImpl implements MessagePoster {
 
-    private final CollectionReference messagesCollection;
-    private final Storage storage;
+  private final CollectionReference messagesCollection;
+  private final Storage storage;
 
-    public MessagePosterImpl(Firestore firestore, Storage storage){
-        this.messagesCollection = firestore.collection(Constants.COLLECTION_PATH);
-        this.storage = storage;
+  public MessagePosterImpl(Firestore firestore, Storage storage) {
+    this.messagesCollection = firestore.collection(Constants.COLLECTION_PATH);
+    this.storage = storage;
+  }
+
+  public DeletePostResponse deleteMessage(String recordID) {
+    DeletePostResponse response;
+    try {
+      ApiFuture<DocumentSnapshot> future = messagesCollection.document(recordID).get();
+
+      DocumentSnapshot document = future.get();
+      String url = document.getString("url");
+      String[] urlSplit = url.split("/");
+      String fileName = urlSplit[urlSplit.length - 1];
+
+      messagesCollection.document(recordID).delete();
+      BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, fileName);
+      storage.delete(blobId);
+
+      response = new DeletePostResponse(201, null);
+    } catch (Exception e) {
+      response = new DeletePostResponse(401, e.getMessage());
     }
 
-    public DeletePostResponse deleteMessage(String recordID){
-        DeletePostResponse response;
-        try{
-            ApiFuture<DocumentSnapshot> future = messagesCollection.document(recordID).get();
+    return response;
 
-            DocumentSnapshot document = future.get();
-            String url = document.getString("url");
-            String[] urlSplit = url.split("/");
-            String fileName = urlSplit[urlSplit.length-1];
+  }
 
-            messagesCollection.document(recordID).delete();
-            BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, fileName);
-            storage.delete(blobId);
+  public NewPostResponse postNewMessage(String userID, byte[] image, String text, double lat,
+                                        double lon, String fileType) {
+    NewPostResponse response;
+    try {
 
-            response = new DeletePostResponse(201, null);
-        }catch(Exception e){
-            response = new DeletePostResponse(401, e.getMessage());
-        }
+      UUID uuid = UUID.randomUUID();
+      BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, uuid.toString() + fileType);
+      BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+      storage.create(blobInfo, image);
 
-        return response;
 
+      Map<String, Object> newPost = new HashMap<>();
+
+      GeoPoint point = new GeoPoint(lat, lon);
+
+
+      newPost.put("user_id", userID);
+      newPost.put("text", text);
+      newPost.put("geotag", point);
+      newPost.put("id", uuid.toString());
+      newPost.put("url",
+          "https://storage.googleapis.com/" + "magikarp-images/" + uuid.toString() + fileType);
+      newPost.put("timestamp", Timestamp.now());
+
+      ApiFuture<WriteResult> writeResult =
+          messagesCollection.document(uuid.toString()).set(newPost, SetOptions.merge());
+
+      writeResult.get();
+
+      response = new NewPostResponse(201, uuid.toString(), null);
+    } catch (Exception e) {
+      System.out.println("AN ERROR OCCURED");
+      response = new NewPostResponse(401, null, e.getMessage());
     }
 
-    public NewPostResponse postNewMessage(String userID, byte[] image, String text, double lat, double lon, String fileType){
-        NewPostResponse response;
-        try{
+    return response;
 
-            UUID uuid = UUID.randomUUID();
-            BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, uuid.toString() + fileType);
-            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
-            storage.create(blobInfo, image);
+  }
+
+  public UpdatePostResponse updateMessage(String record_id, String userID, byte[] image,
+                                          String text, double lat, double lon, String fileType) {
+    UpdatePostResponse response;
+    try {
+
+      this.deleteMessage(record_id);
+
+      BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, record_id + fileType);
+      BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+      storage.create(blobInfo, image);
 
 
-            Map<String, Object> newPost = new HashMap<>();
+      Map<String, Object> update = new HashMap<>();
 
-            GeoPoint point = new GeoPoint(lat, lon);
+      GeoPoint point = new GeoPoint(lat, lon);
 
 
-            newPost.put("user_id", userID);
-            newPost.put("text", text);
-            newPost.put("geotag", point);
-            newPost.put("id", uuid.toString());
-            newPost.put("url", "https://storage.googleapis.com/" + "magikarp-images/" + uuid.toString()  + fileType);
-            newPost.put("timestamp", Timestamp.now());
+      update.put("user_id", userID);
+      update.put("text", text);
+      update.put("geotag", point);
+      update.put("id", record_id);
+      update.put("url",
+          "https://storage.googleapis.com/" + "magikarp-images/" + record_id + fileType);
+      update.put("timestamp", Timestamp.now());
 
-            ApiFuture<WriteResult> writeResult = messagesCollection.document(uuid.toString()).set(newPost, SetOptions.merge());
+      ApiFuture<WriteResult> writeResult =
+          messagesCollection.document(record_id).set(update, SetOptions.merge());
+      writeResult.get();
 
-            writeResult.get();
-
-            response = new NewPostResponse(201, uuid.toString(), null);
-        }catch(Exception e){
-            System.out.println("AN ERROR OCCURED");
-            response = new NewPostResponse(401, null, e.getMessage());
-        }
-
-        return response;
-
+      response = new UpdatePostResponse(201, null);
+    } catch (Exception e) {
+      System.out.println("AN ERROR OCCURED");
+      response = new UpdatePostResponse(401, e.getMessage());
     }
 
-    public UpdatePostResponse updateMessage(String record_id, String userID, byte[] image, String text, double lat, double lon, String fileType){
-        UpdatePostResponse response;
-        try{
+    return response;
 
-            this.deleteMessage(record_id);
-
-            BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, record_id + fileType);
-            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
-            storage.create(blobInfo, image);
-
-
-            Map<String, Object> update = new HashMap<>();
-
-            GeoPoint point = new GeoPoint(lat, lon);
-
-
-            update.put("user_id", userID);
-            update.put("text", text);
-            update.put("geotag", point);
-            update.put("id", record_id);
-            update.put("url", "https://storage.googleapis.com/" + "magikarp-images/" + record_id  + fileType);
-            update.put("timestamp", Timestamp.now());
-
-            ApiFuture<WriteResult> writeResult = messagesCollection.document(record_id).set(update, SetOptions.merge());
-            writeResult.get();
-
-            response = new UpdatePostResponse(201, null);
-        }catch(Exception e){
-            System.out.println("AN ERROR OCCURED");
-            response = new UpdatePostResponse(401,  e.getMessage());
-        }
-
-        return response;
-
-    }
+  }
 }

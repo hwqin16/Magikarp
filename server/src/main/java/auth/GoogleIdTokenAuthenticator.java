@@ -11,19 +11,20 @@ import java.security.GeneralSecurityException;
  */
 public class GoogleIdTokenAuthenticator {
 
-    private final GoogleIdTokenVerifier verifier;
+  private final GoogleIdTokenVerifier verifier;
 
-    public GoogleIdTokenAuthenticator(GoogleIdTokenVerifier verifier) {
-        this.verifier = verifier;
+  public GoogleIdTokenAuthenticator(GoogleIdTokenVerifier verifier) {
+    this.verifier = verifier;
+  }
+
+  public String getUserId(String idTokenString)
+      throws GeneralSecurityException, IOException, InvalidTokenException {
+    GoogleIdToken idToken = verifier.verify(idTokenString);
+
+    if (idToken != null) {
+      return idToken.getPayload().getSubject();
+    } else {
+      throw new InvalidTokenException("Invalid idToken found");
     }
-
-    public String getUserId(String idTokenString) throws GeneralSecurityException, IOException, InvalidTokenException {
-        GoogleIdToken idToken = verifier.verify(idTokenString);
-
-        if (idToken != null) {
-            return idToken.getPayload().getSubject();
-        } else {
-            throw new InvalidTokenException("Invalid idToken found");
-        }
-    }
+  }
 }
