@@ -48,7 +48,8 @@ public class MapsViewModel extends ViewModel implements MessagesListener, ErrorL
   /**
    * Set the query to send to the maps repository.
    *
-   * @param isUserData {@code true} if querying for user data, {@code false} if querying for all data
+   * @param isUserData {@code true} if querying for user data, {@code false} if querying for all
+   *                   data
    * @param bounds     the geographic bounds of the query
    * @param maxRecords the maximum number of records to return
    */

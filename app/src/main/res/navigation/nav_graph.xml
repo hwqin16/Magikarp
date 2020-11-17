@@ -102,10 +102,4 @@
             app:nullable="true" />
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_blank_fragment"
-        android:name="com.magikarp.android.BlankFragment"
-        android:label="Blank Fragment"
-        tools:layout="@layout/fragment_blank" />
-
 </navigation>

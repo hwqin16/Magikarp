@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     setSupportActionBar(toolbar);
 
     DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-    NavigationView navigationView = findViewById(R.id.nav_view);
     navController = ((NavHostFragment) getSupportFragmentManager()
         .findFragmentById(R.id.nav_host_fragment)).getNavController();
     appBarConfiguration =
@@ -36,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
             R.id.nav_help).setOpenableLayout(drawerLayout).build();
 
     NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+    NavigationView navigationView = findViewById(R.id.nav_view);
     NavigationUI.setupWithNavController(navigationView, navController);
   }
 

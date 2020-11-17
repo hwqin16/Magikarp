@@ -1,9 +1,7 @@
 package com.magikarp.android.network;
 
 import android.graphics.Bitmap;
-
 import androidx.collection.LruCache;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

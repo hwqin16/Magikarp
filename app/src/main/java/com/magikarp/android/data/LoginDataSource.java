@@ -1,7 +1,6 @@
 package com.magikarp.android.data;
 
 import com.magikarp.android.data.model.LoggedInUser;
-
 import java.io.IOException;
 
 /**
@@ -9,6 +8,13 @@ import java.io.IOException;
  */
 public class LoginDataSource {
 
+  /**
+   * Get login result.
+   *
+   * @param username login username
+   * @param password login password
+   * @return a login result
+   */
   public Result<LoggedInUser> login(String username, String password) {
 
     try {
