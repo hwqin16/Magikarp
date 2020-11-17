@@ -10,14 +10,14 @@ import javax.inject.Qualifier;
  */
 public class HiltQualifiers {
 
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface GetMessagesUrl {
-    }
+  @Qualifier
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface GetMessagesUrl {
+  }
 
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface GetUserMessagesUrl {
-    }
+  @Qualifier
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface GetUserMessagesUrl {
+  }
 
 }

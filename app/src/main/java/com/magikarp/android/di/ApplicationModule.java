@@ -28,37 +28,37 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 @InstallIn(ApplicationComponent.class)
 public class ApplicationModule {
 
-    @Singleton
-    @Provides
-    public static RequestQueue provideRequestQueue(@ApplicationContext Context applicationContext) {
-        return Volley.newRequestQueue(applicationContext);
-    }
+  @Singleton
+  @Provides
+  public static RequestQueue provideRequestQueue(@ApplicationContext Context applicationContext) {
+    return Volley.newRequestQueue(applicationContext);
+  }
 
-    @Singleton
-    @Provides
-    public static ImageLoader provideImageLoader(@ApplicationContext Context applicationContext,
-                                                 RequestQueue requestQueue) {
-        final int cacheSize = applicationContext.getResources()
-                .getInteger(R.integer.bitmap_cache_size);
-        return new ImageLoader(requestQueue, new ImageCache(new LruBitmapCache(cacheSize)));
-    }
+  @Singleton
+  @Provides
+  public static ImageLoader provideImageLoader(@ApplicationContext Context applicationContext,
+                                               RequestQueue requestQueue) {
+    final int cacheSize = applicationContext.getResources()
+        .getInteger(R.integer.bitmap_cache_size);
+    return new ImageLoader(requestQueue, new ImageCache(new LruBitmapCache(cacheSize)));
+  }
 
-    @GetMessagesUrl
-    @Provides
-    public static String provideGetMessagesUrl(
-            @ApplicationContext Context applicationContext) {
-        final Resources resources = applicationContext.getResources();
-        return resources.getString(R.string.server_url)
-                + resources.getString(R.string.server_get_messages);
-    }
+  @GetMessagesUrl
+  @Provides
+  public static String provideGetMessagesUrl(
+      @ApplicationContext Context applicationContext) {
+    final Resources resources = applicationContext.getResources();
+    return resources.getString(R.string.server_url)
+        + resources.getString(R.string.server_get_messages);
+  }
 
-    @GetUserMessagesUrl
-    @Provides
-    public static String provideGetUserMessagesUrl(
-            @ApplicationContext Context applicationContext) {
-        final Resources resources = applicationContext.getResources();
-        return resources.getString(R.string.server_url)
-                + resources.getString(R.string.server_get_user_messages);
-    }
+  @GetUserMessagesUrl
+  @Provides
+  public static String provideGetUserMessagesUrl(
+      @ApplicationContext Context applicationContext) {
+    final Resources resources = applicationContext.getResources();
+    return resources.getString(R.string.server_url)
+        + resources.getString(R.string.server_get_user_messages);
+  }
 
 }

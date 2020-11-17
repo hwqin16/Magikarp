@@ -11,18 +11,18 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LruBitmapCache extends LruCache<String, Bitmap> {
 
-    /**
-     * Create a new LRU bitmap cache.
-     *
-     * @param maxSize the maximum size of the cache (in bytes)
-     */
-    public LruBitmapCache(int maxSize) {
-        super(maxSize);
-    }
+  /**
+   * Create a new LRU bitmap cache.
+   *
+   * @param maxSize the maximum size of the cache (in bytes)
+   */
+  public LruBitmapCache(int maxSize) {
+    super(maxSize);
+  }
 
-    @Override
-    protected int sizeOf(@NotNull String key, @NotNull Bitmap value) {
-        return value.getByteCount();
-    }
+  @Override
+  protected int sizeOf(@NotNull String key, @NotNull Bitmap value) {
+    return value.getByteCount();
+  }
 
 }
