@@ -32,7 +32,7 @@ public class TestMessagePosterImpl {
    */
   @Test
   public void testDeleteMessage() throws ExecutionException, InterruptedException {
-    List<Map<String, Object>> documentDataList = Arrays.asList(
+    List<Map<String, Object>> documentDataList = Collections.singletonList(
         getRandomDocumentData()
     );
 
@@ -75,7 +75,7 @@ public class TestMessagePosterImpl {
     DeletePostResponse test =
         messagePoster.deleteMessage((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME));
 
-    assertEquals(test.getResponse_code(), 201);
+    assertEquals(test.getResponseCode(), 201);
 
   }
 
@@ -84,7 +84,7 @@ public class TestMessagePosterImpl {
    */
   @Test
   public void testPostMessage() throws ExecutionException, InterruptedException {
-    List<Map<String, Object>> documentDataList = Arrays.asList(
+    List<Map<String, Object>> documentDataList = Collections.singletonList(
         getRandomDocumentData()
     );
 
@@ -115,8 +115,8 @@ public class TestMessagePosterImpl {
     when(write.get()).thenReturn(res);
 
     String userID = "Test";
-    Double lon = 90.0;
-    Double lat = 90.0;
+    double lon = 90.0;
+    double lat = 90.0;
     String text = "test";
     String fileType = ".png";
     byte[] image = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
@@ -135,9 +135,9 @@ public class TestMessagePosterImpl {
     newPost.put("user_id", userID);
     newPost.put("text", text);
     newPost.put("geotag", point);
-    newPost.put("id", (String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME));
+    newPost.put("id", documentDataList.get(0).get(Message.FS_ID_FIELD_NAME));
     newPost.put("url", "https://storage.googleapis.com/" + "magikarp-images/" +
-        (String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME) + fileType);
+        documentDataList.get(0).get(Message.FS_ID_FIELD_NAME) + fileType);
     newPost.put("timestamp", now);
 
 
@@ -157,7 +157,7 @@ public class TestMessagePosterImpl {
         .postNewMessage((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME), userID,
             image, text, lat, lon, fileType, now);
 
-    assertEquals(test.getResponse_code(), 201);
+    assertEquals(test.getResponseCode(), 201);
 
   }
 
@@ -166,7 +166,7 @@ public class TestMessagePosterImpl {
    */
   @Test
   public void testUpdateMessage() throws ExecutionException, InterruptedException {
-    List<Map<String, Object>> documentDataList = Arrays.asList(
+    List<Map<String, Object>> documentDataList = Collections.singletonList(
         getRandomDocumentData()
     );
 
@@ -197,8 +197,8 @@ public class TestMessagePosterImpl {
     when(write.get()).thenReturn(res);
 
     String userID = "Test";
-    Double lon = 90.0;
-    Double lat = 90.0;
+    double lon = 90.0;
+    double lat = 90.0;
     String text = "test";
     String fileType = ".png";
     byte[] image = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
@@ -219,7 +219,7 @@ public class TestMessagePosterImpl {
     newPost.put("geotag", point);
     newPost.put("id", (String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME));
     newPost.put("url", "https://storage.googleapis.com/" + "magikarp-images/" +
-        (String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME) + fileType);
+        documentDataList.get(0).get(Message.FS_ID_FIELD_NAME) + fileType);
     newPost.put("timestamp", now);
 
 
@@ -239,7 +239,7 @@ public class TestMessagePosterImpl {
         .updateMessage((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME), userID,
             image, text, lat, lon, fileType, now);
 
-    assertEquals(test.getResponse_code(), 201);
+    assertEquals(test.getResponseCode(), 201);
 
   }
 

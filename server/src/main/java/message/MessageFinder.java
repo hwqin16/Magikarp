@@ -15,8 +15,9 @@ public interface MessageFinder {
   List<Message> findByUserId(String userId) throws ExecutionException, InterruptedException;
 
   /**
-   * Find all messages that have a longitude and latitude within a particular bounding box limited by
-   * the passed maximum number of records. Provides booleans for wrapping around globe in any direction.
+   * Find all messages that have a longitude and latitude within a particular bounding box limited
+   * by the passed maximum number of records. Provides booleans for wrapping around globe in any
+   * direction.
    *
    * @param lesserPoint            Bottom-Left corner of the bounding box
    * @param greaterPoint           Top-Right corner of the bounding box

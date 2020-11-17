@@ -18,6 +18,17 @@ public class Message {
   private final Date timestamp;
   private final String userId;
 
+  /**
+   * Core Message structure containing the information for users' posts.
+   *
+   * @param id        String Message ID
+   * @param imageUrl  String URL for image
+   * @param latitude  Double latitude of geotag
+   * @param longitude Double longitude of geotag
+   * @param text      String description of the location
+   * @param timestamp Date time the message was posted
+   * @param userId    String user ID
+   */
   public Message(
       String id,
       String imageUrl,

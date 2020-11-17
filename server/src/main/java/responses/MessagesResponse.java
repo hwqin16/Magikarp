@@ -1,11 +1,12 @@
 package responses;
 
-import message.Message;
-
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
+import message.Message;
 
 public class MessagesResponse {
   private final List<Message> messages;
+  @SerializedName("record_count")
   private final int recordCount;
 
   public MessagesResponse(List<Message> messages) {

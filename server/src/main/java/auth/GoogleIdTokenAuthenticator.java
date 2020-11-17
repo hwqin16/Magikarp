@@ -17,6 +17,15 @@ public class GoogleIdTokenAuthenticator {
     this.verifier = verifier;
   }
 
+  /**
+   * Get UserId string from the encoded idTokenString.
+   *
+   * @param idTokenString String encoded sent from Google containing UserId
+   * @return String UserId encoded by the idTokenString
+   * @throws GeneralSecurityException If a security exception occurs
+   * @throws IOException              If the id can't be properly parsed
+   * @throws InvalidTokenException    If the id parses to an invalid user
+   */
   public String getUserId(String idTokenString)
       throws GeneralSecurityException, IOException, InvalidTokenException {
     GoogleIdToken idToken = verifier.verify(idTokenString);
