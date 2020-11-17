@@ -7,11 +7,11 @@ import com.android.volley.RequestQueue;
  */
 public interface RequestQueueFactory {
 
-    /**
-     * Get a request queue for adding network requests.
-     *
-     * @return a request queue
-     */
-    RequestQueue getRequestQueue();
+  /**
+   * Get a request queue for adding network requests.
+   *
+   * @return a request queue
+   */
+  RequestQueue getRequestQueue();
 
 }

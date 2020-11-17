@@ -26,160 +26,166 @@ import java.io.IOException;
 import java.util.List;
 
 public class Server {
-    private static final Gson gson = new Gson();
+  private static final Gson gson = new Gson();
 
-    private static Javalin app;
-    private static MessageFinder messageFinder;
-    private static MessagePoster messagePoster;
+  private static Javalin app;
+  private static MessageFinder messageFinder;
+  private static MessagePoster messagePoster;
 
-    private static void setup() {
-        FileInputStream serviceAccount;
-        FirebaseOptions firebaseOptions;
-        StorageOptions storageOptions;
+  private static void setup() {
+    FileInputStream serviceAccount;
+    FirebaseOptions firebaseOptions;
+    StorageOptions storageOptions;
 
-        try {
+    try {
 
-            serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
-            firebaseOptions = FirebaseOptions
-                    .builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl(Constants.FIRESTORE_URL)
-                    .build();
+      serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
+      firebaseOptions = FirebaseOptions
+          .builder()
+          .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+          .setDatabaseUrl(Constants.FIRESTORE_URL)
+          .build();
 
-            serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
-            storageOptions = StorageOptions
-                    .newBuilder()
-                    .setProjectId(Constants.PROJECT_ID)
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .build();
+      serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
+      storageOptions = StorageOptions
+          .newBuilder()
+          .setProjectId(Constants.PROJECT_ID)
+          .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+          .build();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to find ServiceAccount file");
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to initialize Firestore");
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      throw new RuntimeException("Failed to find ServiceAccount file");
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new RuntimeException("Failed to initialize Firestore");
+    }
+
+    FirebaseApp.initializeApp(firebaseOptions);
+
+    Firestore firestore = FirestoreClient.getFirestore();
+    Storage storage = storageOptions.getService();
+
+    app = Javalin.create().start(Constants.PORT);
+    messageFinder = new MessageFinderImpl(firestore);
+    messagePoster = new MessagePosterImpl(firestore, storage);
+  }
+
+  public static void start() {
+    setup();
+
+    app.post("/messages", ctx -> {
+      FindMessagesByBoundingBoxRequest request = gson.fromJson(
+          ctx.body(),
+          FindMessagesByBoundingBoxRequest.class
+      );
+
+      Double latitudeTop = request.getLatitudeTop();
+      Double latitudeBottom = request.getLatitudeBottom();
+      Double longitudeLeft = request.getLongitudeLeft();
+      Double longitudeRight = request.getLongitudeRight();
+      Integer maxRecords = request.getMaxRecords();
+
+      System.out.println("Getting messages for latitude_top " + latitudeTop + ", latitude_bottom " +
+          latitudeBottom + ", longitude_left " + longitudeLeft + ", latitude_bottom " +
+          latitudeBottom +
+          ", max_records " + maxRecords);
+
+      if (latitudeBottom == null || latitudeBottom < -90 || latitudeBottom > 90) {
+        ctx.result("Invalid latitude_bottom");
+      } else if (latitudeTop == null || latitudeTop < -90 || latitudeTop > 90) {
+        ctx.result("Invalid latitude_top");
+      } else if (longitudeLeft == null || longitudeLeft < -180 || longitudeLeft > 180) {
+        ctx.result("Invalid longitude_left");
+      } else if (longitudeRight == null || longitudeRight < -180 || longitudeRight > 180) {
+        ctx.result("Invalid longitude_right");
+      } else if (maxRecords == null || maxRecords < 0) {
+        ctx.result("Invalid max_records");
+      } else {
+        GeoPoint lesserPoint =
+            new GeoPoint(request.getLatitudeBottom(), request.getLongitudeLeft());
+        GeoPoint greaterPoint = new GeoPoint(request.getLatitudeTop(), request.getLongitudeRight());
+
+        boolean cross90Latitude = false;
+        boolean cross180Longitude = false;
+        if (lesserPoint.getLatitude() >= greaterPoint.getLatitude()) {
+          cross90Latitude = true;
+        }
+        if (lesserPoint.getLongitude() >= greaterPoint.getLongitude()) {
+          cross180Longitude = true;
         }
 
-        FirebaseApp.initializeApp(firebaseOptions);
+        List<Message> messages = messageFinder.findByBoundingBox(
+            lesserPoint,
+            greaterPoint,
+            maxRecords,
+            cross90Latitude,
+            cross180Longitude
+        );
 
-        Firestore firestore = FirestoreClient.getFirestore();
-        Storage storage = storageOptions.getService();
+        ctx.result(gson.toJson(new MessagesResponse(messages)));
+      }
+    });
 
-        app = Javalin.create().start(Constants.PORT);
-        messageFinder = new MessageFinderImpl(firestore);
-        messagePoster = new MessagePosterImpl(firestore, storage);
-    }
+    app.post("/messages/:user_id", ctx -> {
+      String userId = ctx.pathParam("user_id");
 
-    public static void start() {
-        setup();
+      System.out.println("Getting messages for user_id " + userId);
+      List<Message> messages = messageFinder.findByUserId(userId);
 
-        app.post("/messages", ctx -> {
-            FindMessagesByBoundingBoxRequest request = gson.fromJson(
-                    ctx.body(),
-                    FindMessagesByBoundingBoxRequest.class
-            );
+      ctx.result(gson.toJson(new MessagesResponse(messages)));
+    });
 
-            Double latitudeTop = request.getLatitudeTop();
-            Double latitudeBottom = request.getLatitudeBottom();
-            Double longitudeLeft = request.getLongitudeLeft();
-            Double longitudeRight = request.getLongitudeRight();
-            Integer maxRecords = request.getMaxRecords();
+    app.post("/message/:user_id/new", ctx -> {
 
-            System.out.println("Getting messages for latitude_top " + latitudeTop + ", latitude_bottom " +
-                    latitudeBottom + ", longitude_left " + longitudeLeft + ", latitude_bottom " + latitudeBottom +
-                    ", max_records " + maxRecords);
+      String userID = ctx.pathParam("user_id");
+      UploadedFile picture = ctx.uploadedFile("image");
 
-            if (latitudeBottom == null || latitudeBottom < -90 || latitudeBottom > 90) {
-                ctx.result("Invalid latitude_bottom");
-            } else if (latitudeTop == null || latitudeTop < -90 || latitudeTop > 90) {
-                ctx.result("Invalid latitude_top");
-            } else if (longitudeLeft == null || longitudeLeft < -180 || longitudeLeft > 180) {
-                ctx.result("Invalid longitude_left");
-            } else if (longitudeRight == null || longitudeRight < -180 || longitudeRight > 180) {
-                ctx.result("Invalid longitude_right");
-            } else if (maxRecords == null || maxRecords < 0) {
-                ctx.result("Invalid max_records");
-            } else {
-                GeoPoint lesserPoint = new GeoPoint(request.getLatitudeBottom(), request.getLongitudeLeft());
-                GeoPoint greaterPoint = new GeoPoint(request.getLatitudeTop(), request.getLongitudeRight());
+      String text = ctx.formParam("text");
+      double lat = Double.parseDouble(ctx.formParam("latitude"));
+      double lon = Double.parseDouble(ctx.formParam("longitude"));
 
-                boolean cross90Latitude = false;
-                boolean cross180Longitude = false;
-                if (lesserPoint.getLatitude() >= greaterPoint.getLatitude()) {
-                    cross90Latitude = true;
-                }
-                if (lesserPoint.getLongitude() >= greaterPoint.getLongitude()) {
-                    cross180Longitude = true;
-                }
+      NewPostResponse response = messagePoster
+          .postNewMessage(userID, IOUtils.toByteArray(picture.getContent()), text, lat, lon,
+              picture.getExtension());
 
-                List<Message> messages = messageFinder.findByBoundingBox(
-                        lesserPoint,
-                        greaterPoint,
-                        maxRecords,
-                        cross90Latitude,
-                        cross180Longitude
-                );
+      ctx.result(gson.toJson(response));
 
-                ctx.result(gson.toJson(new MessagesResponse(messages)));
-            }
-        });
+    });
 
-        app.post("/messages/:user_id", ctx -> {
-            String userId = ctx.pathParam("user_id");
+    app.post(" /messages/:user_id/update/:record_id", ctx -> {
 
-            System.out.println("Getting messages for user_id " + userId);
-            List<Message> messages = messageFinder.findByUserId(userId);
+      String userID = ctx.pathParam("user_id");
+      String recordID = ctx.pathParam("record_id");
+      UploadedFile picture = ctx.uploadedFile("image");
 
-            ctx.result(gson.toJson(new MessagesResponse(messages)));
-        });
+      String text = ctx.formParam("text");
+      double lat = Double.parseDouble(ctx.formParam("latitude"));
+      double lon = Double.parseDouble(ctx.formParam("longitude"));
 
-        app.post("/message/:user_id/new", ctx -> {
+      UpdatePostResponse response = messagePoster
+          .updateMessage(recordID, userID, IOUtils.toByteArray(picture.getContent()), text, lat,
+              lon, picture.getExtension());
 
-           String userID = ctx.pathParam("user_id");
-           UploadedFile picture = ctx.uploadedFile("image");
+      ctx.result(gson.toJson(response));
 
-           String text = ctx.formParam("text");
-           double lat = Double.parseDouble(ctx.formParam("latitude"));
-           double lon = Double.parseDouble(ctx.formParam("longitude"));
+    });
 
-           NewPostResponse response = messagePoster.postNewMessage(userID, IOUtils.toByteArray(picture.getContent()), text, lat, lon, picture.getExtension());
+    app.post("/message/:user_id/delete/:record_id", ctx -> {
 
-           ctx.result(gson.toJson(response));
+      DeletePostResponse response = messagePoster.deleteMessage(ctx.pathParam("record_id"));
 
-        });
+      ctx.result(gson.toJson(response));
 
-        app.post(" /messages/:user_id/update/:record_id", ctx -> {
+    });
 
-            String userID = ctx.pathParam("user_id");
-            String recordID = ctx.pathParam("record_id");
-            UploadedFile picture = ctx.uploadedFile("image");
+  }
 
-            String text = ctx.formParam("text");
-            double lat = Double.parseDouble(ctx.formParam("latitude"));
-            double lon = Double.parseDouble(ctx.formParam("longitude"));
+  public static void stop() {
+    app.stop();
+  }
 
-            UpdatePostResponse response = messagePoster.updateMessage(recordID, userID, IOUtils.toByteArray(picture.getContent()), text, lat, lon, picture.getExtension());
-
-            ctx.result(gson.toJson(response));
-
-        });
-
-        app.post("/message/:user_id/delete/:record_id", ctx -> {
-
-            DeletePostResponse response = messagePoster.deleteMessage(ctx.pathParam("record_id"));
-
-            ctx.result(gson.toJson(response));
-
-        });
-
-    }
-
-    public static void stop() {
-        app.stop();
-    }
-
-    public static void main(String[] args) {
-        start();
-    }
+  public static void main(String[] args) {
+    start();
+  }
 }

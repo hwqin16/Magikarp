@@ -7,11 +7,11 @@ import com.android.volley.toolbox.ImageLoader;
  */
 public interface ImageLoaderFactory {
 
-    /**
-     * Get a Volley image loader.
-     *
-     * @return a network image loader
-     */
-    ImageLoader getImageLoader();
+  /**
+   * Get a Volley image loader.
+   *
+   * @return a network image loader
+   */
+  ImageLoader getImageLoader();
 
 }
