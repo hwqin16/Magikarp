@@ -63,4 +63,11 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+    <!-- Strings related to content creation -->
+    <string name="post_content">Post</string>
+    <string name="create_new_post">Create New Post</string>
+    <string name="title_activity_create_post">CreatePostActivity</string>
+    <string name="image_preview">Image Preview</string>
+    <string name="gps_location">GPS Location</string>
 </resources>
