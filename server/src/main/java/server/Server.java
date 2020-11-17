@@ -104,19 +104,24 @@ public class Server {
                 GeoPoint lesserPoint = new GeoPoint(request.getLatitudeBottom(), request.getLongitudeLeft());
                 GeoPoint greaterPoint = new GeoPoint(request.getLatitudeTop(), request.getLongitudeRight());
 
+                boolean cross90Latitude = false;
+                boolean cross180Longitude = false;
                 if (lesserPoint.getLatitude() >= greaterPoint.getLatitude()) {
-                    ctx.result("Passed bottom_latitude that is greater than top_latitude");
-                } else if (lesserPoint.getLongitude() >= greaterPoint.getLongitude()) {
-                    ctx.result("Passed left_longitude that is greater than right_latitude");
-                } else {
-                    List<Message> messages = messageFinder.findByBoundingBox(
-                            lesserPoint,
-                            greaterPoint,
-                            maxRecords
-                    );
-
-                    ctx.result(gson.toJson(new MessagesResponse(messages)));
+                    cross90Latitude = true;
                 }
+                if (lesserPoint.getLongitude() >= greaterPoint.getLongitude()) {
+                    cross180Longitude = true;
+                }
+
+                List<Message> messages = messageFinder.findByBoundingBox(
+                        lesserPoint,
+                        greaterPoint,
+                        maxRecords,
+                        cross90Latitude,
+                        cross180Longitude
+                );
+
+                ctx.result(gson.toJson(new MessagesResponse(messages)));
             }
         });
 
