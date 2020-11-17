@@ -1,5 +1,6 @@
 package server;
 
+import com.google.cloud.Timestamp;
 import org.apache.commons.io.IOUtils;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
@@ -24,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 public class Server {
   private static final Gson gson = new Gson();
@@ -145,9 +147,11 @@ public class Server {
       double lat = Double.parseDouble(ctx.formParam("latitude"));
       double lon = Double.parseDouble(ctx.formParam("longitude"));
 
+      UUID uuid = UUID.randomUUID();
+
       NewPostResponse response = messagePoster
-          .postNewMessage(userID, IOUtils.toByteArray(picture.getContent()), text, lat, lon,
-              picture.getExtension());
+          .postNewMessage(uuid.toString(), userID, IOUtils.toByteArray(picture.getContent()), text, lat, lon,
+              picture.getExtension(), Timestamp.now());
 
       ctx.result(gson.toJson(response));
 
@@ -165,7 +169,7 @@ public class Server {
 
       UpdatePostResponse response = messagePoster
           .updateMessage(recordID, userID, IOUtils.toByteArray(picture.getContent()), text, lat,
-              lon, picture.getExtension());
+              lon, picture.getExtension(), Timestamp.now());
 
       ctx.result(gson.toJson(response));
 
