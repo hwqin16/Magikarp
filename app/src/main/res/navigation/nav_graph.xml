@@ -68,6 +68,10 @@
             app:argType="java.lang.Double"
             app:nullable="true" />
         <argument
+            android:name="@string/args_text"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
             android:name="@string/args_image_uri"
             app:argType="string"
             app:nullable="true" />
@@ -88,6 +92,10 @@
         <argument
             android:name="@string/args_longitude"
             app:argType="java.lang.Double" />
+        <argument
+            android:name="@string/args_text"
+            app:argType="string"
+            app:nullable="true" />
         <argument
             android:name="@string/args_image_uri"
             app:argType="string"

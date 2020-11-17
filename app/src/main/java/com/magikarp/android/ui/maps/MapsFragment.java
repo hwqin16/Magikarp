@@ -72,7 +72,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
       bundle.putBoolean(resources.getString(R.string.args_is_user_data), true);
       bundle.putDouble(resources.getString(R.string.args_latitude), Double.NaN);
       bundle.putDouble(resources.getString(R.string.args_longitude), Double.NaN);
-      bundle.putString(resources.getString(R.string.args_image_uri), "TEST");
       NavHostFragment.findNavController(this).navigate(R.id.action_nav_maps_to_post_editor, bundle);
       return true;
     }
@@ -93,10 +92,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public void onMapReady(GoogleMap googleMap) {
     this.googleMap = googleMap;
     //googleMap.setMyLocationEnabled(true);
-    // clusterManager = new ClusterManager<>(requireContext(), googleMap);
     googleMap.setOnCameraIdleListener(this);
     googleMap.setOnMarkerClickListener(this);
-    // clusterManager.setOnClusterItemClickListener();
     mapsViewModel.getMessages().observe(this, this);
   }
 
@@ -110,20 +107,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public void onChanged(List<Message> clusterItems) {
     googleMap.clear();
     for (Message message : clusterItems) {
-      googleMap.addMarker(
+      Marker marker = googleMap.addMarker(
           new MarkerOptions().position(new LatLng(message.getLatitude(), message.getLongitude())));
+      marker.setTag(message);
     }
   }
 
   @Override
   public boolean onMarkerClick(Marker marker) {
     LatLng latLng = marker.getPosition();
+    Message message = (Message) marker.getTag();
+
     Resources resources = getResources();
     Bundle bundle = new Bundle();
     bundle.putBoolean(resources.getString(R.string.args_is_user_data), isUserData);
     bundle.putDouble(resources.getString(R.string.args_latitude), latLng.latitude);
     bundle.putDouble(resources.getString(R.string.args_longitude), latLng.longitude);
-    bundle.putString(resources.getString(R.string.args_image_uri), "TEST");
+    bundle.putString(resources.getString(R.string.args_text), message.getText());
+    bundle.putString(resources.getString(R.string.args_image_uri), message.getImageUrl());
     int action =
         isUserData ? R.id.action_nav_maps_to_post_editor : R.id.action_nav_maps_to_post_viewer;
     NavHostFragment.findNavController(this).navigate(action, bundle);

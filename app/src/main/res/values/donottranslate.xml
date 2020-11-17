@@ -11,6 +11,7 @@
     <string name="args_image_uri">image_uri</string>
     <string name="args_latitude">latitude</string>
     <string name="args_longitude">longitude</string>
+    <string name="args_text">text</string>
     <string name="args_is_user_data">is_user_data</string>
     <string name="fragment_tag_maps">tag_maps</string>
 
