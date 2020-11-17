@@ -30,13 +30,7 @@ allprojects {
     }
 
     apply plugin: 'com.github.spotbugs'
-
-    spotbugsMain{
-        reports {
-            xml.enabled = false
-            html.enabled = true
-        }
-    }
+    
 }
 
 subprojects {
