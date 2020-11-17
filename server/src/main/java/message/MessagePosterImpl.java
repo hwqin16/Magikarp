@@ -51,12 +51,11 @@ public class MessagePosterImpl implements MessagePoster {
 
     }
 
-    public NewPostResponse postNewMessage(String userID, byte[] image, String text, double lat, double lon, String fileType){
+    public NewPostResponse postNewMessage(String recordID, String userID, byte[] image, String text, double lat, double lon, String fileType, Timestamp now){
         NewPostResponse response;
         try{
 
-            UUID uuid = UUID.randomUUID();
-            BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, uuid.toString() + fileType);
+            BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET, recordID + fileType);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
             storage.create(blobInfo, image);
 
@@ -69,15 +68,15 @@ public class MessagePosterImpl implements MessagePoster {
             newPost.put("user_id", userID);
             newPost.put("text", text);
             newPost.put("geotag", point);
-            newPost.put("id", uuid.toString());
-            newPost.put("url", "https://storage.googleapis.com/" + "magikarp-images/" + uuid.toString()  + fileType);
-            newPost.put("timestamp", Timestamp.now());
+            newPost.put("id", recordID);
+            newPost.put("url", "https://storage.googleapis.com/" + "magikarp-images/" + recordID  + fileType);
+            newPost.put("timestamp", now);
 
-            ApiFuture<WriteResult> writeResult = messagesCollection.document(uuid.toString()).set(newPost, SetOptions.merge());
+            ApiFuture<WriteResult> writeResult = messagesCollection.document(recordID).set(newPost, SetOptions.merge());
 
             writeResult.get();
 
-            response = new NewPostResponse(201, uuid.toString(), null);
+            response = new NewPostResponse(201, recordID, null);
         }catch(Exception e){
             System.out.println("AN ERROR OCCURED");
             response = new NewPostResponse(401, null, e.getMessage());
@@ -87,7 +86,7 @@ public class MessagePosterImpl implements MessagePoster {
 
     }
 
-    public UpdatePostResponse updateMessage(String record_id, String userID, byte[] image, String text, double lat, double lon, String fileType){
+    public UpdatePostResponse updateMessage(String record_id, String userID, byte[] image, String text, double lat, double lon, String fileType, Timestamp now){
         UpdatePostResponse response;
         try{
 
@@ -108,7 +107,7 @@ public class MessagePosterImpl implements MessagePoster {
             update.put("geotag", point);
             update.put("id", record_id);
             update.put("url", "https://storage.googleapis.com/" + "magikarp-images/" + record_id  + fileType);
-            update.put("timestamp", Timestamp.now());
+            update.put("timestamp", now);
 
             ApiFuture<WriteResult> writeResult = messagesCollection.document(record_id).set(update, SetOptions.merge());
             writeResult.get();
