@@ -26,8 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
-            android:name=".service.LocationService"
+            android:name=".services.LocationService"
             android:foregroundServiceType="location" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
