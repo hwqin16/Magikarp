@@ -8,13 +8,17 @@
         android:checkableBehavior="single">
 
         <item
+            android:id="@+id/action_login"
+            android:icon="@drawable/ic_login"
+            android:title="@string/menu_login" />
+        <item
+            android:id="@+id/nav_my_posts"
+            android:icon="@drawable/ic_person_pin"
+            android:title="@string/menu_my_locations" />
+        <item
             android:id="@+id/nav_maps"
             android:icon="@drawable/ic_map"
             android:title="@string/menu_maps" />
-        <item
-            android:id="@+id/nav_my_posts"
-            android:icon="@drawable/ic_map"
-            android:title="@string/menu_my_locations" />
 
     </group>
 
@@ -31,6 +35,16 @@
             android:icon="@drawable/ic_help"
             android:title="@string/menu_help" />
 
+    </group>
+
+    <group
+        android:id="@+id/menu_group_logout"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/action_logout"
+            android:icon="@drawable/ic_power_settings_new"
+            android:title="@string/menu_logout" />
     </group>
 
 </menu>

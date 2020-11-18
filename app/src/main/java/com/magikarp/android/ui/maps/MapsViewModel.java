@@ -1,6 +1,7 @@
 package com.magikarp.android.ui.maps;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,6 +14,7 @@ import com.magikarp.android.data.MapsRepository.MessagesListener;
 import com.magikarp.android.data.model.Message;
 import java.util.Collections;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class to provide map items from the map item repository.
@@ -48,17 +50,16 @@ public class MapsViewModel extends ViewModel implements MessagesListener, ErrorL
   /**
    * Set the query to send to the maps repository.
    *
-   * @param isUserData {@code true} if querying for user data, {@code false} if querying for all
-   *                   data
+   * @param userId     user ID
    * @param bounds     the geographic bounds of the query
    * @param maxRecords the maximum number of records to return
    */
-  public void setMapsQuery(boolean isUserData, @NonNull LatLngBounds bounds, int maxRecords) {
-    mapsRepository.getMessages(isUserData, bounds, maxRecords, this, this);
+  public void setMapsQuery(@Nullable String userId, @NonNull LatLngBounds bounds, int maxRecords) {
+    mapsRepository.getMessages(userId, bounds, maxRecords, this, this);
   }
 
   @Override
-  public void onMessagesChanged(List<Message> messages) {
+  public void onMessagesChanged(@NotNull List<Message> messages) {
     liveData.setValue(messages);
   }
 

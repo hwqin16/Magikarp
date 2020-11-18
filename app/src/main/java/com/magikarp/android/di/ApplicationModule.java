@@ -7,7 +7,6 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.magikarp.android.R;
 import com.magikarp.android.di.HiltQualifiers.GetMessagesUrl;
-import com.magikarp.android.di.HiltQualifiers.GetUserMessagesUrl;
 import com.magikarp.android.network.ImageCache;
 import com.magikarp.android.network.LruBitmapCache;
 import dagger.Module;
@@ -66,20 +65,6 @@ public class ApplicationModule {
     final Resources resources = applicationContext.getResources();
     return resources.getString(R.string.server_url)
         + resources.getString(R.string.server_get_messages);
-  }
-
-  /**
-   * Injector for creating a URL for get user messages endpoint.
-   *
-   * @param applicationContext the application context
-   * @return a URL for get user messages endpoint
-   */
-  @GetUserMessagesUrl
-  @Provides
-  public static String provideGetUserMessagesUrl(@ApplicationContext Context applicationContext) {
-    final Resources resources = applicationContext.getResources();
-    return resources.getString(R.string.server_url)
-        + resources.getString(R.string.server_get_user_messages);
   }
 
 }

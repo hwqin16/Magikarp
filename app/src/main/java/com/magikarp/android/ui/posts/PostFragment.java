@@ -91,21 +91,27 @@ public class PostFragment extends Fragment {
     setHasOptionsMenu(true);
 
     final Intent gpsIntent = new Intent(getContext(), LocationService.class);
-    getActivity().bindService(gpsIntent, gpsServiceConnection, Context.BIND_AUTO_CREATE);
-    getActivity().startService(gpsIntent);
+    final Activity activity = getActivity();
+    assert activity != null;
+    activity.bindService(gpsIntent, gpsServiceConnection, Context.BIND_AUTO_CREATE);
+    activity.startService(gpsIntent);
   }
 
   @Override
   public void onDestroy() {
     gpsService.dispose();
-    getActivity().unbindService(gpsServiceConnection);
+    final Activity activity = getActivity();
+    assert activity != null;
+    activity.unbindService(gpsServiceConnection);
     super.onDestroy();
   }
 
   @Override
   public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
-    if (getArguments().getBoolean(getResources().getString(R.string.args_is_editable))) {
+    Bundle arguments = getArguments();
+    assert arguments != null;
+    if (arguments.getBoolean(getResources().getString(R.string.args_is_editable))) {
       inflater.inflate(R.menu.menu_post_edit, menu);
       menu.findItem(R.id.menu_get_location).setOnMenuItemClickListener(this::onGpsButtonClick);
     } else {
@@ -196,9 +202,14 @@ public class PostFragment extends Fragment {
    */
   private void loadImage(final Uri imageUri) {
     try {
-      final InputStream imageInput = getContext().getContentResolver().openInputStream(imageUri);
+      final Context context = getContext();
+      assert context != null;
+      final Activity activity = getActivity();
+      assert activity != null;
+
+      final InputStream imageInput = context.getContentResolver().openInputStream(imageUri);
       final Bitmap selectedImage = BitmapFactory.decodeStream(imageInput);
-      final ImageView preview = getActivity().findViewById(R.id.create_post_image_preview);
+      final ImageView preview = activity.findViewById(R.id.create_post_image_preview);
       preview.setImageBitmap(selectedImage);
 
       imagePath = imageUri.getPath();
