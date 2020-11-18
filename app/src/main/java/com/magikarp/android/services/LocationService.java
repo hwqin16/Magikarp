@@ -2,13 +2,11 @@ package com.magikarp.android.services;
 
 import android.Manifest;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -43,8 +41,7 @@ public class LocationService extends Service implements LocationListener {
             != PackageManager.PERMISSION_GRANTED && ActivityCompat
             .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
-
-          // TODO: Request permission
+          
           Log.d("LocationService", "Failed to initialize location service.  Requires permissions.");
         } else {
           isLocationEnabled = true;
