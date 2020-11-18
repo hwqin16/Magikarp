@@ -2,13 +2,11 @@ package com.magikarp.android.services;
 
 import android.Manifest;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -37,14 +35,12 @@ public class LocationService extends Service implements LocationListener {
       boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
       boolean isNetworkEnabled =
           locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-      Log.e("NTC", "GPS " + Boolean.toString(isGpsEnabled));
       if (isGpsEnabled || isNetworkEnabled) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED && ActivityCompat
             .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
-
-          // TODO: Request permission
+          
           Log.d("LocationService", "Failed to initialize location service.  Requires permissions.");
         } else {
           isLocationEnabled = true;
