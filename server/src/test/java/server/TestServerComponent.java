@@ -3,7 +3,6 @@ package server;
 
 import com.google.gson.Gson;
 import helper.TestHelper;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import kong.unirest.Unirest;
 import kong.unirest.HttpResponse;
@@ -40,15 +39,17 @@ public class TestServerComponent {
 
   @Test
   @Order(1)
-  public void newPostTest() throws FileNotFoundException {
-    InputStream image = new FileInputStream(new File(imagePath));
-    // Create HTTP request and get response
-    HttpResponse<String> response =
-        helper.writeDataToEndpoint(writeEndpoint + helper.getUserId() + "/new", image);
-    // Get the response and parse the JSON
-    JSONObject responseJson = new JSONObject(response.getBody());
+  public void newPostTest() throws IOException {
+    try (InputStream image = new FileInputStream(new File(imagePath))) {
+      // Create HTTP request and get response
+      HttpResponse<String> response =
+          helper.writeDataToEndpoint(writeEndpoint + helper.getUserId() + "/new", image);
 
-    assertEquals(201, responseJson.get("response_code"));
+      // Get the response and parse the JSON
+      JSONObject responseJson = new JSONObject(response.getBody());
+
+      assertEquals(201, responseJson.get("response_code"));
+    }
   }
 
   @Test
@@ -76,20 +77,22 @@ public class TestServerComponent {
 
   @Test
   @Order(3)
-  public void updatePostTest() throws FileNotFoundException {
+  public void updatePostTest() throws IOException {
     String recordId = getFirstRecordIdFromHelper();
 
     // Update test helper to new values
     helper.randomUpdate();
 
-    InputStream image = new FileInputStream(new File(imagePath));
-    HttpResponse<String> response =
-        helper
-            .writeDataToEndpoint(writeEndpoint + helper.getUserId() + "/update/" + recordId, image);
+    try (InputStream image = new FileInputStream(new File(imagePath))) {
 
-    JSONObject responseJson = new JSONObject(response.getBody());
+      HttpResponse<String> response =
+          helper.writeDataToEndpoint(writeEndpoint + helper.getUserId() + "/update/" + recordId,
+              image);
 
-    assertEquals(201, responseJson.get("response_code"));
+      JSONObject responseJson = new JSONObject(response.getBody());
+
+      assertEquals(201, responseJson.get("response_code"));
+    }
   }
 
   @Test
