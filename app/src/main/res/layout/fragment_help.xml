@@ -1,27 +1,117 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Use DrawerLayout as root container for activity -->
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.app.HelpFragment"
-    android:id="@+id/help_container">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/text_call"
+    <RelativeLayout
+        android:id="@+id/two_line_item1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/text_call"
-        app:drawableStartCompat="@drawable/ic_call"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_alignParentTop="true"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:minHeight="72dp"
+        android:paddingStart="?listPreferredItemPaddingLeft"
+        android:paddingLeft="?listPreferredItemPaddingLeft"
+        android:paddingEnd="?listPreferredItemPaddingRight"
+        android:paddingRight="?listPreferredItemPaddingRight">
 
-    <TextView
-        android:id="@+id/text_email"
+        <ImageView
+            android:id="@+id/primary_action1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_call" />
+
+        <LinearLayout
+            android:id="@+id/lines_container1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_toEndOf="@+id/primary_action1"
+            android:layout_toRightOf="@+id/primary_action1"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/first_text_view1"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="Call" />
+
+            <TextView
+                android:id="@+id/second_text_view1"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="1-800-555-5555" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/two_line_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/text_email"
-        app:drawableStartCompat="@drawable/ic_email"
-        app:layout_constraintTop_toBottomOf="@id/text_call" />
+        android:layout_below="@id/two_line_item1"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:minHeight="72dp"
+        android:paddingStart="?listPreferredItemPaddingLeft"
+        android:paddingLeft="?listPreferredItemPaddingLeft"
+        android:paddingEnd="?listPreferredItemPaddingRight"
+        android:paddingRight="?listPreferredItemPaddingRight">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/primary_action"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_email" />
+
+        <LinearLayout
+            android:id="@+id/lines_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_toEndOf="@+id/primary_action"
+            android:layout_toRightOf="@+id/primary_action"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/first_text_view"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="Email" />
+
+            <TextView
+                android:id="@+id/second_text_view"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="help@example.com" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
