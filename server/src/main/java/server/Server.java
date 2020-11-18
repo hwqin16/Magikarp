@@ -16,6 +16,7 @@ import io.javalin.http.UploadedFile;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 import message.Message;
@@ -39,7 +40,7 @@ public class Server {
 
   private static ByteArrayInputStream getServiceAccountInputStream() {
     return new ByteArrayInputStream(
-        System.getenv(Constants.FIREBASE_SERVICE_ACCOUNT_ENV_VAR).getBytes());
+        System.getenv(Constants.FIREBASE_SERVICE_ACCOUNT_ENV_VAR).getBytes(StandardCharsets.UTF_8));
   }
 
   private static void setup() throws IOException {
