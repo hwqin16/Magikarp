@@ -1,11 +1,14 @@
 package com.magikarp.android.data.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class GetMessagesResponse {
 
+  @SerializedName("record_count")
   private final int recordCount;
 
+  @SerializedName("records")
   private final List<Message> messages;
 
   /**

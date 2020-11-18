@@ -15,6 +15,7 @@ import com.magikarp.android.data.model.GetMessagesResponse;
 import com.magikarp.android.data.model.Message;
 import com.magikarp.android.di.HiltQualifiers.GetMessagesUrl;
 import com.magikarp.android.network.GsonRequest;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -63,9 +64,6 @@ public class MapsRepository {
     } else {
       url = urlGetMessages + "/" + userId;
     }
-
-    Log.i("MapsRepository", "URL: " + url);
-
     GsonRequest<GetMessagesResponse> request =
         new GsonRequest<>(Request.Method.POST, url, GetMessagesResponse.class,
             new Gson().toJson(body), new GetMessagesResponseListener(listener), errorListener);
@@ -91,7 +89,9 @@ public class MapsRepository {
 
     @Override
     public void onResponse(GetMessagesResponse response) {
-      listener.onMessagesChanged(response.getMessages());
+      Log.i("MapsRepository", "Response: " + new Gson().toJson(response));
+      final List<Message> messages = response.getMessages();
+      listener.onMessagesChanged((messages == null) ? Collections.emptyList() : messages);
     }
 
   }
@@ -106,7 +106,7 @@ public class MapsRepository {
      *
      * @param messages a list of messages
      */
-    void onMessagesChanged(List<Message> messages);
+    void onMessagesChanged(@NonNull List<Message> messages);
 
   }
 

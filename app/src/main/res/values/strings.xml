@@ -7,7 +7,7 @@
     <string name="menu_login">Sign in</string>
     <string name="menu_logout">Sign out</string>
     <string name="menu_maps">Map</string>
-    <string name="menu_my_posts">My posts</string>
+    <string name="menu_my_locations">My locations</string>
     <string name="menu_settings">Settings</string>
 
     <!-- Taskbar menu items -->

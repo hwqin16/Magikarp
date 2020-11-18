@@ -14,6 +14,7 @@ import com.magikarp.android.data.MapsRepository.MessagesListener;
 import com.magikarp.android.data.model.Message;
 import java.util.Collections;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class to provide map items from the map item repository.
@@ -58,7 +59,7 @@ public class MapsViewModel extends ViewModel implements MessagesListener, ErrorL
   }
 
   @Override
-  public void onMessagesChanged(List<Message> messages) {
+  public void onMessagesChanged(@NotNull List<Message> messages) {
     liveData.setValue(messages);
   }
 
