@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import constants.Constants;
 import io.javalin.Javalin;
 import io.javalin.http.UploadedFile;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -37,26 +37,29 @@ public class Server {
   private static MessageFinder messageFinder;
   private static MessagePoster messagePoster;
 
+  private static ByteArrayInputStream getServiceAccountInputStream() {
+    return new ByteArrayInputStream(
+        System.getenv(Constants.FIREBASE_SERVICE_ACCOUNT_ENV_VAR).getBytes());
+  }
+
   private static void setup() throws IOException {
-    FileInputStream serviceAccount;
+    ByteArrayInputStream serviceAccount = getServiceAccountInputStream();
     FirebaseOptions firebaseOptions;
     StorageOptions storageOptions;
-    serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
 
     try {
-
       firebaseOptions = FirebaseOptions
           .builder()
           .setCredentials(GoogleCredentials.fromStream(serviceAccount))
           .setDatabaseUrl(Constants.FIRESTORE_URL)
           .build();
-      serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
+      serviceAccount.close();
+      serviceAccount = getServiceAccountInputStream();
       storageOptions = StorageOptions
           .newBuilder()
           .setProjectId(Constants.PROJECT_ID)
           .setCredentials(GoogleCredentials.fromStream(serviceAccount))
           .build();
-
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       throw new RuntimeException("Failed to find ServiceAccount file");
@@ -133,7 +136,9 @@ public class Server {
 
         ctx.result(gson.toJson(new MessagesResponse(messages)));
       }
-    }).post("/messages/:user_id", ctx -> {
+    });
+
+    app.post("/messages/:user_id", ctx -> {
       String userId = ctx.pathParam("user_id");
 
       System.out.println("Getting messages for user_id " + userId);
@@ -145,6 +150,9 @@ public class Server {
     app.post("/message/:user_id/new", ctx -> {
 
       String userID = ctx.pathParam("user_id");
+
+      System.out.println("Creating new message for user " + userID);
+
       UploadedFile picture = ctx.uploadedFile("image");
 
       NewPostResponse response;
@@ -175,10 +183,14 @@ public class Server {
 
     });
 
-    app.post(" /messages/:user_id/update/:record_id", ctx -> {
+    app.post("/message/:user_id/update/:record_id", ctx -> {
 
+      // TODO validate user_id actually owns record_id
       String userID = ctx.pathParam("user_id");
       String recordID = ctx.pathParam("record_id");
+
+      System.out.println("Updating message " + recordID + " for user " + userID);
+
       UploadedFile picture = ctx.uploadedFile("image");
 
       UpdatePostResponse response;
@@ -208,7 +220,13 @@ public class Server {
 
     app.post("/message/:user_id/delete/:record_id", ctx -> {
 
-      DeletePostResponse response = messagePoster.deleteMessage(ctx.pathParam("record_id"));
+      // TODO validate user_id actually owns record_id
+      String userId = ctx.pathParam("user_id");
+      String recordId = ctx.pathParam("record_id");
+
+      System.out.println("Deleting message " + recordId + " from user " + userId);
+
+      DeletePostResponse response = messagePoster.deleteMessage(recordId);
 
       ctx.result(gson.toJson(response));
 

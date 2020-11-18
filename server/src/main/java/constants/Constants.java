@@ -7,13 +7,16 @@ public class Constants {
   public static final int PORT = 7000;
   // Everyone will need to create a file like below from
   // https://console.firebase.google.com/u/1/project/magikarp-295201/settings/serviceaccounts/adminsdk
-  // rename to magikarp.json and stick it in /tmp
-  public static final String FIREBASE_SERVICE_ACCOUNT_FILE = "/tmp/magikarp.json";
+  // Add the contents of it to the environment variable MAGIKARP_JSON with a command like
+  // export MAGIKARP_JSON=$(cat magikarp.json)
+  public static final String FIREBASE_SERVICE_ACCOUNT_ENV_VAR = "MAGIKARP_JSON";
   public static final String FIRESTORE_URL = "https://magikarp-295201.firebaseio.com";
 
   public static final String COLLECTION_PATH = "messages";
 
   public static final String PROJECT_ID = "magikarp-295201";
+  public static final String GCS_BUCKET_ROOT = "https://storage.googleapis.com/";
   public static final String PROJECT_BUCKET = "magikarp-images";
+  public static final String FULL_PROJECT_BUCKET = GCS_BUCKET_ROOT + PROJECT_BUCKET;
 
 }

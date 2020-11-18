@@ -5,6 +5,7 @@ import java.util.List;
 import message.Message;
 
 public class MessagesResponse {
+  @SerializedName("records")
   private final List<Message> messages;
   @SerializedName("record_count")
   private final int recordCount;
