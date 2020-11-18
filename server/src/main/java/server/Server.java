@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import constants.Constants;
 import io.javalin.Javalin;
 import io.javalin.http.UploadedFile;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -37,26 +37,29 @@ public class Server {
   private static MessageFinder messageFinder;
   private static MessagePoster messagePoster;
 
+  private static ByteArrayInputStream getServiceAccountInputStream() {
+    return new ByteArrayInputStream(
+        System.getenv(Constants.FIREBASE_SERVICE_ACCOUNT_ENV_VAR).getBytes());
+  }
+
   private static void setup() throws IOException {
-    FileInputStream serviceAccount;
+    ByteArrayInputStream serviceAccount = getServiceAccountInputStream();
     FirebaseOptions firebaseOptions;
     StorageOptions storageOptions;
-    serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
 
     try {
-
       firebaseOptions = FirebaseOptions
           .builder()
           .setCredentials(GoogleCredentials.fromStream(serviceAccount))
           .setDatabaseUrl(Constants.FIRESTORE_URL)
           .build();
-      serviceAccount = new FileInputStream(Constants.FIREBASE_SERVICE_ACCOUNT_FILE);
+      serviceAccount.close();
+      serviceAccount = getServiceAccountInputStream();
       storageOptions = StorageOptions
           .newBuilder()
           .setProjectId(Constants.PROJECT_ID)
           .setCredentials(GoogleCredentials.fromStream(serviceAccount))
           .build();
-
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       throw new RuntimeException("Failed to find ServiceAccount file");
