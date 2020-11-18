@@ -1,25 +1,28 @@
 package server;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.Gson;
 import helper.TestHelper;
-import java.io.IOException;
-import kong.unirest.Unirest;
-import kong.unirest.HttpResponse;
-import kong.unirest.json.JSONObject;
-import org.junit.jupiter.api.*;
-
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
+import kong.unirest.json.JSONObject;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import requests.FindMessagesByBoundingBoxRequest;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 
 /**
  * Right now this runs against our production database on real data. So the tests will start failing
- * once actual data is passing through it. We should use an emulated database or a staging database or something.
+ * once actual data is passing through it. We should use an emulated database or a staging database
+ * or something.
  * At minimum, we can create and then delete data in Antarctica or something for tests.
  * But, right now, when we don't have any of the write paths, we'll just use the production db.
  */
