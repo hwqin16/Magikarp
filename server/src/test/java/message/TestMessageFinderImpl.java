@@ -1,23 +1,31 @@
 package message;
 
+import static helper.TestHelper.getMockQueryDocumentSnapshotsFromDocumentDataList;
+import static helper.TestHelper.getRandomDocumentData;
+import static helper.TestHelper.getRandomString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.google.api.core.SettableApiFuture;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.GeoPoint;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 import constants.Constants;
-import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-
-import static helper.TestHelper.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
 
 public class TestMessageFinderImpl {
   /**
@@ -158,7 +166,6 @@ public class TestMessageFinderImpl {
 
   @Test
   public void testFindByBoundingBoxBigLimit() throws ExecutionException, InterruptedException {
-    int limit = 10;
     List<Map<String, Object>> documentDataList = Arrays.asList(
         getRandomDocumentData(),
         getRandomDocumentData(),
@@ -179,6 +186,7 @@ public class TestMessageFinderImpl {
 
     MessageFinderImpl messageFinder = new MessageFinderImpl(mockFirestore);
 
+    int limit = 10;
     List<Message> messages = messageFinder.findByBoundingBox(
         new GeoPoint(-90, -180),
         new GeoPoint(90, 180),
@@ -195,7 +203,6 @@ public class TestMessageFinderImpl {
 
   @Test
   public void testFindByBoundingBoxSmallLimit() throws ExecutionException, InterruptedException {
-    int limit = 3;
     List<Map<String, Object>> documentDataList = Arrays.asList(
         getRandomDocumentData(),
         getRandomDocumentData(),
@@ -216,6 +223,7 @@ public class TestMessageFinderImpl {
 
     MessageFinderImpl messageFinder = new MessageFinderImpl(mockFirestore);
 
+    int limit = 3;
     List<Message> messages = messageFinder.findByBoundingBox(
         new GeoPoint(-90, -180),
         new GeoPoint(90, 180),
@@ -237,7 +245,6 @@ public class TestMessageFinderImpl {
 
   @Test
   public void testFindByBoundingBoxZeroLimit() throws ExecutionException, InterruptedException {
-    int limit = 0;
     List<Map<String, Object>> documentDataList = Arrays.asList(
         getRandomDocumentData(),
         getRandomDocumentData(),
@@ -258,6 +265,7 @@ public class TestMessageFinderImpl {
 
     MessageFinderImpl messageFinder = new MessageFinderImpl(mockFirestore);
 
+    int limit = 0;
     List<Message> messages = messageFinder.findByBoundingBox(
         new GeoPoint(-90, -180),
         new GeoPoint(90, 180),
@@ -270,7 +278,8 @@ public class TestMessageFinderImpl {
   }
 
   /**
-   * Compares a Message to a Map from Strings to Objects representing the document data returned from Firestore
+   * Compares a Message to a Map from Strings to Objects representing the document data returned
+   * from Firestore.
    *
    * @param message      Message to be compared
    * @param documentData Map from Strings to Objects to be compared

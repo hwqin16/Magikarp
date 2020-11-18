@@ -35,6 +35,7 @@ public class LocationService extends Service implements LocationListener {
       boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
       boolean isNetworkEnabled =
           locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+      Log.e("NTC", "GPS " + isGpsEnabled);
       if (isGpsEnabled || isNetworkEnabled) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED && ActivityCompat

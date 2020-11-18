@@ -1,7 +1,6 @@
 package com.magikarp.android.data;
 
 import android.text.TextUtils;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.android.volley.Request;
@@ -55,15 +54,18 @@ public class MapsRepository {
   public void getMessages(@Nullable String userId, @NonNull LatLngBounds bounds, int maxRecords,
                           @NonNull MessagesListener listener,
                           @Nullable ErrorListener errorListener) {
+    // Create message body
     final GetMessagesRequest body = new GetMessagesRequest(bounds.northeast.latitude,
         bounds.southwest.longitude, bounds.southwest.latitude, bounds.northeast.longitude,
         maxRecords);
+    // Build endpoint URL.
     String url;
     if (TextUtils.isEmpty(userId)) {
       url = urlGetMessages;
     } else {
       url = urlGetMessages + "/" + userId;
     }
+    // Create a new GSON request.
     GsonRequest<GetMessagesResponse> request =
         new GsonRequest<>(Request.Method.POST, url, GetMessagesResponse.class,
             new Gson().toJson(body), new GetMessagesResponseListener(listener), errorListener);
@@ -89,7 +91,6 @@ public class MapsRepository {
 
     @Override
     public void onResponse(GetMessagesResponse response) {
-      Log.i("MapsRepository", "Response: " + new Gson().toJson(response));
       final List<Message> messages = response.getMessages();
       listener.onMessagesChanged((messages == null) ? Collections.emptyList() : messages);
     }

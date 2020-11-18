@@ -148,7 +148,7 @@ public class Server {
       ctx.result(gson.toJson(new MessagesResponse(messages)));
     });
 
-    app.post("/message/:user_id/new", ctx -> {
+    app.post("/messages/:user_id/new", ctx -> {
 
       String userID = ctx.pathParam("user_id");
 
@@ -184,7 +184,7 @@ public class Server {
 
     });
 
-    app.post("/message/:user_id/update/:record_id", ctx -> {
+    app.post("/messages/:user_id/update/:record_id", ctx -> {
 
       // TODO validate user_id actually owns record_id
       String userID = ctx.pathParam("user_id");
@@ -219,7 +219,7 @@ public class Server {
 
     });
 
-    app.post("/message/:user_id/delete/:record_id", ctx -> {
+    app.post("/messages/:user_id/delete/:record_id", ctx -> {
 
       // TODO validate user_id actually owns record_id
       String userId = ctx.pathParam("user_id");
