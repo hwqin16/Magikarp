@@ -61,10 +61,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState) {
-
-    Log.i("MapsFragment",
-        "User Data: " + getArguments().getBoolean(getResources().getString(R.string.args_is_user_data)));
-
     return inflater.inflate(R.layout.fragment_maps, container, false);
   }
 
