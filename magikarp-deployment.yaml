@@ -19,6 +19,12 @@ spec:
           image: gcr.io/magikarp-295201/magikarp-server:latest
           ports:
             - containerPort: 7000
+          env:
+            - name: MAGIKARP_JSON
+              valueFrom:
+                secretKeyRef:
+                  name: magikarp-secret
+                  key: magikarp-295201-16cb5b55b6fb.json
 ---
 apiVersion: v1
 kind: Service
