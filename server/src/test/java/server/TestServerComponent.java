@@ -31,9 +31,7 @@ public class TestServerComponent {
   private static final Gson gson = new Gson();
   private static final String imagePath = "src/test/resources/karp.png";
   private static final TestServerComponentHelper helper = new TestServerComponentHelper();
-  private static final String localhost = "http://localhost:7000/";
-  private static final String writeEndpoint = localhost + "message/";
-  private static final String readEndpoint = localhost + "messages/";
+  private static final String endpoint = "http://localhost:7000/messages/";
 
   @BeforeAll
   public static void setup() throws IOException {
@@ -46,7 +44,7 @@ public class TestServerComponent {
     try (InputStream image = new FileInputStream(new File(imagePath))) {
       // Create HTTP request and get response
       HttpResponse<String> response =
-          helper.writeDataToEndpoint(writeEndpoint + helper.getUserId() + "/new", image);
+          helper.writeDataToEndpoint(endpoint + helper.getUserId() + "/new", image);
 
       // Get the response and parse the JSON
       JSONObject responseJson = new JSONObject(response.getBody());
@@ -65,7 +63,7 @@ public class TestServerComponent {
         helper.getLongitude() + 0.5,
         5
     );
-    HttpResponse<String> response = Unirest.post(readEndpoint)
+    HttpResponse<String> response = Unirest.post(endpoint)
         .body(gson.toJson(request))
         .asString();
 
@@ -89,7 +87,7 @@ public class TestServerComponent {
     try (InputStream image = new FileInputStream(new File(imagePath))) {
 
       HttpResponse<String> response =
-          helper.writeDataToEndpoint(writeEndpoint + helper.getUserId() + "/update/" + recordId,
+          helper.writeDataToEndpoint(endpoint + helper.getUserId() + "/update/" + recordId,
               image);
 
       JSONObject responseJson = new JSONObject(response.getBody());
@@ -102,7 +100,7 @@ public class TestServerComponent {
   @Order(4)
   public void getByUserIdTest() {
     HttpResponse<String> response =
-        Unirest.post(readEndpoint + helper.getUserId()).asString();
+        Unirest.post(endpoint + helper.getUserId()).asString();
 
     JSONObject responseJson = new JSONObject(response.getBody());
 
@@ -119,7 +117,7 @@ public class TestServerComponent {
     String recordId = getFirstRecordIdFromHelper();
 
     HttpResponse<String> deleteResponse =
-        Unirest.post(writeEndpoint + helper.getUserId() + "/delete/" + recordId).asString();
+        Unirest.post(endpoint + helper.getUserId() + "/delete/" + recordId).asString();
 
     JSONObject postDeleteBodyJson = new JSONObject(deleteResponse.getBody());
 
@@ -133,7 +131,7 @@ public class TestServerComponent {
 
   private String getFirstRecordIdFromHelper() {
     HttpResponse<String> getByUserIdResponse =
-        Unirest.post(readEndpoint + helper.getUserId()).asString();
+        Unirest.post(endpoint + helper.getUserId()).asString();
 
     JSONObject getByUserIdBodyJson = new JSONObject(getByUserIdResponse.getBody());
 
