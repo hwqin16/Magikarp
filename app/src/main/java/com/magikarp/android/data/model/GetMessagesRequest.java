@@ -41,15 +41,15 @@ public class GetMessagesRequest {
     return latitudeTop;
   }
 
-  public double getlongitudeLeft() {
+  public double getLongitudeLeft() {
     return longitudeLeft;
   }
 
-  public double getlatitudeBottom() {
+  public double getLatitudeBottom() {
     return latitudeBottom;
   }
 
-  public double getlongitudeRight() {
+  public double getLongitudeRight() {
     return longitudeRight;
   }
 
