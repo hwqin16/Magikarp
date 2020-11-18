@@ -133,7 +133,9 @@ public class Server {
 
         ctx.result(gson.toJson(new MessagesResponse(messages)));
       }
-    }).post("/messages/:user_id", ctx -> {
+    });
+
+    app.post("/messages/:user_id", ctx -> {
       String userId = ctx.pathParam("user_id");
 
       System.out.println("Getting messages for user_id " + userId);
@@ -145,6 +147,9 @@ public class Server {
     app.post("/message/:user_id/new", ctx -> {
 
       String userID = ctx.pathParam("user_id");
+
+      System.out.println("Creating new message for user " + userID);
+
       UploadedFile picture = ctx.uploadedFile("image");
 
       NewPostResponse response;
@@ -175,10 +180,14 @@ public class Server {
 
     });
 
-    app.post(" /messages/:user_id/update/:record_id", ctx -> {
+    app.post("/message/:user_id/update/:record_id", ctx -> {
 
+      // TODO validate user_id actually owns record_id
       String userID = ctx.pathParam("user_id");
       String recordID = ctx.pathParam("record_id");
+
+      System.out.println("Updating message " + recordID + " for user " + userID);
+
       UploadedFile picture = ctx.uploadedFile("image");
 
       UpdatePostResponse response;
@@ -208,7 +217,13 @@ public class Server {
 
     app.post("/message/:user_id/delete/:record_id", ctx -> {
 
-      DeletePostResponse response = messagePoster.deleteMessage(ctx.pathParam("record_id"));
+      // TODO validate user_id actually owns record_id
+      String userId = ctx.pathParam("user_id");
+      String recordId = ctx.pathParam("record_id");
+
+      System.out.println("Deleting message " + recordId + " from user " + userId);
+
+      DeletePostResponse response = messagePoster.deleteMessage(recordId);
 
       ctx.result(gson.toJson(response));
 

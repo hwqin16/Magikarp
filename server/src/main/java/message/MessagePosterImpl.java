@@ -15,6 +15,7 @@ import constants.Constants;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import responses.DeletePostResponse;
 import responses.NewPostResponse;
 import responses.UpdatePostResponse;
@@ -37,7 +38,9 @@ public class MessagePosterImpl implements MessagePoster {
       ApiFuture<DocumentSnapshot> future = messagesCollection.document(recordId).get();
 
       DocumentSnapshot document = future.get();
-      String url = document.getString("url");
+      System.out.println(document);
+      String url = document.getString(Message.FS_IMAGE_URL_FIELD_NAME);
+      System.out.println("Boop " + url);
       String[] urlSplit = Objects.requireNonNull(url).split("/");
       String fileName = urlSplit[urlSplit.length - 1];
 
@@ -46,7 +49,7 @@ public class MessagePosterImpl implements MessagePoster {
       storage.delete(blobId);
 
       response = new DeletePostResponse(201, null);
-    } catch (Exception e) {
+    } catch (InterruptedException | ExecutionException e) {
       response = new DeletePostResponse(401, e.getMessage());
     }
 
@@ -77,13 +80,13 @@ public class MessagePosterImpl implements MessagePoster {
 
       GeoPoint point = new GeoPoint(lat, lon);
 
-      newPost.put("user_id", userID);
-      newPost.put("text", text);
-      newPost.put("geotag", point);
-      newPost.put("id", recordId);
-      newPost.put("url",
-          "https://storage.googleapis.com/" + "magikarp-images/" + recordId + fileType);
-      newPost.put("timestamp", now);
+      newPost.put(Message.FS_USER_ID_FIELD_NAME, userID);
+      newPost.put(Message.FS_TEXT_FIELD_NAME, text);
+      newPost.put(Message.FS_GEOTAG_FIELD_NAME, point);
+      newPost.put(Message.FS_ID_FIELD_NAME, recordId);
+      newPost.put(Message.FS_IMAGE_URL_FIELD_NAME,
+          Constants.FULL_PROJECT_BUCKET + recordId + fileType);
+      newPost.put(Message.FS_TIMESTAMP_FIELD_NAME, now);
 
       ApiFuture<WriteResult> writeResult =
           messagesCollection.document(recordId).set(newPost, SetOptions.merge());
@@ -125,21 +128,22 @@ public class MessagePosterImpl implements MessagePoster {
       GeoPoint point = new GeoPoint(lat, lon);
 
 
-      update.put("user_id", userID);
-      update.put("text", text);
-      update.put("geotag", point);
-      update.put("id", recordId);
-      update.put("url",
-          "https://storage.googleapis.com/" + "magikarp-images/" + recordId + fileType);
-      update.put("timestamp", now);
+      update.put(Message.FS_USER_ID_FIELD_NAME, userID);
+      update.put(Message.FS_TEXT_FIELD_NAME, text);
+      update.put(Message.FS_GEOTAG_FIELD_NAME, point);
+      update.put(Message.FS_ID_FIELD_NAME, recordId);
+      update.put(Message.FS_IMAGE_URL_FIELD_NAME,
+          Constants.FULL_PROJECT_BUCKET + recordId + fileType);
+      update.put(Message.FS_TIMESTAMP_FIELD_NAME, now);
 
       ApiFuture<WriteResult> writeResult =
           messagesCollection.document(recordId).set(update, SetOptions.merge());
       writeResult.get();
 
       response = new UpdatePostResponse(201, null);
-    } catch (Exception e) {
+    } catch (InterruptedException | ExecutionException e) {
       System.out.println("AN ERROR OCCURED");
+      System.out.println(e.getMessage());
       response = new UpdatePostResponse(401, e.getMessage());
     }
 

@@ -7,7 +7,6 @@ import constants.Constants;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -288,41 +287,5 @@ public class TestMessageFinderImpl {
     assertEquals(((Timestamp) documentData.get(Message.FS_TIMESTAMP_FIELD_NAME)).toDate(),
         message.getTimestamp());
     assertEquals(documentData.get(Message.FS_USER_ID_FIELD_NAME), message.getUserId());
-  }
-
-  /**
-   * Get a map of Strings to random Objects that represent the Document data returned from Firestore
-   *
-   * @return Document Data Map
-   */
-  private static Map<String, Object> getRandomDocumentData() {
-    Map<String, Object> documentData = new HashMap<>();
-
-    documentData
-        .put(Message.FS_GEOTAG_FIELD_NAME, new GeoPoint(getRandomLatitude(), getRandomLongitude()));
-    documentData.put(Message.FS_ID_FIELD_NAME, getRandomString(20));
-    documentData.put(Message.FS_IMAGE_URL_FIELD_NAME, getRandomString(20));
-    documentData.put(Message.FS_TIMESTAMP_FIELD_NAME, Timestamp.of(getRandomDate()));
-    documentData.put(Message.FS_USER_ID_FIELD_NAME, getRandomString(20));
-    return documentData;
-  }
-
-  /**
-   * Build a list of mock QueryDocumentSnapshots that return each of the document data
-   *
-   * @param documentDataList List of Strings to Objects representing document data
-   * @return List of mock QueryDocumentSnapshots
-   */
-  private static List<QueryDocumentSnapshot> getMockQueryDocumentSnapshotsFromDocumentDataList(
-      List<Map<String, Object>> documentDataList
-  ) {
-    return documentDataList
-        .stream()
-        .map(documentData -> {
-          QueryDocumentSnapshot queryDocumentSnapshot = mock(QueryDocumentSnapshot.class);
-          when(queryDocumentSnapshot.getData()).thenReturn(documentData);
-          return queryDocumentSnapshot;
-        })
-        .collect(Collectors.toList());
   }
 }

@@ -1,5 +1,6 @@
 package message;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 public class Message {
@@ -11,11 +12,13 @@ public class Message {
   public static final String FS_USER_ID_FIELD_NAME = "user_id";
 
   private final String id;
+  @SerializedName("image_url")
   private final String imageUrl;
   private final double latitude;
   private final double longitude;
   private final String text;
   private final Date timestamp;
+  @SerializedName("user_id")
   private final String userId;
 
   /**
@@ -68,8 +71,7 @@ public class Message {
   }
 
   public Date getTimestamp() {
-    Date copy = (Date) this.timestamp.clone();
-    return copy;
+    return (Date) this.timestamp.clone();
   }
 
   public String getUserId() {

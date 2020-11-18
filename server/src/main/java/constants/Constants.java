@@ -14,6 +14,8 @@ public class Constants {
   public static final String COLLECTION_PATH = "messages";
 
   public static final String PROJECT_ID = "magikarp-295201";
+  public static final String GCS_BUCKET_ROOT = "https://storage.googleapis.com/";
   public static final String PROJECT_BUCKET = "magikarp-images";
+  public static final String FULL_PROJECT_BUCKET = GCS_BUCKET_ROOT + PROJECT_BUCKET;
 
 }
