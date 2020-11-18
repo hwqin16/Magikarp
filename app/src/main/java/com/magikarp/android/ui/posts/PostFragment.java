@@ -95,9 +95,8 @@ public class PostFragment extends Fragment {
     super.onCreate(savedInstanceState);
     setHasOptionsMenu(true);
 
-    final Intent gpsIntent = new Intent(getContext(), LocationService.class);
-    final Activity activity = getActivity();
-    assert activity != null;
+    final Intent gpsIntent = new Intent(requireContext(), LocationService.class);
+    final Activity activity = requireActivity();
     activity.bindService(gpsIntent, gpsServiceConnection, Context.BIND_AUTO_CREATE);
     activity.startService(gpsIntent);
   }
@@ -105,8 +104,7 @@ public class PostFragment extends Fragment {
   @Override
   public void onDestroy() {
     gpsService.dispose();
-    final Activity activity = getActivity();
-    assert activity != null;
+    final Activity activity = requireActivity();
     activity.unbindService(gpsServiceConnection);
     super.onDestroy();
   }
@@ -224,13 +222,15 @@ public class PostFragment extends Fragment {
   @Override
   public void onRequestPermissionsResult(int requestCode, String permissions[],
                                          int[] grantResults) {
+    final Activity activity = requireActivity();
+
     if (requestCode == 1) {
       if (!(grantResults.length > 0
           && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-        Toast.makeText(getActivity(), "Permission denied to access GPS location",
+        Toast.makeText(activity, "Permission denied to access GPS location",
             Toast.LENGTH_SHORT).show();
       } else {
-        Toast.makeText(getActivity(), "Permission granted to access GPS location",
+        Toast.makeText(activity, "Permission granted to access GPS location",
             Toast.LENGTH_SHORT).show();
         longitude = gpsService.getLocation().getLongitude();
         latitude = gpsService.getLocation().getLatitude();
@@ -257,8 +257,7 @@ public class PostFragment extends Fragment {
    */
   private void loadImage(final Uri imageUri) {
     try {
-      final Context context = getContext();
-      assert context != null;
+      final Context context = requireContext();
 
       final InputStream imageInput = context.getContentResolver().openInputStream(imageUri);
       final Bitmap selectedImage = BitmapFactory.decodeStream(imageInput);
@@ -274,8 +273,7 @@ public class PostFragment extends Fragment {
    * @param imageUrl image to load
    */
   private void loadImage(final String imageUrl) {
-    final Activity activity = getActivity();
-    assert activity != null;
+    final Activity activity = requireActivity();
     final NetworkImageView preview = activity.findViewById(R.id.create_post_image_preview);
     imageLoader.get(imageUrl, ImageLoader
         .getImageListener(preview, R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round));
@@ -288,9 +286,7 @@ public class PostFragment extends Fragment {
    * @param image image to load
    */
   private void loadImage(final Bitmap image) {
-    final Activity activity = getActivity();
-    assert activity != null;
-
+    final Activity activity = requireActivity();
     final Bitmap selectedImage = image;
     final NetworkImageView preview = activity.findViewById(R.id.create_post_image_preview);
     preview.setImageBitmap(selectedImage);
@@ -312,8 +308,7 @@ public class PostFragment extends Fragment {
         latitude = location.getLatitude();
         Log.d("onGpsButtonClick", "Found GPS Location: " + latitude + ", " + longitude);
       } else {
-        final Activity activity = getActivity();
-        assert activity != null;
+        final Activity activity = requireActivity();
         if (ActivityCompat
             .checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED && ActivityCompat
@@ -345,7 +340,7 @@ public class PostFragment extends Fragment {
     }
 
     if (longitude == null && latitude == null) {
-      Toast.makeText(getActivity(), "Permission denied to access GPS location", Toast.LENGTH_SHORT)
+      Toast.makeText(requireActivity(), "Permission denied to access GPS location", Toast.LENGTH_SHORT)
           .show();
     }
     return true;
