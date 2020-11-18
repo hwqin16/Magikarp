@@ -1,5 +1,6 @@
 package com.magikarp.android.ui.login;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -103,16 +104,20 @@ public class LoginFragment extends Fragment {
 
   private void updateUiWithUser(LoggedInUserView model) {
     String welcome = getString(R.string.welcome) + model.getDisplayName();
+    Context context = getContext();
+
     // TODO : initiate successful logged in experience
-    if (getContext() != null && getContext().getApplicationContext() != null) {
-      Toast.makeText(getContext().getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+    if (context != null && context.getApplicationContext() != null) {
+      Toast.makeText(context.getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
   }
 
   private void showLoginFailed(@StringRes Integer errorString) {
-    if (getContext() != null && getContext().getApplicationContext() != null) {
+    Context context = getContext();
+
+    if (context != null && context.getApplicationContext() != null) {
       Toast.makeText(
-          getContext().getApplicationContext(),
+          context.getApplicationContext(),
           errorString,
           Toast.LENGTH_LONG).show();
     }

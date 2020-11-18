@@ -28,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
     setSupportActionBar(toolbar);
 
     DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-    navController = ((NavHostFragment) getSupportFragmentManager()
-        .findFragmentById(R.id.nav_host_fragment)).getNavController();
+    final NavHostFragment navHostFragment =
+        (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+    assert navHostFragment != null;
+    navController = navHostFragment.getNavController();
     appBarConfiguration =
         new AppBarConfiguration.Builder(R.id.nav_maps, R.id.nav_my_posts, R.id.nav_settings,
             R.id.nav_help).setOpenableLayout(drawerLayout).build();
