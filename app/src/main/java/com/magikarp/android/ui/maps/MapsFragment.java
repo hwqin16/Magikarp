@@ -36,8 +36,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
 
   private boolean isUserData;
 
-  // private ClusterManager<Message> clusterManager;
-
   private GoogleMap googleMap;
 
   private MapsViewModel mapsViewModel;
@@ -101,14 +99,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
 
   @Override
   public void onCameraIdle() {
-    mapsViewModel.setMapsQuery(isUserData,
-        googleMap.getProjection().getVisibleRegion().latLngBounds, 20); // TODO records
+    mapsViewModel.setMapsQuery(null, googleMap.getProjection().getVisibleRegion().latLngBounds,
+        20); // TODO records
   }
 
   @Override
-  public void onChanged(List<Message> clusterItems) {
+  public void onChanged(@NonNull List<Message> messages) {
     googleMap.clear();
-    for (Message message : clusterItems) {
+    for (Message message : messages) {
       Marker marker = googleMap.addMarker(
           new MarkerOptions().position(new LatLng(message.getLatitude(), message.getLongitude())));
       marker.setTag(message);
