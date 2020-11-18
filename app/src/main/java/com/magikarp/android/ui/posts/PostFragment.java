@@ -133,8 +133,8 @@ public class PostFragment extends Fragment {
     Bundle args = getArguments();
     Log.i("PostFragment",
         "Editable: " + args.getBoolean(resources.getString(R.string.args_is_editable)));
-    Log.i("PostFragment", "lat: " + args.getFloat(resources.getString(R.string.args_latitude)));
-    Log.i("PostFragment", "long: " + args.getFloat(resources.getString(R.string.args_longitude)));
+    Log.i("PostFragment", "lat: " + args.getDouble(resources.getString(R.string.args_latitude)));
+    Log.i("PostFragment", "long: " + args.getDouble(resources.getString(R.string.args_longitude)));
     Log.i("PostFragment", "text: " + args.getString(resources.getString(R.string.args_text)));
     Log.i("PostFragment", "URI: " + args.getString(resources.getString(R.string.args_image_uri)));
     // *****Check that arguments are passed to fragment.*****//
