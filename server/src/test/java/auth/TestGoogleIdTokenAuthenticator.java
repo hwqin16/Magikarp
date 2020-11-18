@@ -7,10 +7,9 @@ import static org.mockito.Mockito.when;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import org.junit.jupiter.api.Test;
 
 public class TestGoogleIdTokenAuthenticator {
 

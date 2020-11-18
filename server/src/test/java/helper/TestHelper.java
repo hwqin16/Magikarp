@@ -29,16 +29,31 @@ public class TestHelper {
   private static final int LEFT_STRING_LIMIT = 97; // letter 'a'
   private static final int RIGHT_STRING_LIMIT = 122; // letter 'z'
 
+  /**
+   * Get random Date between Timestamp's max and min limit.
+   *
+   * @return Date random date
+   */
   public static Date getRandomDate() {
     long millis = MIN_DATE_LIMIT + (long) (Math.random() * (MAX_DATE_LIMIT - MIN_DATE_LIMIT));
 
     return new Date(millis);
   }
 
+  /**
+   * Get random Latitude constrained my allowed max and min latitude.
+   *
+   * @return Double random latitude
+   */
   public static Double getRandomLatitude() {
     return MIN_LATITUDE_LIMIT + (Math.random() * (MAX_LATITUDE_LIMIT - MIN_LATITUDE_LIMIT));
   }
 
+  /**
+   * Get random Longitude constrained by allowed max and min longitude.
+   *
+   * @return Double random longitude
+   */
   public static Double getRandomLongitude() {
     return MIN_LONGITUDE_LIMIT + (Math.random() * (MAX_LONGITUDE_LIMIT - MIN_LONGITUDE_LIMIT));
   }
@@ -59,7 +74,7 @@ public class TestHelper {
   }
 
   /**
-   * Build a list of mock QueryDocumentSnapshots that return each of the document data
+   * Build a list of mock QueryDocumentSnapshots that return each of the document data.
    *
    * @param documentDataList List of Strings to Objects representing document data
    * @return List of mock QueryDocumentSnapshots
@@ -78,7 +93,8 @@ public class TestHelper {
   }
 
   /**
-   * Get a map of Strings to random Objects that represent the Document data returned from Firestore
+   * Get a map of Strings to random Objects that represent the Document data returned from
+   * Firestore.
    *
    * @return Document Data Map
    */
