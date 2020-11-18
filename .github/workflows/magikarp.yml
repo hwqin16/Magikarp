@@ -37,6 +37,8 @@ jobs:
 
             - name: Run Tests
               run: ./gradlew test
+              env:
+                MAGIKARP_JSON: ${{ secrets.MAGIKARP_JSON }}
 
             - name: Run Checkstyle
               run: ./gradlew :app:checkstyle${{ matrix.build }} :server:checkstyleMain
