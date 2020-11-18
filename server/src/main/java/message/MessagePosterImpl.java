@@ -38,9 +38,7 @@ public class MessagePosterImpl implements MessagePoster {
       ApiFuture<DocumentSnapshot> future = messagesCollection.document(recordId).get();
 
       DocumentSnapshot document = future.get();
-      System.out.println(document);
       String url = document.getString(Message.FS_IMAGE_URL_FIELD_NAME);
-      System.out.println("Boop " + url);
       String[] urlSplit = Objects.requireNonNull(url).split("/");
       String fileName = urlSplit[urlSplit.length - 1];
 
@@ -143,7 +141,6 @@ public class MessagePosterImpl implements MessagePoster {
       response = new UpdatePostResponse(201, null);
     } catch (InterruptedException | ExecutionException e) {
       System.out.println("AN ERROR OCCURED");
-      System.out.println(e.getMessage());
       response = new UpdatePostResponse(401, e.getMessage());
     }
 
