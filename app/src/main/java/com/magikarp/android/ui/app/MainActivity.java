@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
 
     navController = navHostFragment.getNavController();
     appBarConfiguration =
-        new AppBarConfiguration.Builder(R.id.nav_maps, R.id.nav_my_posts, R.id.nav_settings,
-            R.id.nav_help).setOpenableLayout(drawerLayout).build();
+        new AppBarConfiguration.Builder(R.id.nav_maps, R.id.nav_my_posts, R.id.nav_post_sideload,
+            R.id.nav_settings, R.id.nav_help).setOpenableLayout(drawerLayout).build();
 
     NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
     NavigationUI.setupWithNavController(navigationView, navController);

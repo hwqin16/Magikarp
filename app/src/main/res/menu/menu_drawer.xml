@@ -23,6 +23,17 @@
     </group>
 
     <group
+        android:id="@+id/menu_group_sideload"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_post_sideload"
+            android:icon="@drawable/ic_baseline_send"
+            android:title="@string/menu_posts" />
+
+    </group>
+
+    <group
         android:id="@+id/menu_group_overflow"
         android:checkableBehavior="single">
 

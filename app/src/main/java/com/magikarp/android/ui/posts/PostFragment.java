@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -129,6 +130,19 @@ public class PostFragment extends Fragment {
   public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
     final ImageView imageView = view.findViewById(R.id.create_post_image_preview);
     imageView.setOnClickListener(this::selectImageAction);
+
+
+    // *****Check that arguments are passed to fragment.*****//
+    Resources resources = getResources();
+    Bundle args = getArguments();
+    Log.i("PostFragment",
+        "Editable: " + args.getBoolean(resources.getString(R.string.args_is_editable)));
+    Log.i("PostFragment", "lat: " + args.getFloat(resources.getString(R.string.args_latitude)));
+    Log.i("PostFragment", "long: " + args.getFloat(resources.getString(R.string.args_longitude)));
+    Log.i("PostFragment", "text: " + args.getString(resources.getString(R.string.args_text)));
+    Log.i("PostFragment", "URI: " + args.getString(resources.getString(R.string.args_image_uri)));
+    // *****Check that arguments are passed to fragment.*****//
+
 
     if (savedInstanceState != null) {
       imagePath = savedInstanceState.getString(IMAGE_VIEW_ARGUMENT);
