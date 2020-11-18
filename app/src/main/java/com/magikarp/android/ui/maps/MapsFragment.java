@@ -44,7 +44,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mapsViewModel = new ViewModelProvider(this).get(MapsViewModel.class);
-    isUserData = getArguments().getBoolean(getString(R.string.args_is_user_data));
+    Bundle arguments = getArguments();
+    assert arguments != null;
+    isUserData = arguments.getBoolean(getString(R.string.args_is_user_data));
     setHasOptionsMenu(isUserData);
   }
 
@@ -115,6 +117,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public boolean onMarkerClick(Marker marker) {
     LatLng latLng = marker.getPosition();
     Message message = (Message) marker.getTag();
+    assert message != null;
 
     Resources resources = getResources();
     Bundle bundle = new Bundle();

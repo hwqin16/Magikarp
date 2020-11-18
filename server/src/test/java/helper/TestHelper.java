@@ -1,9 +1,19 @@
 package helper;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.google.cloud.Timestamp;
 
+import com.google.cloud.firestore.GeoPoint;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
+import message.Message;
 
 public class TestHelper {
   private static final Random RANDOM = new Random();
@@ -46,5 +56,41 @@ public class TestHelper {
         .limit(length)
         .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
         .toString();
+  }
+
+  /**
+   * Build a list of mock QueryDocumentSnapshots that return each of the document data
+   *
+   * @param documentDataList List of Strings to Objects representing document data
+   * @return List of mock QueryDocumentSnapshots
+   */
+  public static List<QueryDocumentSnapshot> getMockQueryDocumentSnapshotsFromDocumentDataList(
+      List<Map<String, Object>> documentDataList
+  ) {
+    return documentDataList
+        .stream()
+        .map(documentData -> {
+          QueryDocumentSnapshot queryDocumentSnapshot = mock(QueryDocumentSnapshot.class);
+          when(queryDocumentSnapshot.getData()).thenReturn(documentData);
+          return queryDocumentSnapshot;
+        })
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Get a map of Strings to random Objects that represent the Document data returned from Firestore
+   *
+   * @return Document Data Map
+   */
+  public static Map<String, Object> getRandomDocumentData() {
+    Map<String, Object> documentData = new HashMap<>();
+
+    documentData
+        .put(Message.FS_GEOTAG_FIELD_NAME, new GeoPoint(getRandomLatitude(), getRandomLongitude()));
+    documentData.put(Message.FS_ID_FIELD_NAME, getRandomString(20));
+    documentData.put(Message.FS_IMAGE_URL_FIELD_NAME, getRandomString(20));
+    documentData.put(Message.FS_TIMESTAMP_FIELD_NAME, Timestamp.of(getRandomDate()));
+    documentData.put(Message.FS_USER_ID_FIELD_NAME, getRandomString(20));
+    return documentData;
   }
 }

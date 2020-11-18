@@ -9,7 +9,6 @@ import constants.Constants;
 import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 import static helper.TestHelper.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,7 +54,7 @@ public class TestMessagePosterImpl {
     Storage mockStorage = mock(Storage.class);
 
     DocumentSnapshot doc = mock(DocumentSnapshot.class);
-    when(doc.getString("url")).thenReturn("test.com/test.png");
+    when(doc.getString(Message.FS_IMAGE_URL_FIELD_NAME)).thenReturn("test.com/test.png");
     ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
     ApiFuture<WriteResult> write = mock(ApiFuture.class);
 
@@ -84,12 +83,10 @@ public class TestMessagePosterImpl {
    */
   @Test
   public void testPostMessage() throws ExecutionException, InterruptedException {
-    List<Map<String, Object>> documentDataList = Collections.singletonList(
-        getRandomDocumentData()
-    );
+    Map<String, Object> documentData = getRandomDocumentData();
 
     List<QueryDocumentSnapshot> mockQueryDocumentSnapshots =
-        getMockQueryDocumentSnapshotsFromDocumentDataList(documentDataList);
+        getMockQueryDocumentSnapshotsFromDocumentDataList(Collections.singletonList(documentData));
     QuerySnapshot mockQuerySnapshot = mock(QuerySnapshot.class);
     when(mockQuerySnapshot.getDocuments()).thenReturn(mockQueryDocumentSnapshots);
     SettableApiFuture<QuerySnapshot> futureMockQuerySnapshot = SettableApiFuture.create();
@@ -103,11 +100,11 @@ public class TestMessagePosterImpl {
 
     DocumentReference ref = mock(DocumentReference.class);
     when(mockFirestore.collection(Constants.COLLECTION_PATH)
-        .document((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME))).thenReturn(ref);
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME))).thenReturn(ref);
     Storage mockStorage = mock(Storage.class);
 
     DocumentSnapshot doc = mock(DocumentSnapshot.class);
-    when(doc.getString("url")).thenReturn("test.com/test.png");
+    when(doc.getString(Message.FS_IMAGE_URL_FIELD_NAME)).thenReturn("test.com/test.png");
     ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
     ApiFuture<WriteResult> write = mock(ApiFuture.class);
 
@@ -121,8 +118,8 @@ public class TestMessagePosterImpl {
     String fileType = ".png";
     byte[] image = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
 
-    BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET,
-        (String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME) + fileType);
+    BlobId blobId =
+        BlobId.of(Constants.PROJECT_BUCKET, documentData.get(Message.FS_ID_FIELD_NAME) + fileType);
     BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
 
 
@@ -132,20 +129,20 @@ public class TestMessagePosterImpl {
 
     Timestamp now = Timestamp.now();
 
-    newPost.put("user_id", userID);
-    newPost.put("text", text);
-    newPost.put("geotag", point);
-    newPost.put("id", documentDataList.get(0).get(Message.FS_ID_FIELD_NAME));
-    newPost.put("url", "https://storage.googleapis.com/" + "magikarp-images/" +
-        documentDataList.get(0).get(Message.FS_ID_FIELD_NAME) + fileType);
-    newPost.put("timestamp", now);
+    newPost.put(Message.FS_USER_ID_FIELD_NAME, userID);
+    newPost.put(Message.FS_TEXT_FIELD_NAME, text);
+    newPost.put(Message.FS_GEOTAG_FIELD_NAME, point);
+    newPost.put(Message.FS_ID_FIELD_NAME, documentData.get(Message.FS_ID_FIELD_NAME));
+    newPost.put(Message.FS_IMAGE_URL_FIELD_NAME, Constants.FULL_PROJECT_BUCKET +
+        documentData.get(Message.FS_ID_FIELD_NAME) + fileType);
+    newPost.put(Message.FS_TIMESTAMP_FIELD_NAME, now);
 
 
     when(mockFirestore.collection(Constants.COLLECTION_PATH)
-        .document((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME)).get())
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME)).get())
         .thenReturn(future);
     when(mockFirestore.collection(Constants.COLLECTION_PATH)
-        .document((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME))
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME))
         .set(newPost, SetOptions.merge())).thenReturn(write);
 
     Blob blob = mock(Blob.class);
@@ -154,7 +151,7 @@ public class TestMessagePosterImpl {
     MessagePosterImpl messagePoster = new MessagePosterImpl(mockFirestore, mockStorage);
 
     NewPostResponse test = messagePoster
-        .postNewMessage((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME), userID,
+        .postNewMessage((String) documentData.get(Message.FS_ID_FIELD_NAME), userID,
             image, text, lat, lon, fileType, now);
 
     assertEquals(test.getResponseCode(), 201);
@@ -166,12 +163,10 @@ public class TestMessagePosterImpl {
    */
   @Test
   public void testUpdateMessage() throws ExecutionException, InterruptedException {
-    List<Map<String, Object>> documentDataList = Collections.singletonList(
-        getRandomDocumentData()
-    );
+    Map<String, Object> documentData = getRandomDocumentData();
 
     List<QueryDocumentSnapshot> mockQueryDocumentSnapshots =
-        getMockQueryDocumentSnapshotsFromDocumentDataList(documentDataList);
+        getMockQueryDocumentSnapshotsFromDocumentDataList(Collections.singletonList(documentData));
     QuerySnapshot mockQuerySnapshot = mock(QuerySnapshot.class);
     when(mockQuerySnapshot.getDocuments()).thenReturn(mockQueryDocumentSnapshots);
     SettableApiFuture<QuerySnapshot> futureMockQuerySnapshot = SettableApiFuture.create();
@@ -185,14 +180,15 @@ public class TestMessagePosterImpl {
 
     DocumentReference ref = mock(DocumentReference.class);
     when(mockFirestore.collection(Constants.COLLECTION_PATH)
-        .document((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME))).thenReturn(ref);
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME))).thenReturn(ref);
     Storage mockStorage = mock(Storage.class);
 
     DocumentSnapshot doc = mock(DocumentSnapshot.class);
-    when(doc.getString("url")).thenReturn("test.com/test.png");
+    when(doc.getString(Message.FS_IMAGE_URL_FIELD_NAME)).thenReturn("test.com/test.png");
     ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
     ApiFuture<WriteResult> write = mock(ApiFuture.class);
 
+    when(future.get()).thenReturn(doc);
     WriteResult res = mock(WriteResult.class);
     when(write.get()).thenReturn(res);
 
@@ -203,8 +199,8 @@ public class TestMessagePosterImpl {
     String fileType = ".png";
     byte[] image = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
 
-    BlobId blobId = BlobId.of(Constants.PROJECT_BUCKET,
-        (String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME) + fileType);
+    BlobId blobId =
+        BlobId.of(Constants.PROJECT_BUCKET, documentData.get(Message.FS_ID_FIELD_NAME) + fileType);
     BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
 
 
@@ -214,20 +210,19 @@ public class TestMessagePosterImpl {
 
     Timestamp now = Timestamp.now();
 
-    newPost.put("user_id", userID);
-    newPost.put("text", text);
-    newPost.put("geotag", point);
-    newPost.put("id", (String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME));
-    newPost.put("url", "https://storage.googleapis.com/" + "magikarp-images/" +
-        documentDataList.get(0).get(Message.FS_ID_FIELD_NAME) + fileType);
-    newPost.put("timestamp", now);
-
+    newPost.put(Message.FS_USER_ID_FIELD_NAME, userID);
+    newPost.put(Message.FS_TEXT_FIELD_NAME, text);
+    newPost.put(Message.FS_GEOTAG_FIELD_NAME, point);
+    newPost.put(Message.FS_ID_FIELD_NAME, documentData.get(Message.FS_ID_FIELD_NAME));
+    newPost.put(Message.FS_IMAGE_URL_FIELD_NAME, Constants.FULL_PROJECT_BUCKET +
+        documentData.get(Message.FS_ID_FIELD_NAME) + fileType);
+    newPost.put(Message.FS_TIMESTAMP_FIELD_NAME, now);
 
     when(mockFirestore.collection(Constants.COLLECTION_PATH)
-        .document((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME)).get())
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME)).get())
         .thenReturn(future);
     when(mockFirestore.collection(Constants.COLLECTION_PATH)
-        .document((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME))
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME))
         .set(newPost, SetOptions.merge())).thenReturn(write);
 
     Blob blob = mock(Blob.class);
@@ -236,7 +231,7 @@ public class TestMessagePosterImpl {
     MessagePosterImpl messagePoster = new MessagePosterImpl(mockFirestore, mockStorage);
 
     UpdatePostResponse test = messagePoster
-        .updateMessage((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME), userID,
+        .updateMessage((String) documentData.get(Message.FS_ID_FIELD_NAME), userID,
             image, text, lat, lon, fileType, now);
 
     assertEquals(test.getResponseCode(), 201);
@@ -252,41 +247,4 @@ public class TestMessagePosterImpl {
     }
     return data;
   }
-
-  /**
-   * Build a list of mock QueryDocumentSnapshots that return each of the document data
-   *
-   * @param documentDataList List of Strings to Objects representing document data
-   * @return List of mock QueryDocumentSnapshots
-   */
-  private static List<QueryDocumentSnapshot> getMockQueryDocumentSnapshotsFromDocumentDataList(
-      List<Map<String, Object>> documentDataList
-  ) {
-    return documentDataList
-        .stream()
-        .map(documentData -> {
-          QueryDocumentSnapshot queryDocumentSnapshot = mock(QueryDocumentSnapshot.class);
-          when(queryDocumentSnapshot.getData()).thenReturn(documentData);
-          return queryDocumentSnapshot;
-        })
-        .collect(Collectors.toList());
-  }
-
-  /**
-   * Get a map of Strings to random Objects that represent the Document data returned from Firestore
-   *
-   * @return Document Data Map
-   */
-  private static Map<String, Object> getRandomDocumentData() {
-    Map<String, Object> documentData = new HashMap<>();
-
-    documentData
-        .put(Message.FS_GEOTAG_FIELD_NAME, new GeoPoint(getRandomLatitude(), getRandomLongitude()));
-    documentData.put(Message.FS_ID_FIELD_NAME, getRandomString(20));
-    documentData.put(Message.FS_IMAGE_URL_FIELD_NAME, getRandomString(20));
-    documentData.put(Message.FS_TIMESTAMP_FIELD_NAME, Timestamp.of(getRandomDate()));
-    documentData.put(Message.FS_USER_ID_FIELD_NAME, getRandomString(20));
-    return documentData;
-  }
-
 }
