@@ -1,11 +1,8 @@
 package com.magikarp.android.data.model;
 
-import androidx.annotation.NonNull;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
-import com.google.maps.android.clustering.ClusterItem;
 
-public class Message implements ClusterItem {
+public class Message {
 
   private final String id;
 
@@ -106,22 +103,6 @@ public class Message implements ClusterItem {
    */
   public String getTimestamp() {
     return timestamp;
-  }
-
-  @NonNull
-  @Override
-  public LatLng getPosition() {
-    return new LatLng(getLatitude(), getLongitude());
-  }
-
-  @Override
-  public String getTitle() {
-    return getText();
-  }
-
-  @Override
-  public String getSnippet() {
-    return getText();
   }
 
 }

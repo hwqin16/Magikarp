@@ -60,8 +60,7 @@ public class ApplicationModule {
    */
   @GetMessagesUrl
   @Provides
-  public static String provideGetMessagesUrl(
-      @ApplicationContext Context applicationContext) {
+  public static String provideGetMessagesUrl(@ApplicationContext Context applicationContext) {
     final Resources resources = applicationContext.getResources();
     return resources.getString(R.string.server_url)
         + resources.getString(R.string.server_get_messages);
