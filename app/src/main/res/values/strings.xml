@@ -1,6 +1,6 @@
 <resources>
     <!-- Main app name -->
-    <string name="app_name">Magikarp</string>
+    <string name="app_name">Myplace</string>
 
     <!-- Main Navigation Menu Items -->
     <string name="menu_help">Help</string>
