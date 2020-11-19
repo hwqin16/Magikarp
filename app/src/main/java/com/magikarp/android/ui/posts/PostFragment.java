@@ -137,7 +137,8 @@ public class PostFragment extends Fragment {
     assert args != null;
 
     final boolean isReadOnly = !args.getBoolean(resources.getString(R.string.args_is_editable));
-    Double argLat = null, argLon = null;
+    Double argLat = null;
+    Double argLon = null;
     String argContent = null;
     String imageUrl = args.getString(resources.getString(R.string.args_image_uri));
     final NetworkImageView imageView = view.findViewById(R.id.create_post_image_preview);
@@ -223,7 +224,7 @@ public class PostFragment extends Fragment {
   }
 
   @Override
-  public void onRequestPermissionsResult(int requestCode, String permissions[],
+  public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                          int[] grantResults) {
     final Activity activity = requireActivity();
 
@@ -330,7 +331,7 @@ public class PostFragment extends Fragment {
   }
 
   /**
-   * Post button click callback
+   * Post button click callback.
    *
    * @param item item clicked
    * @return always {@code true}
@@ -343,8 +344,8 @@ public class PostFragment extends Fragment {
     }
 
     if (longitude == null && latitude == null) {
-      Toast.makeText(requireActivity(), "Permission denied to access GPS location", Toast.LENGTH_SHORT)
-          .show();
+      Toast.makeText(requireActivity(), "Permission denied to access GPS location",
+          Toast.LENGTH_SHORT).show();
     }
     return true;
   }
