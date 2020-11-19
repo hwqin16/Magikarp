@@ -16,6 +16,8 @@ spec:
     spec:
       containers:
         - name: magikarp
+          command: ["sleep"]
+          args: ["infinity"]
           image: gcr.io/magikarp-295201/magikarp-server:latest
           ports:
             - containerPort: 7000
