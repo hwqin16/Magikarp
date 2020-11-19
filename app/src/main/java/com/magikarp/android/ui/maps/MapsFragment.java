@@ -2,7 +2,6 @@ package com.magikarp.android.ui.maps;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -57,7 +56,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
     // Get saved messages, if applicable.
     if (savedInstanceState != null) {
       messages = savedInstanceState.getParcelableArrayList(SAVED_STATE);
-      Log.i("MapsFragment", "Map Items: " + messages.size());
     }
   }
 
@@ -102,7 +100,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   @Override
   public void onSaveInstanceState(@NonNull Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putParcelableArrayList(SAVED_STATE, messages);
+    if (messages != null) {
+      outState.putParcelableArrayList(SAVED_STATE, messages);
+    }
   }
 
   @Override
