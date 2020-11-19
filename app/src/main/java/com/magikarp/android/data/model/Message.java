@@ -1,8 +1,10 @@
 package com.magikarp.android.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
-public class Message {
+public class Message implements Parcelable {
 
   private final String id;
 
@@ -103,6 +105,52 @@ public class Message {
    */
   public String getTimestamp() {
     return timestamp;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeString(userId);
+    dest.writeString(imageUrl);
+    dest.writeString(text);
+    dest.writeDouble(latitude);
+    dest.writeDouble(longitude);
+    dest.writeString(timestamp);
+  }
+
+  /**
+   * Creator class to supporting parcelling.
+   */
+  public static final Parcelable.Creator<Message> CREATOR = new Parcelable.Creator<Message>() {
+
+    public Message createFromParcel(Parcel in) {
+      return new Message(in);
+    }
+
+    public Message[] newArray(int size) {
+      return new Message[size];
+    }
+
+  };
+
+  /**
+   * Create a message from a parcel.
+   *
+   * @param in parcel to create message
+   */
+  protected Message(Parcel in) {
+    id = in.readString();
+    userId = in.readString();
+    imageUrl = in.readString();
+    text = in.readString();
+    latitude = in.readDouble();
+    longitude = in.readDouble();
+    timestamp = in.readString();
   }
 
 }
