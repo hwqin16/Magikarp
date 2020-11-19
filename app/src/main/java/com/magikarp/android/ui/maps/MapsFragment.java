@@ -2,7 +2,6 @@ package com.magikarp.android.ui.maps;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.magikarp.android.R;
 import com.magikarp.android.data.model.Message;
 import dagger.hilt.android.AndroidEntryPoint;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,9 +35,13 @@ import java.util.List;
 public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener,
     Observer<List<Message>>, OnMarkerClickListener {
 
+  private static final String SAVED_STATE = "savedState";
+
   private boolean isUserData;
 
   private GoogleMap googleMap;
+
+  private ArrayList<Message> messages;
 
   private MapsViewModel mapsViewModel;
 
@@ -45,10 +49,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mapsViewModel = new ViewModelProvider(this).get(MapsViewModel.class);
-    Bundle arguments = getArguments();
-    assert arguments != null;
-    isUserData = arguments.getBoolean(getString(R.string.args_is_user_data));
+    isUserData = requireArguments().getBoolean(getString(R.string.args_is_user_data));
     setHasOptionsMenu(isUserData);
+    // Get saved messages, if applicable.
+    if (savedInstanceState != null) {
+      messages = savedInstanceState.getParcelableArrayList(SAVED_STATE);
+    }
   }
 
   @Override
@@ -90,11 +96,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   }
 
   @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    if (messages != null) {
+      outState.putParcelableArrayList(SAVED_STATE, messages);
+    }
+  }
+
+  @Override
   public void onMapReady(GoogleMap googleMap) {
     this.googleMap = googleMap;
     //googleMap.setMyLocationEnabled(true);
     googleMap.setOnCameraIdleListener(this);
     googleMap.setOnMarkerClickListener(this);
+    // Load saved messages.
+    if (messages != null) {
+      onChanged(messages);
+    }
     mapsViewModel.getMessages().observe(this, this);
   }
 
@@ -106,11 +124,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
 
   @Override
   public void onChanged(@NonNull List<Message> messages) {
-    googleMap.clear();
-    for (Message message : messages) {
-      Marker marker = googleMap.addMarker(
-          new MarkerOptions().position(new LatLng(message.getLatitude(), message.getLongitude())));
-      marker.setTag(message);
+    // Do not update messages if there are none (ex. no network, etc.).
+    if (!messages.isEmpty()) {
+      this.messages = (ArrayList<Message>) messages;
+      googleMap.clear();
+      for (Message message : messages) {
+        Marker marker = googleMap.addMarker(
+            new MarkerOptions()
+                .position(new LatLng(message.getLatitude(), message.getLongitude())));
+        marker.setTag(message);
+      }
     }
   }
 
