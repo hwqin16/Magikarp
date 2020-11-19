@@ -37,7 +37,7 @@ public class NetworkTest {
             null, listener, null);
 
     Response<NewMessageResponse> response = request.parseNetworkResponse(networkResponse);
-    assertEquals(response.result.getRecordId(), 1);
+    assertEquals(response.result.getRecordId(), "1");
   }
 
   @Test
