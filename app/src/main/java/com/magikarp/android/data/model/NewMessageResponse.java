@@ -5,18 +5,18 @@ import com.google.gson.annotations.SerializedName;
 public class NewMessageResponse {
 
   @SerializedName("record_id")
-  private final int recordId;
+  private final String recordId;
 
   /**
    * Create a new message response.
    *
    * @param recordId new message ID
    */
-  public NewMessageResponse(int recordId) {
+  public NewMessageResponse(String recordId) {
     this.recordId = recordId;
   }
 
-  public int getRecordId() {
+  public String getRecordId() {
     return recordId;
   }
 
