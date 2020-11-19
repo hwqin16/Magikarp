@@ -4,8 +4,6 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.GeoPoint;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -24,8 +22,8 @@ import message.MessageFinder;
 import message.MessageFinderImpl;
 import message.MessagePoster;
 import message.MessagePosterImpl;
-import org.apache.commons.io.IOUtils;
 import requests.FindMessagesByBoundingBoxRequest;
+import requests.MessageRequest;
 import responses.DeletePostResponse;
 import responses.MessagesResponse;
 import responses.NewPostResponse;
@@ -46,7 +44,6 @@ public class Server {
   private static void setup() throws IOException {
     ByteArrayInputStream serviceAccount = getServiceAccountInputStream();
     FirebaseOptions firebaseOptions;
-    StorageOptions storageOptions;
 
     try {
       firebaseOptions = FirebaseOptions
@@ -55,12 +52,6 @@ public class Server {
           .setDatabaseUrl(Constants.FIRESTORE_URL)
           .build();
       serviceAccount.close();
-      serviceAccount = getServiceAccountInputStream();
-      storageOptions = StorageOptions
-          .newBuilder()
-          .setProjectId(Constants.PROJECT_ID)
-          .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-          .build();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       throw new RuntimeException("Failed to find ServiceAccount file");
@@ -74,11 +65,10 @@ public class Server {
     FirebaseApp.initializeApp(firebaseOptions);
 
     Firestore firestore = FirestoreClient.getFirestore();
-    Storage storage = storageOptions.getService();
 
     app = Javalin.create().start(Constants.PORT);
     messageFinder = new MessageFinderImpl(firestore);
-    messagePoster = new MessagePosterImpl(firestore, storage);
+    messagePoster = new MessagePosterImpl(firestore);
   }
 
   /**
@@ -151,69 +141,45 @@ public class Server {
     app.post("/messages/:user_id/new", ctx -> {
 
       String userID = ctx.pathParam("user_id");
+      MessageRequest messageRequest = gson.fromJson(ctx.body(), MessageRequest.class);
 
       System.out.println("Creating new message for user " + userID);
 
-      UploadedFile picture = ctx.uploadedFile("image");
-
       NewPostResponse response;
 
-      if (picture != null) {
-        String text = ctx.formParam("text");
-        double lat = ctx.formParam("latitude", Double.class).get();
-        double lon = ctx.formParam("longitude", Double.class).get();
+      UUID uuid = UUID.randomUUID();
 
-        UUID uuid = UUID.randomUUID();
-
-        response = messagePoster.postNewMessage(
-            uuid.toString(),
-            userID,
-            IOUtils.toByteArray(picture.getContent()),
-            text,
-            lat,
-            lon,
-            picture.getExtension(),
-            Timestamp.now()
-        );
-      } else {
-        response = new NewPostResponse(401, null, "Missing new image");
-      }
-
+      response = messagePoster.postNewMessage(
+          uuid.toString(),
+          userID,
+          messageRequest.getImageUrl(),
+          messageRequest.getText(),
+          messageRequest.getLatitude(),
+          messageRequest.getLongitude(),
+          Timestamp.now()
+      );
 
       ctx.result(gson.toJson(response));
 
     });
 
     app.post("/messages/:user_id/update/:record_id", ctx -> {
-
       // TODO validate user_id actually owns record_id
       String userID = ctx.pathParam("user_id");
       String recordID = ctx.pathParam("record_id");
+      MessageRequest messageRequest = gson.fromJson(ctx.body(), MessageRequest.class);
 
       System.out.println("Updating message " + recordID + " for user " + userID);
 
-      UploadedFile picture = ctx.uploadedFile("image");
-
-      UpdatePostResponse response;
-
-      if (picture != null) {
-        String text = ctx.formParam("text");
-        double lat = ctx.formParam("latitude", Double.class).get();
-        double lon = ctx.formParam("longitude", Double.class).get();
-
-        response = messagePoster.updateMessage(
-            recordID,
-            userID,
-            IOUtils.toByteArray(picture.getContent()),
-            text,
-            lat,
-            lon,
-            picture.getExtension(),
-            Timestamp.now()
-        );
-      } else {
-        response = new UpdatePostResponse(401, "Missing updated image");
-      }
+      UpdatePostResponse response = messagePoster.updateMessage(
+          recordID,
+          userID,
+          messageRequest.getImageUrl(),
+          messageRequest.getText(),
+          messageRequest.getLatitude(),
+          messageRequest.getLongitude(),
+          Timestamp.now()
+      );
 
       ctx.result(gson.toJson(response));
 

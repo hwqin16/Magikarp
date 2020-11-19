@@ -124,6 +124,7 @@ public class PostFragment extends Fragment {
 
   @Override
   public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
+<<<<<<< HEAD
     final Bundle args = requireArguments();
     String imageUrl = null;
 
@@ -133,6 +134,33 @@ public class PostFragment extends Fragment {
       longitude = savedInstanceState.getDouble(SAVESTATE_LONGITUDE);
       imageBitmap = savedInstanceState.getParcelable(SAVESTATE_IMAGE);
       text = savedInstanceState.getString(SAVESTATE_TEXT);
+=======
+    // *****Check that arguments are passed to fragment.*****//
+    final Resources resources = getResources();
+    final Bundle args = getArguments();
+    assert args != null;
+
+    final boolean isReadOnly = !args.getBoolean(resources.getString(R.string.args_is_editable));
+    Double argLat = null;
+    Double argLon = null;
+    String argContent = null;
+    String imageUrl = args.getString(resources.getString(R.string.args_image_uri));
+    final NetworkImageView imageView = view.findViewById(R.id.create_post_image_preview);
+
+    if (isReadOnly) {
+      // Read from the arguments
+      argContent = args.getString(resources.getString(R.string.args_text));
+      if (argContent != null) {
+        argLat = args.getDouble(resources.getString(R.string.args_latitude));
+        argLon = args.getDouble(resources.getString(R.string.args_longitude));
+      }
+      if (imageUrl != null) {
+        loadImage(imageUrl);
+      } else {
+        final String dummyImage = "https://i.imgur.com/asvhtNe.jpg";
+        loadImage(dummyImage);
+      }
+>>>>>>> d7848d9173dfb40a4c15023c99d0c6e380820358
     } else {
       latitude = args.getDouble(getString(R.string.args_latitude), Double.NaN);
       longitude = args.getDouble(getString(R.string.args_longitude), Double.NaN);
@@ -182,10 +210,28 @@ public class PostFragment extends Fragment {
   }
 
   @Override
+<<<<<<< HEAD
   public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == RESULT_LOAD_IMG && resultCode == Activity.RESULT_OK) {
       loadImage(data.getData());
+=======
+  public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                         int[] grantResults) {
+    final Activity activity = requireActivity();
+
+    if (requestCode == 1) {
+      if (!(grantResults.length > 0
+          && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+        Toast.makeText(activity, "Permission denied to access GPS location",
+            Toast.LENGTH_SHORT).show();
+      } else {
+        Toast.makeText(activity, "Permission granted to access GPS location",
+            Toast.LENGTH_SHORT).show();
+        longitude = gpsService.getLocation().getLongitude();
+        latitude = gpsService.getLocation().getLatitude();
+      }
+>>>>>>> d7848d9173dfb40a4c15023c99d0c6e380820358
     }
   }
 
@@ -308,7 +354,7 @@ public class PostFragment extends Fragment {
       Toast.makeText(requireActivity(), "Permission denied to access GPS location",
           Toast.LENGTH_SHORT).show();
     }
-
+    
     UUID imageName = UUID.randomUUID();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     // Create a storage reference from our app

@@ -33,6 +33,7 @@ allprojects {
     apply plugin: 'com.github.spotbugs'
 
     spotbugs {
+        ignoreFailures = false
         excludeFilter = file("../config/spotbugs/excludeFilter.xml")
     }
 }

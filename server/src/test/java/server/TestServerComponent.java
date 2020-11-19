@@ -4,10 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.Gson;
 import helper.TestHelper;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
@@ -18,6 +15,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import requests.FindMessagesByBoundingBoxRequest;
+import requests.MessageRequest;
 
 /**
  * Right now this runs against our production database on real data. So the tests will start failing
@@ -29,7 +27,6 @@ import requests.FindMessagesByBoundingBoxRequest;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestServerComponent {
   private static final Gson gson = new Gson();
-  private static final String imagePath = "src/test/resources/karp.png";
   private static final TestServerComponentHelper helper = new TestServerComponentHelper();
   private static final String endpoint = "http://localhost:7000/messages/";
 
@@ -41,16 +38,14 @@ public class TestServerComponent {
   @Test
   @Order(1)
   public void newPostTest() throws IOException {
-    try (InputStream image = new FileInputStream(new File(imagePath))) {
-      // Create HTTP request and get response
-      HttpResponse<String> response =
-          helper.writeDataToEndpoint(endpoint + helper.getUserId() + "/new", image);
+    // Create HTTP request and get response
+    HttpResponse<String> response =
+        helper.writeDataToEndpoint(endpoint + helper.getUserId() + "/new");
 
-      // Get the response and parse the JSON
-      JSONObject responseJson = new JSONObject(response.getBody());
+    // Get the response and parse the JSON
+    JSONObject responseJson = new JSONObject(response.getBody());
 
-      assertEquals(201, responseJson.get("response_code"));
-    }
+    assertEquals(201, responseJson.get("response_code"));
   }
 
   @Test
@@ -84,16 +79,13 @@ public class TestServerComponent {
     // Update test helper to new values
     helper.randomUpdate();
 
-    try (InputStream image = new FileInputStream(new File(imagePath))) {
+    HttpResponse<String> response =
+        helper.writeDataToEndpoint(endpoint + helper.getUserId() + "/update/" + recordId);
 
-      HttpResponse<String> response =
-          helper.writeDataToEndpoint(endpoint + helper.getUserId() + "/update/" + recordId,
-              image);
+    JSONObject responseJson = new JSONObject(response.getBody());
 
-      JSONObject responseJson = new JSONObject(response.getBody());
-
-      assertEquals(201, responseJson.get("response_code"));
-    }
+    System.out.println(responseJson);
+    assertEquals(201, responseJson.get("response_code"));
   }
 
   @Test
@@ -143,7 +135,7 @@ public class TestServerComponent {
   private static class TestServerComponentHelper {
     private final String userId = TestHelper.getRandomString(20);
 
-    private String imageName;
+    private String imageUrl;
     private Double latitude;
     private Double longitude;
     private String text;
@@ -153,19 +145,20 @@ public class TestServerComponent {
     }
 
     public void randomUpdate() {
-      imageName = TestHelper.getRandomString(10) + ".png";
+      imageUrl = TestHelper.getRandomString(10) + ".png";
       latitude = TestHelper.getRandomLatitude();
       longitude = TestHelper.getRandomLongitude();
       text = TestHelper.getRandomString(50);
     }
 
-    public HttpResponse<String> writeDataToEndpoint(String endpoint, InputStream image) {
-      return Unirest.post(endpoint)
-          .field("image", image, helper.getImageName())
-          .field("text", helper.getText())
-          .field("latitude", Double.toString(helper.getLatitude()))
-          .field("longitude", Double.toString(helper.getLongitude()))
-          .asString();
+    public HttpResponse<String> writeDataToEndpoint(String endpoint) {
+      MessageRequest messageRequest = new MessageRequest(
+          helper.getImageUrl(),
+          helper.getText(),
+          helper.getLatitude(),
+          helper.getLongitude()
+      );
+      return Unirest.post(endpoint).body(gson.toJson(messageRequest)).asString();
     }
 
     public void assertResponseIsEquivalent(JSONObject json) {
@@ -175,8 +168,8 @@ public class TestServerComponent {
       assertEquals(helper.getLongitude(), json.getDouble("longitude"));
     }
 
-    public String getImageName() {
-      return imageName;
+    public String getImageUrl() {
+      return imageUrl;
     }
 
     public Double getLatitude() {
