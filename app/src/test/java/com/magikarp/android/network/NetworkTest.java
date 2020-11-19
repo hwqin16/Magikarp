@@ -7,6 +7,11 @@ import static org.mockito.Mockito.when;
 
 import android.graphics.Bitmap;
 import androidx.collection.LruCache;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.magikarp.android.data.model.NewMessageResponse;
+import java.util.ArrayList;
 import org.junit.Test;
 
 /**
@@ -16,22 +21,24 @@ import org.junit.Test;
  */
 public class NetworkTest {
 
-//  @Test
-//  public void testGsonRequestParseNetworkResponse() {
-//    NetworkResponse networkResponse = mock(NetworkResponse.class);
-//    doReturn("{\"record_id\":1}".getBytes()).when(networkResponse).data;
-//    when(networkResponse.data).thenReturn("{\"record_id\":1}".getBytes());
-//    when(networkResponse.headers).thenReturn(Collections.emptyMap());
-//
-//    Response.Listener<NewMessageResponse> listener = resp -> {
-//    };
-//    GsonRequest<NewMessageResponse> request =
-//        new GsonRequest<>(Request.Method.GET, "https://www.example.com", NewMessageResponse.class,
-//            null, listener, null);
-//
-//    Response<NewMessageResponse> response = request.parseNetworkResponse(networkResponse);
-//    assertEquals(response.result.getRecordId(), 1);
-//  }
+  @Test
+  public void testGsonRequestParseNetworkResponse() {
+    NetworkResponse networkResponse = new NetworkResponse(
+        201,
+        "{\"record_id\":1}".getBytes(),
+        false,
+        123,
+        new ArrayList<>()
+    );
+
+    Response.Listener<NewMessageResponse> listener = resp -> {};
+    GsonRequest<NewMessageResponse> request =
+        new GsonRequest<>(Request.Method.GET, "https://www.example.com", NewMessageResponse.class,
+            null, listener, null);
+
+    Response<NewMessageResponse> response = request.parseNetworkResponse(networkResponse);
+    assertEquals(response.result.getRecordId(), 1);
+  }
 
   @Test
   public void testImageCachePutBitmapGetBitmap() {
