@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "222054183884",
+    "firebase_url": "https://magikarp-295201.firebaseio.com",
+    "project_id": "magikarp-295201",
+    "storage_bucket": "magikarp-295201.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222054183884:android:3dca114010466a2e6e2369",
+        "android_client_info": {
+          "package_name": "com.magikarp.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222054183884-jugv90amgbrvjk33hnstuk649t8o45vo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXpvUdKtjQExDylavT_gEnsY8mflVvia8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222054183884-jugv90amgbrvjk33hnstuk649t8o45vo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222054183884:android:260f6b267fd87cc56e2369",
+        "android_client_info": {
+          "package_name": "magikarp.columbia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222054183884-jugv90amgbrvjk33hnstuk649t8o45vo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXpvUdKtjQExDylavT_gEnsY8mflVvia8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222054183884-jugv90amgbrvjk33hnstuk649t8o45vo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -14,6 +14,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,14 +28,36 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
+import com.android.volley.Request;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
 import com.magikarp.android.R;
+import com.magikarp.android.data.MapsRepository;
+import com.magikarp.android.data.model.GetMessagesRequest;
+import com.magikarp.android.data.model.GetMessagesResponse;
+import com.magikarp.android.data.model.GetMessagesResponse;
+import com.magikarp.android.data.model.NewMessageRequest;
+import com.magikarp.android.network.GsonRequest;
 import com.magikarp.android.services.LocationService;
 import dagger.hilt.android.AndroidEntryPoint;
+
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.UUID;
+
 import javax.inject.Inject;
+
 
 /**
  * A fragment for viewing and editing posts.
@@ -51,6 +74,7 @@ public class PostFragment extends Fragment {
   private final String content = null;
   @Inject
   ImageLoader imageLoader;
+
   private Double latitude = null;
   private Double longitude = null;
   private Bitmap image = null;
@@ -336,6 +360,7 @@ public class PostFragment extends Fragment {
    * @return always {@code true}
    */
   private boolean onPostButtonClick(final MenuItem item) {
+
     if (latitude == null && longitude == null) {
       // GPS position wasn't fetched. Fetch it.
       onGpsButtonClick(item);
@@ -346,6 +371,52 @@ public class PostFragment extends Fragment {
       Toast.makeText(requireActivity(), "Permission denied to access GPS location", Toast.LENGTH_SHORT)
           .show();
     }
-    return true;
+
+    UUID imageName = UUID.randomUUID();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    // Create a storage reference from our app
+    StorageReference storageRef = storage.getReference();
+
+    StorageReference ref = storageRef.child("images/" + imageName.toString() + ".png");
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    image.compress(Bitmap.CompressFormat.PNG, 100, baos);
+    byte[] data = baos.toByteArray();
+
+    UploadTask uploadTask = ref.putBytes(data);
+    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+      @Override
+      public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+        if (!task.isSuccessful()) {
+          throw task.getException();
+        }
+
+        // Continue with the task to get the download URL
+        return ref.getDownloadUrl();
+      }
+    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+      @Override
+      public void onComplete(@NonNull Task<Uri> task) {
+        if (task.isSuccessful()) {
+          Uri downloadUri = task.getResult();
+          // Create message body
+          final NewMessageRequest body = new NewMessageRequest(downloadUri.toString(), "test", latitude, longitude);
+          // Create a new GSON request.
+          GsonRequest<GetMessagesResponse> request =
+                  new GsonRequest<>(Request.Method.POST, url, GetMessagesResponse.class,
+                          new Gson().toJson(body), new MapsRepository.GetMessagesResponseListener(listener), errorListener);
+          requestQueue.add(request);
+
+        } else {
+          // Handle failures
+          // ...
+        }
+      }
+    });
+
+
+
+
+   return true;
   }
 }
