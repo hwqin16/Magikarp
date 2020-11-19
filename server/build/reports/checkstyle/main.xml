@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.27">
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\auth\GoogleIdTokenAuthenticator.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\auth\GoogleIdTokenAuthenticator.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\auth\InvalidTokenException.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\auth\InvalidTokenException.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\constants\Constants.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\constants\Constants.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\message\Message.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\message\Message.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\message\MessageFinder.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\message\MessageFinder.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\message\MessageFinderImpl.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\message\MessageFinderImpl.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\message\MessagePoster.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\message\MessagePoster.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\message\MessagePosterImpl.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\message\MessagePosterImpl.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\requests\FindMessagesByBoundingBoxRequest.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\requests\FindMessagesByBoundingBoxRequest.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\requests\MessageRequest.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\requests\MessageRequest.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\responses\DeletePostResponse.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\responses\DeletePostResponse.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\responses\MessagesResponse.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\responses\MessagesResponse.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\responses\NewPostResponse.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\responses\NewPostResponse.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\responses\UpdatePostResponse.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\responses\UpdatePostResponse.java">
 </file>
-<file name="C:\Users\Nick Clark\Documents\Code\Magikarp\server\src\main\java\server\Server.java">
+<file name="C:\Users\johns\AndroidStudioProjects\Magikarp\server\src\main\java\server\Server.java">
 </file>
 </checkstyle>
