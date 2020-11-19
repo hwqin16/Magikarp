@@ -1,7 +1,9 @@
 package com.magikarp.android.di;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import androidx.preference.PreferenceManager;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
@@ -50,6 +52,18 @@ public class ApplicationModule {
     final int cacheSize = applicationContext.getResources()
         .getInteger(R.integer.bitmap_cache_size);
     return new ImageLoader(requestQueue, new ImageCache(new LruBitmapCache(cacheSize)));
+  }
+
+  /**
+   * Injector for creating a shared preferences object.
+   *
+   * @param applicationContext the application context
+   * @return a URL for get messages endpoint
+   */
+  @Provides
+  public static SharedPreferences provideSharedPreferences(
+      @ApplicationContext Context applicationContext) {
+    return PreferenceManager.getDefaultSharedPreferences(applicationContext);
   }
 
   /**

@@ -1,5 +1,7 @@
 package com.magikarp.android.ui.maps;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -27,23 +31,31 @@ import com.magikarp.android.data.model.Message;
 import dagger.hilt.android.AndroidEntryPoint;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  * A fragment for providing a map interface.
  */
 @AndroidEntryPoint
 public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener,
-    Observer<List<Message>>, OnMarkerClickListener {
+    Observer<List<Message>>, OnMarkerClickListener, OnSharedPreferenceChangeListener {
 
   private static final String SAVED_STATE = "savedState";
+
+  private ArrayList<Message> messages;
 
   private boolean isUserData;
 
   private GoogleMap googleMap;
 
-  private ArrayList<Message> messages;
+  private int maxRecords;
 
   private MapsViewModel mapsViewModel;
+
+  @Inject
+  protected SharedPreferences preferences;
+
+  private String userId;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +67,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
     if (savedInstanceState != null) {
       messages = savedInstanceState.getParcelableArrayList(SAVED_STATE);
     }
+    // Register preference listener to get max records to query.
+    maxRecords = Integer.parseInt(preferences.getString(getString(R.string.max_records), "20"));
+    preferences.registerOnSharedPreferenceChangeListener(this);
   }
 
   @Override
@@ -96,6 +111,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   }
 
   @Override
+  public void onDestroy() {
+    super.onDestroy();
+    // Unregister preference listener.
+    preferences.unregisterOnSharedPreferenceChangeListener(this);
+  }
+
+  @Override
   public void onSaveInstanceState(@NonNull Bundle outState) {
     super.onSaveInstanceState(outState);
     if (messages != null) {
@@ -109,6 +131,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
     //googleMap.setMyLocationEnabled(true);
     googleMap.setOnCameraIdleListener(this);
     googleMap.setOnMarkerClickListener(this);
+    // Get current signed in user. TODO need to get listener in case account changes while running
+    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
+    if (isUserData && account != null) {
+      userId = account.getId();
+    }
     // Load saved messages.
     if (messages != null) {
       onChanged(messages);
@@ -118,8 +145,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
 
   @Override
   public void onCameraIdle() {
-    mapsViewModel.setMapsQuery(null, googleMap.getProjection().getVisibleRegion().latLngBounds,
-        20); // TODO records
+    mapsViewModel.setMapsQuery(userId, googleMap.getProjection().getVisibleRegion().latLngBounds,
+        maxRecords);
   }
 
   @Override
@@ -154,6 +181,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
         isUserData ? R.id.action_nav_maps_to_post_editor : R.id.action_nav_maps_to_post_viewer;
     NavHostFragment.findNavController(this).navigate(action, bundle);
     return true;
+  }
+
+  @Override
+  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    maxRecords = Integer.parseInt(preferences.getString(getString(R.string.max_records), "20"));
   }
 
 }

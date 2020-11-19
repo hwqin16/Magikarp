@@ -16,6 +16,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -77,6 +78,10 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
     imageView.setDefaultImageResId(R.mipmap.ic_launcher_round);
     imageView.setErrorImageResId(R.mipmap.ic_launcher_round);
     imageView.setImageUrl(null, null);
+
+    // Set the default shared preferences for the application on first run.
+    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
     // Check for existing Google Sign In account, if the user is already signed in
     // the GoogleSignInAccount will be non-null.
     Log.i("Main Activity", "Account: " + GoogleSignIn.getLastSignedInAccount(this));
