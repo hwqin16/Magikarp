@@ -49,8 +49,7 @@ public class PostEditorTest {
   @Before
   public void navigateToPostEditor() {
     onView(withContentDescription(R.string.nav_app_bar_open_drawer_description)).perform(click());
-    onView(withId(R.id.nav_my_posts)).perform(click());
-    onView(withId(R.id.nav_post_editor)).check(matches(isDisplayed())).perform(click());
+    onView(withId(R.id.nav_post_sideload)).perform(click());
 
     final Intent imageClickIntent = new Intent();
     imageClickIntent.setData(Uri.parse(DUMMY_URI));
