@@ -49,9 +49,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mapsViewModel = new ViewModelProvider(this).get(MapsViewModel.class);
-    Bundle arguments = getArguments();
-    assert arguments != null;
-    isUserData = arguments.getBoolean(getString(R.string.args_is_user_data));
+    isUserData = requireArguments().getBoolean(getString(R.string.args_is_user_data));
     setHasOptionsMenu(isUserData);
     // Get saved messages, if applicable.
     if (savedInstanceState != null) {
