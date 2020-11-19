@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -57,11 +58,36 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
 
   private String userId;
 
+  @VisibleForTesting
+  public MapsFragment() {
+  }
+
+  @VisibleForTesting
+  MapsFragment(MapsViewModel mapsViewModel, GoogleMap googleMap) {
+    this.mapsViewModel = mapsViewModel;
+    this.googleMap = googleMap;
+  }
+
+  @VisibleForTesting
+  MapsFragment(boolean isUserData) {
+    this.isUserData = isUserData;
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mapsViewModel = new ViewModelProvider(this).get(MapsViewModel.class);
-    isUserData = requireArguments().getBoolean(getString(R.string.args_is_user_data));
+    performOnCreate(new ViewModelProvider(this), getString(R.string.args_is_user_data),
+        savedInstanceState);
+  }
+
+  @VisibleForTesting
+  void performOnCreate(
+      ViewModelProvider viewModelProvider,
+      String argsIsUserData,
+      Bundle savedInstanceState
+  ) {
+    mapsViewModel = viewModelProvider.get(MapsViewModel.class);
+    isUserData = requireArguments().getBoolean(argsIsUserData);
     setHasOptionsMenu(isUserData);
     // Get saved messages, if applicable.
     if (savedInstanceState != null) {
@@ -75,6 +101,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   @Override
   public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
+    performOnCreateOptionsMenu(menu, inflater);
+  }
+
+  @VisibleForTesting
+  void performOnCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     inflater.inflate(R.menu.menu_maps, menu);
   }
 
@@ -166,21 +197,26 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
 
   @Override
   public boolean onMarkerClick(Marker marker) {
+    Bundle bundle = new Bundle();
+    prepareBundleFromMarker(bundle, marker, getResources());
+    int action =
+        isUserData ? R.id.action_nav_maps_to_post_editor : R.id.action_nav_maps_to_post_viewer;
+    NavHostFragment.findNavController(this).navigate(action, bundle);
+    return true;
+  }
+
+  @VisibleForTesting
+  Bundle prepareBundleFromMarker(Bundle bundle, Marker marker, Resources resources) {
     LatLng latLng = marker.getPosition();
     Message message = (Message) marker.getTag();
     assert message != null;
 
-    Resources resources = getResources();
-    Bundle bundle = new Bundle();
     bundle.putBoolean(resources.getString(R.string.args_is_user_data), isUserData);
     bundle.putDouble(resources.getString(R.string.args_latitude), latLng.latitude);
     bundle.putDouble(resources.getString(R.string.args_longitude), latLng.longitude);
     bundle.putString(resources.getString(R.string.args_text), message.getText());
     bundle.putString(resources.getString(R.string.args_image_uri), message.getImageUrl());
-    int action =
-        isUserData ? R.id.action_nav_maps_to_post_editor : R.id.action_nav_maps_to_post_viewer;
-    NavHostFragment.findNavController(this).navigate(action, bundle);
-    return true;
+    return bundle;
   }
 
   @Override
