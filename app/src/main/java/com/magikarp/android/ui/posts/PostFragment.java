@@ -149,9 +149,12 @@ public class PostFragment extends Fragment {
         argLat = args.getDouble(resources.getString(R.string.args_latitude));
         argLon = args.getDouble(resources.getString(R.string.args_longitude));
       }
-
-      final String dummyImage = "https://i.imgur.com/asvhtNe.jpg";
-      loadImage(dummyImage);
+      if (imageUrl != null) {
+        loadImage(imageUrl);
+      } else {
+        final String dummyImage = "https://i.imgur.com/asvhtNe.jpg";
+        loadImage(dummyImage);
+      }
     } else {
       if (savedInstanceState != null) {
         image = savedInstanceState.getParcelable(IMAGE_VIEW_ARGUMENT);
