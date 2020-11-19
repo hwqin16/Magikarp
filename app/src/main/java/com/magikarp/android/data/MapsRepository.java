@@ -54,7 +54,7 @@ public class MapsRepository {
   public void getMessages(@Nullable String userId, @NonNull LatLngBounds bounds, int maxRecords,
                           @NonNull MessagesListener listener,
                           @Nullable ErrorListener errorListener) {
-    // Create message body
+    // Create message body.
     final GetMessagesRequest body = new GetMessagesRequest(bounds.northeast.latitude,
         bounds.southwest.longitude, bounds.southwest.latitude, bounds.northeast.longitude,
         maxRecords);
