@@ -47,7 +47,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   private MapsViewModel mapsViewModel;
 
   @VisibleForTesting
-  MapsFragment() {
+  public MapsFragment() {
   }
 
   @VisibleForTesting
