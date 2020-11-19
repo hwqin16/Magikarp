@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
 
     View headerView = navigationView.getHeaderView(0);
     NetworkImageView imageView = headerView.findViewById(R.id.drawer_header_image);
-    imageView.setDefaultImageResId(R.mipmap.ic_launcher_round);
-    imageView.setErrorImageResId(R.mipmap.ic_launcher_round);
+    imageView.setDefaultImageResId(R.mipmap.ic_myplace_round);
+    imageView.setErrorImageResId(R.mipmap.ic_myplace_round);
     imageView.setImageUrl(null, null);
     // Check for existing Google Sign In account, if the user is already signed in
     // the GoogleSignInAccount will be non-null.
