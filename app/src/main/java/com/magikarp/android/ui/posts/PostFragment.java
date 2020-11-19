@@ -7,14 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,47 +26,29 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.magikarp.android.R;
-import com.magikarp.android.data.MapsRepository;
-import com.magikarp.android.data.model.GetMessagesRequest;
-import com.magikarp.android.data.model.GetMessagesResponse;
-import com.magikarp.android.data.model.GetMessagesResponse;
-import com.magikarp.android.data.model.Message;
 import com.magikarp.android.data.model.NewMessageRequest;
 import com.magikarp.android.data.model.NewMessageResponse;
 import com.magikarp.android.network.GsonRequest;
 import com.magikarp.android.services.LocationService;
 import dagger.hilt.android.AndroidEntryPoint;
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
-
 import javax.inject.Inject;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A fragment for viewing and editing posts.
@@ -77,21 +57,25 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 public class PostFragment extends Fragment {
 
   private static final int RESULT_LOAD_IMG = 1;
-  private static final String IMAGE_VIEW_ARGUMENT = "image_view";
-  private static final String CONTENT_ARGUMENT = "content";
-  private static final String LATITUDE_ARGUMENT = "latitude";
-  private static final String LONGITUDE_ARGUMENT = "longitude";
-  private static final String TOOLBAR_EXTENSION_ID = "post_toolbar_extension";
-  private final String content = null;
+  private static final String SAVESTATE_IMAGE = "imageUri";
+  private static final String SAVESTATE_TEXT = "text";
+  private static final String SAVESTATE_LATITUDE = "latitude";
+  private static final String SAVESTATE_LONGITUDE = "longitude";
+
+  private double latitude;
+  private double longitude;
+  private Bitmap imageBitmap;
+  private String text;
+
   @Inject
   ImageLoader imageLoader;
+  @Inject
+  RequestQueue requestQueue;
 
-  private Double latitude = null;
-  private Double longitude = null;
-  private Bitmap image = null;
   private LocationService gpsService;
   private boolean isGpsServiceBound = false;
   private final ServiceConnection gpsServiceConnection = new ServiceConnection() {
+
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
       final LocationService.LocationServiceBinder binder =
@@ -106,24 +90,8 @@ public class PostFragment extends Fragment {
       Log.d("GPS Service Conn", "Disconnected");
       isGpsServiceBound = false;
     }
-  };
 
-  /**
-   * Use this factory method to create a new instance of
-   * this fragment using the provided parameters.
-   *
-   * @param image   Image to populate with
-   * @param content Text to populate with
-   * @return A new instance of fragment CreatePostFragment.
-   */
-  public static PostFragment newInstance(final Bitmap image, final String content) {
-    PostFragment fragment = new PostFragment();
-    Bundle args = new Bundle();
-    args.putParcelable(IMAGE_VIEW_ARGUMENT, image);
-    args.putString(CONTENT_ARGUMENT, content);
-    fragment.setArguments(args);
-    return fragment;
-  }
+  };
 
   @Override
   public void onCreate(final Bundle savedInstanceState) {
@@ -131,25 +99,15 @@ public class PostFragment extends Fragment {
     setHasOptionsMenu(true);
 
     final Intent gpsIntent = new Intent(requireContext(), LocationService.class);
-    final Activity activity = requireActivity();
-    activity.bindService(gpsIntent, gpsServiceConnection, Context.BIND_AUTO_CREATE);
-    activity.startService(gpsIntent);
-  }
-
-  @Override
-  public void onDestroy() {
-    gpsService.dispose();
-    final Activity activity = requireActivity();
-    activity.unbindService(gpsServiceConnection);
-    super.onDestroy();
+    final Context context = requireContext();
+    context.bindService(gpsIntent, gpsServiceConnection, Context.BIND_AUTO_CREATE);
+    context.startService(gpsIntent);
   }
 
   @Override
   public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
-    Bundle arguments = getArguments();
-    assert arguments != null;
-    if (arguments.getBoolean(getResources().getString(R.string.args_is_editable))) {
+    if (requireArguments().getBoolean(getResources().getString(R.string.args_is_editable))) {
       inflater.inflate(R.menu.menu_post_edit, menu);
       menu.findItem(R.id.menu_get_location).setOnMenuItemClickListener(this::onGpsButtonClick);
       menu.findItem(R.id.menu_upload_content).setOnMenuItemClickListener(this::onPostButtonClick);
@@ -166,114 +124,68 @@ public class PostFragment extends Fragment {
 
   @Override
   public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
-    // *****Check that arguments are passed to fragment.*****//
-    final Resources resources = getResources();
-    final Bundle args = getArguments();
-    assert args != null;
+    final Bundle args = requireArguments();
+    String imageUrl = null;
 
-    final boolean isReadOnly = !args.getBoolean(resources.getString(R.string.args_is_editable));
-    Double argLat = null, argLon = null;
-    String argContent = null;
-    String imageUrl = args.getString(resources.getString(R.string.args_image_uri));
-    final NetworkImageView imageView = view.findViewById(R.id.create_post_image_preview);
-
-    if (isReadOnly) {
-      // Read from the arguments
-      argContent = args.getString(resources.getString(R.string.args_text));
-      if (argContent != null) {
-        argLat = args.getDouble(resources.getString(R.string.args_latitude));
-        argLon = args.getDouble(resources.getString(R.string.args_longitude));
-      }
-      if (imageUrl != null) {
-        loadImage(imageUrl);
-      } else {
-        final String dummyImage = "https://i.imgur.com/asvhtNe.jpg";
-        loadImage(dummyImage);
-      }
+    // Load data from saved state or passed in arguments.
+    if (savedInstanceState != null) {
+      latitude = savedInstanceState.getDouble(SAVESTATE_LATITUDE);
+      longitude = savedInstanceState.getDouble(SAVESTATE_LONGITUDE);
+      imageBitmap = savedInstanceState.getParcelable(SAVESTATE_IMAGE);
+      text = savedInstanceState.getString(SAVESTATE_TEXT);
     } else {
-      if (savedInstanceState != null) {
-        image = savedInstanceState.getParcelable(IMAGE_VIEW_ARGUMENT);
-        loadImage(image);
-
-        argContent = savedInstanceState.getString(CONTENT_ARGUMENT);
-        if (argContent != null) {
-          argLat = savedInstanceState.getDouble(LATITUDE_ARGUMENT);
-          argLon = savedInstanceState.getDouble(LONGITUDE_ARGUMENT);
-        }
-      } else {
-        argContent = args.getString(resources.getString(R.string.args_text));
-        if (argContent != null) {
-          argLat = args.getDouble(resources.getString(R.string.args_latitude));
-          argLon = args.getDouble(resources.getString(R.string.args_longitude));
-        }
-
-        if (imageUrl != null) {
-          loadImage(imageUrl);
-        } else {
-          imageView.setDefaultImageResId(R.drawable.ic_menu_gallery);
-          imageView.setErrorImageResId(R.drawable.ic_menu_gallery);
-        }
-      }
+      latitude = args.getDouble(getString(R.string.args_latitude), Double.NaN);
+      longitude = args.getDouble(getString(R.string.args_longitude), Double.NaN);
+      imageUrl = args.getString(getString(R.string.args_image_uri));
+      text = args.getString(getString(R.string.args_text));
     }
 
-    latitude = argLat;
-    longitude = argLon;
+    // Set up the image and text views.
+    final NetworkImageView imageView = view.findViewById(R.id.create_post_image_preview);
+    imageView.setDefaultImageResId(R.drawable.ic_menu_gallery);
+    imageView.setErrorImageResId(R.drawable.ic_menu_gallery);
+    final EditText editText = view.findViewById(R.id.create_post_caption);
+    editText.setText(text);
 
-    if (!isReadOnly) {
+    // Disable editing if UI is read only.
+    if (!args.getBoolean(getString(R.string.args_is_editable))) {
+      editText.setEnabled(false);
+      editText.setFocusable(false);
+      editText.setFocusableInTouchMode(false);
+    } else {
       imageView.setOnClickListener(this::selectImageAction);
     }
 
-    final EditText textContentField = view.findViewById(R.id.create_post_caption);
-    textContentField.setText(argContent);
-    textContentField.setFocusable(!isReadOnly);
-    textContentField.setFocusableInTouchMode(!isReadOnly);
-    loadImage(image);
-
-    Log.i("PostFragment",
-        "Editable: " + args.getBoolean(resources.getString(R.string.args_is_editable)));
-    Log.i("PostFragment", "lat: " + args.getDouble(resources.getString(R.string.args_latitude)));
-    Log.i("PostFragment", "long: " + args.getDouble(resources.getString(R.string.args_longitude)));
-    Log.i("PostFragment", "text: " + args.getString(resources.getString(R.string.args_text)));
-    Log.i("PostFragment", "URI: " + args.getString(resources.getString(R.string.args_image_uri)));
+    // Load image.
+    if (imageBitmap != null) {
+      loadImage(imageBitmap);
+    } else if (imageUrl != null) {
+      loadImage(imageUrl);
+    }
   }
 
   @Override
-  public void onSaveInstanceState(final Bundle bundle) {
-    bundle.putParcelable(IMAGE_VIEW_ARGUMENT, image);
-    bundle.putString(CONTENT_ARGUMENT, content);
-    bundle.putDouble(LONGITUDE_ARGUMENT, longitude);
-    bundle.putDouble(LATITUDE_ARGUMENT, latitude);
+  public void onSaveInstanceState(@NotNull Bundle bundle) {
+    if (requireArguments().getBoolean(getString(R.string.args_is_editable))) {
+      bundle.putDouble(SAVESTATE_LATITUDE, latitude);
+      bundle.putDouble(SAVESTATE_LONGITUDE, longitude);
+      bundle.putParcelable(SAVESTATE_IMAGE, imageBitmap);
+      bundle.putString(SAVESTATE_TEXT, text);
+    }
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    gpsService.dispose();
+    requireContext().unbindService(gpsServiceConnection);
   }
 
   @Override
   public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    if (resultCode == Activity.RESULT_OK) {
-      if (requestCode == RESULT_LOAD_IMG) {
-
-        loadImage(data.getData());
-      } else {
-        throw new IllegalStateException("Unexpected value: " + requestCode);
-      }
-    }
-  }
-
-  @Override
-  public void onRequestPermissionsResult(int requestCode, String permissions[],
-                                         int[] grantResults) {
-    final Activity activity = requireActivity();
-
-    if (requestCode == 1) {
-      if (!(grantResults.length > 0
-          && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-        Toast.makeText(activity, "Permission denied to access GPS location",
-            Toast.LENGTH_SHORT).show();
-      } else {
-        Toast.makeText(activity, "Permission granted to access GPS location",
-            Toast.LENGTH_SHORT).show();
-        longitude = gpsService.getLocation().getLongitude();
-        latitude = gpsService.getLocation().getLatitude();
-      }
+    if (requestCode == RESULT_LOAD_IMG && resultCode == Activity.RESULT_OK) {
+      loadImage(data.getData());
     }
   }
 
@@ -287,7 +199,6 @@ public class PostFragment extends Fragment {
     Intent photoSelectionIntent = new Intent(Intent.ACTION_PICK);
     photoSelectionIntent.setType("image/*");
     startActivityForResult(photoSelectionIntent, RESULT_LOAD_IMG);
-
   }
 
   /**
@@ -295,11 +206,10 @@ public class PostFragment extends Fragment {
    *
    * @param imageUri image to load
    */
-  private void loadImage(final Uri imageUri) {
+  private void loadImage(@NonNull Uri imageUri) {
     try {
-      final Context context = requireContext();
-
-      final InputStream imageInput = context.getContentResolver().openInputStream(imageUri);
+      final InputStream imageInput =
+          requireContext().getContentResolver().openInputStream(imageUri);
       final Bitmap selectedImage = BitmapFactory.decodeStream(imageInput);
       loadImage(selectedImage);
     } catch (final FileNotFoundException e) {
@@ -312,11 +222,10 @@ public class PostFragment extends Fragment {
    *
    * @param imageUrl image to load
    */
-  private void loadImage(final String imageUrl) {
-    final Activity activity = requireActivity();
-    final NetworkImageView preview = activity.findViewById(R.id.create_post_image_preview);
+  private void loadImage(@NonNull String imageUrl) {
+    final NetworkImageView preview = getView().findViewById(R.id.create_post_image_preview);
     imageLoader.get(imageUrl, ImageLoader
-        .getImageListener(preview, R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round));
+        .getImageListener(preview, R.drawable.ic_menu_gallery, R.drawable.ic_menu_gallery));
     preview.setImageUrl(imageUrl, imageLoader);
   }
 
@@ -325,14 +234,10 @@ public class PostFragment extends Fragment {
    *
    * @param image image to load
    */
-  private void loadImage(final Bitmap image) {
-    final Activity activity = requireActivity();
-    final Bitmap selectedImage = image;
-    final NetworkImageView preview = activity.findViewById(R.id.create_post_image_preview);
-    preview.setImageBitmap(selectedImage);
-
-    this.image = selectedImage;
-
+  private void loadImage(@NonNull Bitmap image) {
+    final NetworkImageView preview = getView().findViewById(R.id.create_post_image_preview);
+    preview.setImageBitmap(image);
+    this.imageBitmap = image;
   }
 
   /**
@@ -341,7 +246,7 @@ public class PostFragment extends Fragment {
    * @param item item clicked
    * @return always {@code true}
    */
-  private boolean onGpsButtonClick(final MenuItem item) {
+  private boolean onGpsButtonClick(@NonNull MenuItem item) {
     if (isGpsServiceBound) {
       if (gpsService.isLocationEnabled()) {
         final Location location = gpsService.getLocation();
@@ -367,23 +272,41 @@ public class PostFragment extends Fragment {
     return true;
   }
 
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions,
+                                         @NotNull int[] grantResults) {
+    final Context context = requireContext();
+
+    if (requestCode == 1) {
+      if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+        Toast.makeText(context, "Permission denied to access GPS location",
+            Toast.LENGTH_SHORT).show();
+      } else {
+        Toast.makeText(context, "Permission granted to access GPS location",
+            Toast.LENGTH_SHORT).show();
+        Location location = gpsService.getLocation();
+        longitude = location.getLongitude();
+        latitude = location.getLatitude();
+      }
+    }
+  }
+
   /**
-   * Post button click callback
+   * Post button click callback.
    *
    * @param item item clicked
    * @return always {@code true}
    */
   private boolean onPostButtonClick(final MenuItem item) {
-
-    if (latitude == null && longitude == null) {
+    if (Double.isNaN(latitude) || Double.isNaN(longitude)) {
       // GPS position wasn't fetched. Fetch it.
       onGpsButtonClick(item);
       Log.i("onPostButtonClick", "No location selected. Grabbing the location now.");
     }
-
-    if (longitude == null && latitude == null) {
-      Toast.makeText(requireActivity(), "Permission denied to access GPS location", Toast.LENGTH_SHORT)
-          .show();
+    // Recheck location.
+    if (Double.isNaN(latitude) || Double.isNaN(longitude)) {
+      Toast.makeText(requireActivity(), "Permission denied to access GPS location",
+          Toast.LENGTH_SHORT).show();
     }
 
     UUID imageName = UUID.randomUUID();
@@ -394,54 +317,42 @@ public class PostFragment extends Fragment {
     StorageReference ref = storageRef.child("images/" + imageName.toString() + ".png");
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    image.compress(Bitmap.CompressFormat.PNG, 100, baos);
+    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
     byte[] data = baos.toByteArray();
 
     UploadTask uploadTask = ref.putBytes(data);
-    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-      @Override
-      public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-        if (!task.isSuccessful()) {
-          throw task.getException();
-        }
+    Task<Uri> urlTask =
+        uploadTask.continueWithTask(task -> {
+          if (!task.isSuccessful()) {
+            throw task.getException();
+          }
 
-        // Continue with the task to get the download URL
-        return ref.getDownloadUrl();
-      }
-    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-      @Override
-      public void onComplete(@NonNull Task<Uri> task) {
-        if (task.isSuccessful()) {
-          Uri downloadUri = task.getResult();
-          // Create message body
-          final NewMessageRequest body = new NewMessageRequest(downloadUri.toString(), "test", latitude, longitude);
+          // Continue with the task to get the download URL
+          return ref.getDownloadUrl();
+        }).addOnCompleteListener(task -> {
+          if (task.isSuccessful()) {
+            Uri downloadUri = task.getResult();
+            // Create message body
+            final NewMessageRequest body =
+                new NewMessageRequest(downloadUri.toString(), "test", latitude, longitude);
 
-          String url = getContext().getResources().getString(R.string.server_url) + "/messages/tester/new";
-          // Create a new GSON request.
-          GsonRequest<NewMessageResponse> request =
-                  new GsonRequest<>(Request.Method.POST, url, NewMessageResponse.class,
-                          new Gson().toJson(body), new Response.Listener<NewMessageResponse>() {
-                    @Override
-                    public void onResponse(NewMessageResponse response) {
-                    }
-                  }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+            String url = getContext().getResources().getString(R.string.server_url)
+                + "/messages/tester/new";
+            // Create a new GSON request.
+            GsonRequest<NewMessageResponse> request =
+                new GsonRequest<>(Request.Method.POST, url, NewMessageResponse.class,
+                    new Gson().toJson(body), response -> {
+                }, error -> {
+                });
+            requestQueue.add(request);
 
-                    }
-                  });
-          RequestQueue queue = Volley.newRequestQueue(getContext());
-          queue.add(request);
+          } else {
+            // Handle failures
+            // ...
+          }
+        });
 
-        } else {
-          // Handle failures
-          // ...
-        }
-      }
-    });
-
-   return true;
+    return true;
   }
+
 }
-
-
