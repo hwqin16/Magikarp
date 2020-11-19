@@ -427,7 +427,9 @@ public class PostFragment extends Fragment {
                   }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                      Toast.makeText(requireActivity(), error.getMessage(), Toast.LENGTH_SHORT)
+                              .show();
+                      Log.i("onPostButtonClick", error.getMessage());
                     }
                   });
           RequestQueue queue = Volley.newRequestQueue(getContext());
