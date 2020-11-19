@@ -321,7 +321,7 @@ public class PostFragment extends Fragment {
     byte[] data = baos.toByteArray();
     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
     String id = "noID";
-    if(account != null){
+    if (account != null) {
       id = account.getId();
     }
     final String idfinal = id;
@@ -339,7 +339,8 @@ public class PostFragment extends Fragment {
             Uri downloadUri = task.getResult();
             // Create message body
             final NewMessageRequest body =
-                new NewMessageRequest(downloadUri.toString(), editText.getText().toString() , latitude, longitude);
+                new NewMessageRequest(downloadUri.toString(), editText.getText().toString(),
+                        latitude, longitude);
 
             String url = getContext().getResources().getString(R.string.server_url)
                 + "/messages/" + idfinal + "/new";
