@@ -1,214 +1,216 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<BugCollection version="4.1.1" sequence="0" timestamp="1605827968143" analysisTimestamp="1605827968149" release="8.0">
+<BugCollection version="4.1.1" sequence="0" timestamp="1605829913848" analysisTimestamp="1605829913858" release="8.0">
   <Project projectName="Magikarp (spotbugsRelease)">
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\BuildConfig.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\MapsRepository$GetMessagesResponseListener.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\MapsRepository$MessagesListener.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\MapsRepository.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\MapsRepository_Factory.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\GetMessagesRequest.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\GetMessagesResponse.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\Message$1.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\Message.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\NewMessageRequest.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\NewMessageResponse.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ActivityModule.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ActivityModule_ProvideGoogleSignInClientFactory.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ApplicationModule.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ApplicationModule_ProvideGetMessagesUrlFactory.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ApplicationModule_ProvideImageLoaderFactory.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ApplicationModule_ProvideRequestQueueFactory.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\HiltQualifiers$GetMessagesUrl.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\HiltQualifiers$GetUserMessagesUrl.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\HiltQualifiers.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ViewModelModule.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ViewModelModule_ProvideMutableLiveDataFactory$InstanceHolder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ViewModelModule_ProvideMutableLiveDataFactory.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\network\GsonRequest.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\network\ImageCache.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\network\LruBitmapCache.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\services\LocationService$LocationServiceBinder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\services\LocationService.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$1.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCBuilder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCBuilder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCBuilder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCImpl$ViewWithFragmentCBuilder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCImpl$ViewWithFragmentCImpl.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCImpl.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$SwitchingProvider.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$ViewCBuilder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$ViewCImpl.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$SwitchingProvider.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$Builder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ServiceCBuilder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ServiceCImpl.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$SwitchingProvider.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\HelpFragment.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\Hilt_MagikarpApplication$1.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\Hilt_MagikarpApplication.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\Hilt_MainActivity.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_GeneratedInjector.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityC$Builder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityC.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityCBuilderModule.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityRetainedC$Builder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityRetainedC.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityRetainedCBuilderModule.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$FragmentC$Builder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$FragmentC.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$FragmentCBuilderModule.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ServiceC$Builder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ServiceC.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ServiceCBuilderModule.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$SingletonC.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewC$Builder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewC.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewCBuilderModule.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewWithFragmentC$Builder.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewWithFragmentC.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewWithFragmentCBuilderModule.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MainActivity.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MainActivity_GeneratedInjector.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MainActivity_MembersInjector.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\SettingsFragment.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\Hilt_MapsFragment.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsFragment.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsFragmentWrapper.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsFragment_GeneratedInjector.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsViewModel.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsViewModel_AssistedFactory.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsViewModel_AssistedFactory_Factory.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsViewModel_HiltModule.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\posts\Hilt_PostFragment.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\posts\PostFragment$1.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\posts\PostFragment.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\posts\PostFragment_GeneratedInjector.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\posts\PostFragment_MembersInjector.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_di_ActivityModuleModuleDeps.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_di_ApplicationModuleModuleDeps.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_di_ViewModelModuleModuleDeps.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_ui_app_MagikarpApplication_GeneratedInjectorModuleDeps.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_ui_app_MainActivity_GeneratedInjectorModuleDeps.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_ui_maps_MapsFragment_GeneratedInjectorModuleDeps.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_ui_maps_MapsViewModel_HiltModuleModuleDeps.class</Jar>
-    <Jar>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_ui_posts_PostFragment_GeneratedInjectorModuleDeps.class</Jar>
-    <AuxClasspathEntry>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\release\R.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\800b91c35a5698589866bb6b37a633dd\constraintlayout-2.0.4-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\1150fcb2712dda51a188d7ad7095491c\navigation-ui-2.3.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\9fec7f9303e070e87defce079556b9c0\material-1.2.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\9d6ef5dcc6303b430d1f8848a1e13a10\preference-1.1.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\ae6622242f9c6a9d8ac5224916092566\appcompat-1.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\a5d3751a13d94d0055d97a45b89e3b00\navigation-fragment-2.3.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\095cb0fff5bdcac712c82301ad1344aa\jetified-volley-1.1.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\d91f960cdada4cc9c640895c50d8b756\jetified-play-services-auth-19.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\09f53c771c73f65cc7ae905c623fae3d\jetified-play-services-maps-17.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\a150b81655a93c44efa65051a00bbde9\jetified-gson-2.8.6.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\fe2db3573914b6846313028f3ee47b44\jetified-hilt-lifecycle-viewmodel-1.0.0-alpha02-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\641cbb514fec91fd0ab9bc56acbe9181\jetified-hilt-android-2.29.1-alpha-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\52ed4377f5607a3a16eff47bc8822c97\jetified-android-maps-utils-2.1.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\551f1fbfa70775ddd357bbc30718a79d\legacy-support-v4-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\a9a4cffc35fc4a62b7728461c63461b6\lifecycle-extensions-2.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\f6573d65f783feddf4e5765ade1e57ae\jetified-lifecycle-livedata-ktx-2.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\58a90a33b41644bc4d3eca73502ea729\jetified-lifecycle-viewmodel-ktx-2.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\35af20101e346a1e03ca95b40984d9af\jetified-firebase-storage-19.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\b7ecd13a4a5e1c7fe44f6281d7c9890a\jetified-play-services-auth-api-phone-17.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\b63ac8a63ab98ffce8c508024d1d3fbd\jetified-play-services-auth-base-17.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\6f0891614e06b7bfc8dfb788c789c1a1\jetified-firebase-auth-interop-18.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\479e47ea623c325f56414ae64040151c\jetified-play-services-base-17.1.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\c5f8772398cc6880a1f0f2b95ec04d3b\jetified-firebase-common-19.4.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\d13c6bf93cb3c9e30037659a8ea904f0\jetified-play-services-tasks-17.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\ac4b4a75cc36846d612839fdcfbc6d4b\jetified-play-services-basement-17.1.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\ec2e5df61383878e88b452fb7c40febe\jetified-viewpager2-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\993647e4fdb460ae9253113e0f214b58\fragment-1.2.4-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\943fafd378fa364753b23ba392eeba76\jetified-appcompat-resources-1.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\5764adf1626c419dd33b9ffe07b08eb2\legacy-support-core-ui-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\da90ee23fc782b43713b657395030e3c\drawerlayout-1.1.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\bf7e994e6bd95baa8545838db9622414\coordinatorlayout-1.1.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\bb42848bf1571e1860f34ac99ca74fbf\recyclerview-1.1.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\217b248fd4d0817414bac7df3bcf81fa\viewpager-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\72620d0ddd8c293da01b94b541a5a190\slidingpanelayout-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\3b241129e7ff1a6863f6bdbbac3e41f5\customview-1.1.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\5bfe0dd06a14ab764a2759c0a70b1e51\legacy-support-core-utils-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\75baa751471597726a280dc044cd786f\loader-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\cbd36317502ff4794f51defa23a29d9f\transition-1.3.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\54016b8ac8ee926deca5cab015c6ce2c\vectordrawable-animated-1.1.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\8bbc598c4869d184fe672c451522f93d\vectordrawable-1.1.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\7f8b905efbe4fba65b204dd1e3e4f211\navigation-runtime-2.3.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\675d4c87c81feb320f557a50e070e3ae\jetified-activity-1.1.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\90f035c8c7c67ff3f7b535289e740cce\media-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\2eb509dfe6041ac54206b276b400c392\swiperefreshlayout-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\463011464c9ae3ff649ca09ad04a02a7\asynclayoutinflater-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\4c1bcc43febb154767cddd68937a2abd\core-1.3.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\ee79651b5bb870c9b5bfc5b6946ec199\cursoradapter-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\22f736eb7abcce7a469af89072e3dd0b\cardview-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\48162220166ddbc369a3dc19f6f0693a\jetified-lifecycle-process-2.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\1f4bd4722f2389786d73f893f6488ce1\jetified-lifecycle-service-2.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\30824e14d4767796770a45782cf00963\lifecycle-runtime-2.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\59e10c83442c683f023320e7eba4c7e7\jetified-lifecycle-viewmodel-savedstate-2.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\27721b4d488ba9c598d6b0b0243bada7\lifecycle-viewmodel-2.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\a152662fd12bd384ac63e4414eadf58d\lifecycle-livedata-2.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\728ec053f188646ecffe34e7da2ff577\jetified-lifecycle-livedata-core-ktx-2.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\14d1706cf0dbf9b04bff763e2801e291\lifecycle-livedata-core-2.2.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\5c6718082a4bc9b3ef68bc00df3ce5b2\core-runtime-2.1.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\dba5f184b8ea34e5b24ee738913abe92\jetified-savedstate-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\modules-2\files-2.1\androidx.arch.core\core-common\2.1.0\b3152fc64428c9354344bd89848ecddc09b6f07e\core-common-2.1.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\modules-2\files-2.1\androidx.lifecycle\lifecycle-common\2.2.0\4ef09a745007778eef83b92f8f23987a8ea59496\lifecycle-common-2.2.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\0a945670d069f3bc8a4d3f18cf5f046d\versionedparcelable-1.1.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\modules-2\files-2.1\androidx.collection\collection\1.1.0\1f27220b47669781457de0d600849a5de0e89909\collection-1.1.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\598788397cadd97217880acaf56738dd\jetified-firebase-components-16.0.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\56e279ce984d59e77f9d37877b023ab0\navigation-common-2.3.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\134c1d59253af501897376c913d22274\documentfile-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\6f56a0bdf2abc2abaf79f325d3bb8bee\localbroadcastmanager-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\8c368791d7ca303224b94eafddb45b18\print-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\385d111f7fc22337870095ebd80a33a6\interpolator-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\modules-2\files-2.1\androidx.annotation\annotation\1.1.0\e3a6fb2f40e3a3842e6b7472628ba4ce416ea4c8\annotation-1.1.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\afe87fd7811b1f411ace8b112a0116cc\multidex-2.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\modules-2\files-2.1\androidx.constraintlayout\constraintlayout-solver\2.0.4\1f001d7db280a89a6c26b26a66eb064bb6d5efeb\constraintlayout-solver-2.0.4.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\4d117f6ea38dfa659f84e5e67ebef546\jetified-annotation-experimental-1.0.0-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\6c26703d667427124e50774d8affc614\jetified-hilt-core-2.29.1-alpha.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\78f4d4f83ecb6d25ef0962a1c417d80c\jetified-dagger-2.29.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\ba393409ae078e256e3cfc4702312635\jetified-javax.inject-1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\f709802062b8a167fe78e65c18e78522\jetified-dagger-lint-aar-2.29.1-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\93efc8e64b4915d7804d29d1c7146927\jetified-jsr305-3.0.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\9f157352f81db33d578bd6fbe8db0af3\jetified-jsr250-api-1.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\e255b4943e71606ee2e6b6be6a71f752\jetified-hilt-common-1.0.0-alpha02-api.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\1dba0ead03dec1919acb35f9785a410a\jetified-kotlinx-coroutines-android-1.3.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\ac12551926b842fad08e9a91b15f6311\jetified-kotlinx-coroutines-core-1.3.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\89315e470be8dc5a748bee95a741732a\jetified-kotlin-stdlib-1.3.50.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\aa5a6d0178b6cc0a352068edf56231a9\jetified-kotlin-stdlib-common-1.3.50.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>C:\Users\johns\.gradle\caches\transforms-2\files-2.1\8d3860ad604868c7d95f188bbd78f547\jetified-annotations-13.0.jar</AuxClasspathEntry>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\data\MapsRepository.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\data\model\GetMessagesRequest.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\data\model\GetMessagesResponse.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\data\model\Message.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\data\model\NewMessageRequest.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\data\model\NewMessageResponse.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\di\ActivityModule.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\di\ApplicationModule.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\di\HiltQualifiers.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\di\ViewModelModule.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\network\GsonRequest.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\network\ImageCache.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\network\LruBitmapCache.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\services\LocationService.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\ui\app\HelpFragment.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\ui\app\MagikarpApplication.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\ui\app\MainActivity.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\ui\app\SettingsFragment.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\ui\maps\MapsFragment.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\ui\maps\MapsFragmentWrapper.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\ui\maps\MapsViewModel.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\src\main\java\com\magikarp\android\ui\posts\PostFragment.java</SrcDir>
-    <SrcDir>C:\Users\johns\AndroidStudioProjects\Magikarp\app\build\generated\source\buildConfig\release\com\magikarp\android\BuildConfig.java</SrcDir>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\BuildConfig.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\MapsRepository$GetMessagesResponseListener.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\MapsRepository$MessagesListener.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\MapsRepository.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\MapsRepository_Factory.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\GetMessagesRequest.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\GetMessagesResponse.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\Message$1.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\Message.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\NewMessageRequest.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\data\model\NewMessageResponse.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ActivityModule.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ActivityModule_ProvideGoogleSignInClientFactory.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ApplicationModule.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ApplicationModule_ProvideGetMessagesUrlFactory.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ApplicationModule_ProvideImageLoaderFactory.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ApplicationModule_ProvideRequestQueueFactory.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ApplicationModule_ProvideSharedPreferencesFactory.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\HiltQualifiers$GetMessagesUrl.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\HiltQualifiers$GetUserMessagesUrl.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\HiltQualifiers.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ViewModelModule.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ViewModelModule_ProvideMutableLiveDataFactory$InstanceHolder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\di\ViewModelModule_ProvideMutableLiveDataFactory.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\network\GsonRequest.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\network\ImageCache.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\network\LruBitmapCache.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\services\LocationService$LocationServiceBinder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\services\LocationService.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$1.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCBuilder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCBuilder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCBuilder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCImpl$ViewWithFragmentCBuilder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCImpl$ViewWithFragmentCImpl.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCImpl.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$SwitchingProvider.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$ViewCBuilder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$ViewCImpl.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$SwitchingProvider.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$Builder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ServiceCBuilder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$ServiceCImpl.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC$SwitchingProvider.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\DaggerMagikarpApplication_HiltComponents_SingletonC.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\HelpFragment.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\Hilt_MagikarpApplication$1.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\Hilt_MagikarpApplication.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\Hilt_MainActivity.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_GeneratedInjector.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityC$Builder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityC.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityCBuilderModule.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityRetainedC$Builder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityRetainedC.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ActivityRetainedCBuilderModule.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$FragmentC$Builder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$FragmentC.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$FragmentCBuilderModule.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ServiceC$Builder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ServiceC.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ServiceCBuilderModule.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$SingletonC.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewC$Builder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewC.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewCBuilderModule.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewWithFragmentC$Builder.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewWithFragmentC.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents$ViewWithFragmentCBuilderModule.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MagikarpApplication_HiltComponents.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MainActivity.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MainActivity_GeneratedInjector.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\MainActivity_MembersInjector.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\app\SettingsFragment.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\Hilt_MapsFragment.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsFragment.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsFragmentWrapper.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsFragment_GeneratedInjector.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsFragment_MembersInjector.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsViewModel.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsViewModel_AssistedFactory.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsViewModel_AssistedFactory_Factory.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\maps\MapsViewModel_HiltModule.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\posts\Hilt_PostFragment.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\posts\PostFragment$1.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\posts\PostFragment.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\posts\PostFragment_GeneratedInjector.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\com\magikarp\android\ui\posts\PostFragment_MembersInjector.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_di_ActivityModuleModuleDeps.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_di_ApplicationModuleModuleDeps.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_di_ViewModelModuleModuleDeps.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_ui_app_MagikarpApplication_GeneratedInjectorModuleDeps.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_ui_app_MainActivity_GeneratedInjectorModuleDeps.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_ui_maps_MapsFragment_GeneratedInjectorModuleDeps.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_ui_maps_MapsViewModel_HiltModuleModuleDeps.class</Jar>
+    <Jar>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\javac\release\classes\hilt_aggregated_deps\com_magikarp_android_ui_posts_PostFragment_GeneratedInjectorModuleDeps.class</Jar>
+    <AuxClasspathEntry>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\release\R.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\8a2345c27851e7dde7435db1875a1952\constraintlayout-2.0.4-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\27402d5fef3eff515ae61717756c81e1\navigation-ui-2.3.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\64d365d8515353b605b280f8da6b1759\material-1.2.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\3fec28165a73bfd53ae9f44523ac2c85\preference-1.1.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\04559576360a5416778741d5625cfc46\appcompat-1.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\83df6238afe1f52bfaaea38679e907a8\navigation-fragment-2.3.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\4ae2d7a6fb8d89b88221e297370176c3\jetified-volley-1.1.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\e5df5ee74526c63efbda0a85931f7236\jetified-play-services-auth-19.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\50fabdf4f1891fd4a766e65d96f9c1eb\jetified-play-services-maps-17.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\77887cfaff0eb0d54cfe863a9b12fba7\jetified-gson-2.8.6.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\e6a3eb4e4179414897305253d857d978\jetified-hilt-lifecycle-viewmodel-1.0.0-alpha02-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\cb9c4fbac214618bb2bfb52c5d79c1e3\jetified-hilt-android-2.29.1-alpha-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\d4712ba33c18b06618d8bec73297970c\jetified-android-maps-utils-2.1.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\fce7f8933557f29d6339e3474c9ea0b7\legacy-support-v4-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\23cb38fe46392a1a0b66d3b240399010\lifecycle-extensions-2.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\79c1c70346fbd3876ec83ad8b5752b4b\jetified-lifecycle-livedata-ktx-2.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\d5384f2f52ccf5ff7976b958bceee4df\jetified-lifecycle-viewmodel-ktx-2.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\916c12c2f0aada5545bdb0598fc3e6a7\jetified-firebase-storage-19.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\ef12df9257da016df97b1fd0e11873e8\jetified-play-services-auth-api-phone-17.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\d79e55d5fd8a10bb364a0e2b4e83ea8d\jetified-play-services-auth-base-17.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\1d6c1072ae9271829cbc3e3396e81001\jetified-firebase-auth-interop-18.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\03b5880e111dee3784230d42ed7f4c86\jetified-play-services-base-17.1.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\920ee0824ed2f4068d6058b0a71fd624\jetified-firebase-common-19.4.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\18d119219c84cf7efae33712bc3c3388\jetified-play-services-tasks-17.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\80bd5c3d67042dfc4b313d68b8816532\jetified-play-services-basement-17.1.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\4216d282cfb0b44b443dd1634d1c0f03\jetified-viewpager2-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\f5d08eef6ce63ed79676167c8817eb5c\fragment-1.2.4-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\c817a273b7347e1688cde246840d09e3\jetified-appcompat-resources-1.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\593b2c5240361ce20155b5f51ceb2d5f\legacy-support-core-ui-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\46e2a6d3bdcd2ea6d23f129900bf1dff\drawerlayout-1.1.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\4432afdff62a246958e7ae7413d88d24\coordinatorlayout-1.1.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\65d0d5df625fcb9647a2d9b90f5cad15\recyclerview-1.1.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\703aad3a61e1f3bb7781137fc90258dd\viewpager-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\af83a46cd6ea6d6a11b6d3b21084e4da\slidingpanelayout-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\f0e764c9a8948c585c36bcbc6c5a817c\customview-1.1.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\46d5d9b4de7263f47cec3134ebb35394\legacy-support-core-utils-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\e96c597eb72818279b26478786dcd908\loader-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\96e2ce5948ecd5df36d4d8132e0b4681\transition-1.3.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\dfaa30f2da791b2e2a2ab47b239fca88\vectordrawable-animated-1.1.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\01436c76e8d994139fc8428554cb9ca9\vectordrawable-1.1.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\b70e1d150e118f0a421d32e8f7a16f17\navigation-runtime-2.3.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\188db1624ea506999f97980e8eb970f8\jetified-activity-1.1.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\da982c6cbc44bf8b67a2cf80f886919d\media-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\109e4a34132677b030c290711eea2a61\swiperefreshlayout-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\9da154af35a16d986593ad17970cb5fd\asynclayoutinflater-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\67cd793ab1cf89070e20101b21ed8f3e\core-1.3.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\4c8334c5994e04c97a601bdfcd181505\cursoradapter-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\be88afb33646d8f728a61c33786e493a\cardview-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\1b807d2894463a3734c499fcef23fd40\jetified-lifecycle-process-2.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\dc222c323de18e5a9cc7a91479a9abce\jetified-lifecycle-service-2.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\38cbb75a54461f1929d6b73eac20a8db\lifecycle-runtime-2.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\575780ce8dfe530248da07ca77be713d\jetified-lifecycle-viewmodel-savedstate-2.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\8855d2c7b3560018873f45b4255c4c03\lifecycle-viewmodel-2.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\0a68ac0bdc1a9fb2364c1e8793b06614\lifecycle-livedata-2.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\542f4c57e8d6b5dc56536e1cc2083ce1\jetified-lifecycle-livedata-core-ktx-2.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\a1c3532d2d92d0e18a15daa5381f43b3\lifecycle-livedata-core-2.2.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\4fd0620173932b8f18477e6bdbc8b1f9\core-runtime-2.1.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\0b90ca48be7e7e8480c2b1062742a614\jetified-savedstate-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\modules-2\files-2.1\androidx.arch.core\core-common\2.1.0\b3152fc64428c9354344bd89848ecddc09b6f07e\core-common-2.1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\modules-2\files-2.1\androidx.lifecycle\lifecycle-common\2.2.0\4ef09a745007778eef83b92f8f23987a8ea59496\lifecycle-common-2.2.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\0fb7adad1f4eb8ca8b882c1b8fe77864\versionedparcelable-1.1.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\modules-2\files-2.1\androidx.collection\collection\1.1.0\1f27220b47669781457de0d600849a5de0e89909\collection-1.1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\ffe8cc986029210e9ad0deb7ab33c48d\jetified-firebase-components-16.0.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\44c763c1a6796dcb9839d10f15ebf4c5\navigation-common-2.3.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\ab82515b32dd39d1c754be2d9e3a7ca5\documentfile-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\2b12941237dd8db5fb206e780e3cff07\localbroadcastmanager-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\a26858d51756b52aa1eb664a336ebe2f\print-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\f6cbaa5be49e498dc81ae8647adbf2d9\interpolator-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\modules-2\files-2.1\androidx.annotation\annotation\1.1.0\e3a6fb2f40e3a3842e6b7472628ba4ce416ea4c8\annotation-1.1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\64e9c3ce4886c35e1084bcce4d109bb8\multidex-2.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\modules-2\files-2.1\androidx.constraintlayout\constraintlayout-solver\2.0.4\1f001d7db280a89a6c26b26a66eb064bb6d5efeb\constraintlayout-solver-2.0.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\e4cc44324e03b59b0bc59508afd679de\jetified-annotation-experimental-1.0.0-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\5f3e00a7d61506e8ab67fc7c9bb39029\jetified-hilt-core-2.29.1-alpha.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\3ad23ddafd9e2fcb5f7a7f17edabc76d\jetified-dagger-2.29.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\b985ec84562933303788e94f52b02f43\jetified-javax.inject-1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\c1cdc09d053fa017a419d2b97de87693\jetified-dagger-lint-aar-2.29.1-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\cb653992200b12c8cb545d424a6f59ce\jetified-jsr305-3.0.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\dbefe67a38caa1bb8bc5615f377a9136\jetified-jsr250-api-1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\a156e10872291501910a10aebaeac8e9\jetified-hilt-common-1.0.0-alpha02-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\9dfa2ff8f5d8dddf67b8168e6a7e56e0\jetified-kotlinx-coroutines-android-1.3.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\863b04be6eab0f572dd32a3ea21fb480\jetified-kotlinx-coroutines-core-1.3.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\41d084b3dae8a30749bbb4af6b763ed7\jetified-kotlin-stdlib-1.3.50.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\0ad7a7396db7ba9d23e32841e44cb1d1\jetified-kotlin-stdlib-common-1.3.50.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>C:\Users\Nick Clark\.gradle\caches\transforms-2\files-2.1\8d469fb2e3434d329dfd8bfd5c672aec\jetified-annotations-13.0.jar</AuxClasspathEntry>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\data\MapsRepository.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\data\model\GetMessagesRequest.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\data\model\GetMessagesResponse.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\data\model\Message.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\data\model\NewMessageRequest.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\data\model\NewMessageResponse.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\di\ActivityModule.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\di\ApplicationModule.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\di\HiltQualifiers.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\di\ViewModelModule.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\network\GsonRequest.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\network\ImageCache.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\network\LruBitmapCache.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\services\LocationService.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\ui\app\HelpFragment.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\ui\app\MagikarpApplication.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\ui\app\MainActivity.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\ui\app\SettingsFragment.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\ui\maps\MapsFragment.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\ui\maps\MapsFragmentWrapper.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\ui\maps\MapsViewModel.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\src\main\java\com\magikarp\android\ui\posts\PostFragment.java</SrcDir>
+    <SrcDir>C:\Users\Nick Clark\Documents\Code\Magikarp\app\build\generated\source\buildConfig\release\com\magikarp\android\BuildConfig.java</SrcDir>
   </Project>
-  <Errors errors="0" missingClasses="34">
+  <Errors errors="0" missingClasses="36">
     <MissingClass>android.app.Activity</MissingClass>
     <MissingClass>android.app.Application</MissingClass>
     <MissingClass>android.app.Service</MissingClass>
@@ -217,6 +219,8 @@
     <MissingClass>android.content.Context</MissingClass>
     <MissingClass>android.content.Intent</MissingClass>
     <MissingClass>android.content.ServiceConnection</MissingClass>
+    <MissingClass>android.content.SharedPreferences</MissingClass>
+    <MissingClass>android.content.SharedPreferences$OnSharedPreferenceChangeListener</MissingClass>
     <MissingClass>android.content.res.Resources</MissingClass>
     <MissingClass>android.graphics.Bitmap</MissingClass>
     <MissingClass>android.graphics.Bitmap$CompressFormat</MissingClass>
@@ -244,7 +248,7 @@
     <MissingClass>android.widget.TextView</MissingClass>
     <MissingClass>android.widget.Toast</MissingClass>
   </Errors>
-  <FindBugsSummary timestamp="Thu, 19 Nov 2020 15:19:28 -0800" total_classes="97" referenced_classes="584" total_bugs="0" total_size="1442" num_packages="10" java_version="1.8.0_242-release" vm_version="25.242-b01" cpu_seconds="3.75" clock_seconds="0.88" peak_mbytes="396.64" alloc_mbytes="455.50" gc_seconds="0.06">
+  <FindBugsSummary timestamp="Thu, 19 Nov 2020 18:51:53 -0500" total_classes="99" referenced_classes="587" total_bugs="0" total_size="1497" num_packages="10" java_version="11" vm_version="11+28" cpu_seconds="13.05" clock_seconds="5.50" peak_mbytes="469.86" alloc_mbytes="512.00" gc_seconds="0.03">
     <FileStats path="com/magikarp/android/BuildConfig.java" bugCount="0" size="8"/>
     <FileStats path="com/magikarp/android/data/MapsRepository.java" bugCount="0" size="31"/>
     <FileStats path="com/magikarp/android/data/MapsRepository_Factory.java" bugCount="0" size="16"/>
@@ -255,10 +259,11 @@
     <FileStats path="com/magikarp/android/data/model/NewMessageResponse.java" bugCount="0" size="8"/>
     <FileStats path="com/magikarp/android/di/ActivityModule.java" bugCount="0" size="7"/>
     <FileStats path="com/magikarp/android/di/ActivityModule_ProvideGoogleSignInClientFactory.java" bugCount="0" size="14"/>
-    <FileStats path="com/magikarp/android/di/ApplicationModule.java" bugCount="0" size="13"/>
+    <FileStats path="com/magikarp/android/di/ApplicationModule.java" bugCount="0" size="15"/>
     <FileStats path="com/magikarp/android/di/ApplicationModule_ProvideGetMessagesUrlFactory.java" bugCount="0" size="14"/>
     <FileStats path="com/magikarp/android/di/ApplicationModule_ProvideImageLoaderFactory.java" bugCount="0" size="16"/>
     <FileStats path="com/magikarp/android/di/ApplicationModule_ProvideRequestQueueFactory.java" bugCount="0" size="14"/>
+    <FileStats path="com/magikarp/android/di/ApplicationModule_ProvideSharedPreferencesFactory.java" bugCount="0" size="14"/>
     <FileStats path="com/magikarp/android/di/HiltQualifiers.java" bugCount="0" size="5"/>
     <FileStats path="com/magikarp/android/di/ViewModelModule.java" bugCount="0" size="5"/>
     <FileStats path="com/magikarp/android/di/ViewModelModule_ProvideMutableLiveDataFactory.java" bugCount="0" size="18"/>
@@ -266,21 +271,22 @@
     <FileStats path="com/magikarp/android/network/ImageCache.java" bugCount="0" size="11"/>
     <FileStats path="com/magikarp/android/network/LruBitmapCache.java" bugCount="0" size="8"/>
     <FileStats path="com/magikarp/android/services/LocationService.java" bugCount="0" size="53"/>
-    <FileStats path="com/magikarp/android/ui/app/DaggerMagikarpApplication_HiltComponents_SingletonC.java" bugCount="0" size="309"/>
+    <FileStats path="com/magikarp/android/ui/app/DaggerMagikarpApplication_HiltComponents_SingletonC.java" bugCount="0" size="316"/>
     <FileStats path="com/magikarp/android/ui/app/HelpFragment.java" bugCount="0" size="19"/>
     <FileStats path="com/magikarp/android/ui/app/Hilt_MagikarpApplication.java" bugCount="0" size="23"/>
     <FileStats path="com/magikarp/android/ui/app/Hilt_MainActivity.java" bugCount="0" size="35"/>
     <FileStats path="com/magikarp/android/ui/app/MagikarpApplication.java" bugCount="0" size="3"/>
     <FileStats path="com/magikarp/android/ui/app/MagikarpApplication_GeneratedInjector.java" bugCount="0" size="2"/>
     <FileStats path="com/magikarp/android/ui/app/MagikarpApplication_HiltComponents.java" bugCount="0" size="43"/>
-    <FileStats path="com/magikarp/android/ui/app/MainActivity.java" bugCount="0" size="97"/>
+    <FileStats path="com/magikarp/android/ui/app/MainActivity.java" bugCount="0" size="98"/>
     <FileStats path="com/magikarp/android/ui/app/MainActivity_GeneratedInjector.java" bugCount="0" size="2"/>
     <FileStats path="com/magikarp/android/ui/app/MainActivity_MembersInjector.java" bugCount="0" size="22"/>
     <FileStats path="com/magikarp/android/ui/app/SettingsFragment.java" bugCount="0" size="6"/>
     <FileStats path="com/magikarp/android/ui/maps/Hilt_MapsFragment.java" bugCount="0" size="51"/>
-    <FileStats path="com/magikarp/android/ui/maps/MapsFragment.java" bugCount="0" size="102"/>
+    <FileStats path="com/magikarp/android/ui/maps/MapsFragment.java" bugCount="0" size="117"/>
     <FileStats path="com/magikarp/android/ui/maps/MapsFragmentWrapper.java" bugCount="0" size="3"/>
     <FileStats path="com/magikarp/android/ui/maps/MapsFragment_GeneratedInjector.java" bugCount="0" size="2"/>
+    <FileStats path="com/magikarp/android/ui/maps/MapsFragment_MembersInjector.java" bugCount="0" size="16"/>
     <FileStats path="com/magikarp/android/ui/maps/MapsViewModel.java" bugCount="0" size="19"/>
     <FileStats path="com/magikarp/android/ui/maps/MapsViewModel_AssistedFactory.java" bugCount="0" size="12"/>
     <FileStats path="com/magikarp/android/ui/maps/MapsViewModel_AssistedFactory_Factory.java" bugCount="0" size="16"/>
@@ -314,13 +320,14 @@
       <ClassStats class="com.magikarp.android.data.model.NewMessageRequest" sourceFile="NewMessageRequest.java" interface="false" size="20" bugs="0"/>
       <ClassStats class="com.magikarp.android.data.model.NewMessageResponse" sourceFile="NewMessageResponse.java" interface="false" size="8" bugs="0"/>
     </PackageStats>
-    <PackageStats package="com.magikarp.android.di" total_bugs="0" total_types="12" total_size="106">
+    <PackageStats package="com.magikarp.android.di" total_bugs="0" total_types="13" total_size="122">
       <ClassStats class="com.magikarp.android.di.ActivityModule" sourceFile="ActivityModule.java" interface="false" size="7" bugs="0"/>
       <ClassStats class="com.magikarp.android.di.ActivityModule_ProvideGoogleSignInClientFactory" sourceFile="ActivityModule_ProvideGoogleSignInClientFactory.java" interface="false" size="14" bugs="0"/>
-      <ClassStats class="com.magikarp.android.di.ApplicationModule" sourceFile="ApplicationModule.java" interface="false" size="13" bugs="0"/>
+      <ClassStats class="com.magikarp.android.di.ApplicationModule" sourceFile="ApplicationModule.java" interface="false" size="15" bugs="0"/>
       <ClassStats class="com.magikarp.android.di.ApplicationModule_ProvideGetMessagesUrlFactory" sourceFile="ApplicationModule_ProvideGetMessagesUrlFactory.java" interface="false" size="14" bugs="0"/>
       <ClassStats class="com.magikarp.android.di.ApplicationModule_ProvideImageLoaderFactory" sourceFile="ApplicationModule_ProvideImageLoaderFactory.java" interface="false" size="16" bugs="0"/>
       <ClassStats class="com.magikarp.android.di.ApplicationModule_ProvideRequestQueueFactory" sourceFile="ApplicationModule_ProvideRequestQueueFactory.java" interface="false" size="14" bugs="0"/>
+      <ClassStats class="com.magikarp.android.di.ApplicationModule_ProvideSharedPreferencesFactory" sourceFile="ApplicationModule_ProvideSharedPreferencesFactory.java" interface="false" size="14" bugs="0"/>
       <ClassStats class="com.magikarp.android.di.HiltQualifiers" sourceFile="HiltQualifiers.java" interface="false" size="3" bugs="0"/>
       <ClassStats class="com.magikarp.android.di.HiltQualifiers$GetMessagesUrl" sourceFile="HiltQualifiers.java" interface="true" size="1" bugs="0"/>
       <ClassStats class="com.magikarp.android.di.HiltQualifiers$GetUserMessagesUrl" sourceFile="HiltQualifiers.java" interface="true" size="1" bugs="0"/>
@@ -337,15 +344,15 @@
       <ClassStats class="com.magikarp.android.services.LocationService" sourceFile="LocationService.java" interface="false" size="47" bugs="0"/>
       <ClassStats class="com.magikarp.android.services.LocationService$LocationServiceBinder" sourceFile="LocationService.java" interface="false" size="6" bugs="0"/>
     </PackageStats>
-    <PackageStats package="com.magikarp.android.ui.app" total_bugs="0" total_types="48" total_size="561">
-      <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="66" bugs="0"/>
+    <PackageStats package="com.magikarp.android.ui.app" total_bugs="0" total_types="48" total_size="569">
+      <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="69" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$1" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="1" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCBuilder" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="8" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="31" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCBuilder" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="14" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="39" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCBuilder" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="14" bugs="0"/>
-      <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCImpl" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="24" bugs="0"/>
+      <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCImpl" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="28" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCImpl$ViewWithFragmentCBuilder" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="14" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$FragmentCImpl$ViewWithFragmentCImpl" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="7" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCImpl$ActivityCImpl$SwitchingProvider" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="11" bugs="0"/>
@@ -382,16 +389,17 @@
       <ClassStats class="com.magikarp.android.ui.app.MagikarpApplication_HiltComponents$ViewWithFragmentC" sourceFile="MagikarpApplication_HiltComponents.java" interface="false" size="3" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.MagikarpApplication_HiltComponents$ViewWithFragmentC$Builder" sourceFile="MagikarpApplication_HiltComponents.java" interface="true" size="1" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.MagikarpApplication_HiltComponents$ViewWithFragmentCBuilderModule" sourceFile="MagikarpApplication_HiltComponents.java" interface="true" size="2" bugs="0"/>
-      <ClassStats class="com.magikarp.android.ui.app.MainActivity" sourceFile="MainActivity.java" interface="false" size="97" bugs="0"/>
+      <ClassStats class="com.magikarp.android.ui.app.MainActivity" sourceFile="MainActivity.java" interface="false" size="98" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.MainActivity_GeneratedInjector" sourceFile="MainActivity_GeneratedInjector.java" interface="true" size="2" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.MainActivity_MembersInjector" sourceFile="MainActivity_MembersInjector.java" interface="false" size="22" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.SettingsFragment" sourceFile="SettingsFragment.java" interface="false" size="6" bugs="0"/>
     </PackageStats>
-    <PackageStats package="com.magikarp.android.ui.maps" total_bugs="0" total_types="8" total_size="207">
+    <PackageStats package="com.magikarp.android.ui.maps" total_bugs="0" total_types="9" total_size="238">
       <ClassStats class="com.magikarp.android.ui.maps.Hilt_MapsFragment" sourceFile="Hilt_MapsFragment.java" interface="false" size="51" bugs="0"/>
-      <ClassStats class="com.magikarp.android.ui.maps.MapsFragment" sourceFile="MapsFragment.java" interface="false" size="102" bugs="0"/>
+      <ClassStats class="com.magikarp.android.ui.maps.MapsFragment" sourceFile="MapsFragment.java" interface="false" size="117" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.maps.MapsFragmentWrapper" sourceFile="MapsFragmentWrapper.java" interface="false" size="3" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.maps.MapsFragment_GeneratedInjector" sourceFile="MapsFragment_GeneratedInjector.java" interface="true" size="2" bugs="0"/>
+      <ClassStats class="com.magikarp.android.ui.maps.MapsFragment_MembersInjector" sourceFile="MapsFragment_MembersInjector.java" interface="false" size="16" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.maps.MapsViewModel" sourceFile="MapsViewModel.java" interface="false" size="19" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.maps.MapsViewModel_AssistedFactory" sourceFile="MapsViewModel_AssistedFactory.java" interface="false" size="12" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.maps.MapsViewModel_AssistedFactory_Factory" sourceFile="MapsViewModel_AssistedFactory_Factory.java" interface="false" size="16" bugs="0"/>
@@ -415,21 +423,25 @@
       <ClassStats class="hilt_aggregated_deps.com_magikarp_android_ui_posts_PostFragment_GeneratedInjectorModuleDeps" sourceFile="com_magikarp_android_ui_posts_PostFragment_GeneratedInjectorModuleDeps.java" interface="false" size="3" bugs="0"/>
     </PackageStats>
     <FindBugsProfile>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="146" invocations="1983" avgMicrosecondsPerInvocation="73" maxMicrosecondsPerInvocation="39825" standardDeviationMicrosecondsPerInvocation="907"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="68" invocations="2002" avgMicrosecondsPerInvocation="34" maxMicrosecondsPerInvocation="162" standardDeviationMicrosecondsPerInvocation="15"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="56" invocations="584" avgMicrosecondsPerInvocation="97" maxMicrosecondsPerInvocation="6123" standardDeviationMicrosecondsPerInvocation="344"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="51" invocations="584" avgMicrosecondsPerInvocation="88" maxMicrosecondsPerInvocation="3377" standardDeviationMicrosecondsPerInvocation="246"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="23" invocations="584" avgMicrosecondsPerInvocation="40" maxMicrosecondsPerInvocation="3098" standardDeviationMicrosecondsPerInvocation="155"/>
-      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="22" invocations="737" avgMicrosecondsPerInvocation="29" maxMicrosecondsPerInvocation="637" standardDeviationMicrosecondsPerInvocation="47"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.CalledMethods" totalMilliseconds="21" invocations="584" avgMicrosecondsPerInvocation="37" maxMicrosecondsPerInvocation="1682" standardDeviationMicrosecondsPerInvocation="124"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="16" invocations="339" avgMicrosecondsPerInvocation="49" maxMicrosecondsPerInvocation="647" standardDeviationMicrosecondsPerInvocation="73"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="16" invocations="584" avgMicrosecondsPerInvocation="27" maxMicrosecondsPerInvocation="729" standardDeviationMicrosecondsPerInvocation="56"/>
-      <ClassProfile name="edu.umd.cs.findbugs.ba.npe.NullDerefAndRedundantComparisonFinder" totalMilliseconds="15" invocations="309" avgMicrosecondsPerInvocation="50" maxMicrosecondsPerInvocation="699" standardDeviationMicrosecondsPerInvocation="86"/>
-      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="13" invocations="1749" avgMicrosecondsPerInvocation="7" maxMicrosecondsPerInvocation="385" standardDeviationMicrosecondsPerInvocation="18"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.UnconditionalValueDerefDataflowFactory" totalMilliseconds="13" invocations="321" avgMicrosecondsPerInvocation="41" maxMicrosecondsPerInvocation="467" standardDeviationMicrosecondsPerInvocation="56"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="13" invocations="344" avgMicrosecondsPerInvocation="38" maxMicrosecondsPerInvocation="331" standardDeviationMicrosecondsPerInvocation="46"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="11" invocations="584" avgMicrosecondsPerInvocation="20" maxMicrosecondsPerInvocation="403" standardDeviationMicrosecondsPerInvocation="46"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory" totalMilliseconds="11" invocations="348" avgMicrosecondsPerInvocation="32" maxMicrosecondsPerInvocation="420" standardDeviationMicrosecondsPerInvocation="45"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="1123" invocations="2045" avgMicrosecondsPerInvocation="549" maxMicrosecondsPerInvocation="36976" standardDeviationMicrosecondsPerInvocation="1913"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="428" invocations="2065" avgMicrosecondsPerInvocation="207" maxMicrosecondsPerInvocation="16733" standardDeviationMicrosecondsPerInvocation="655"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="335" invocations="587" avgMicrosecondsPerInvocation="571" maxMicrosecondsPerInvocation="41730" standardDeviationMicrosecondsPerInvocation="2677"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="281" invocations="587" avgMicrosecondsPerInvocation="479" maxMicrosecondsPerInvocation="40508" standardDeviationMicrosecondsPerInvocation="2039"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.impl.ZipCodeBaseFactory" totalMilliseconds="127" invocations="85" avgMicrosecondsPerInvocation="1495" maxMicrosecondsPerInvocation="14435" standardDeviationMicrosecondsPerInvocation="1871"/>
+      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="125" invocations="755" avgMicrosecondsPerInvocation="165" maxMicrosecondsPerInvocation="3108" standardDeviationMicrosecondsPerInvocation="335"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="111" invocations="355" avgMicrosecondsPerInvocation="314" maxMicrosecondsPerInvocation="36332" standardDeviationMicrosecondsPerInvocation="1966"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.CalledMethods" totalMilliseconds="110" invocations="587" avgMicrosecondsPerInvocation="188" maxMicrosecondsPerInvocation="14958" standardDeviationMicrosecondsPerInvocation="1047"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="109" invocations="587" avgMicrosecondsPerInvocation="187" maxMicrosecondsPerInvocation="55991" standardDeviationMicrosecondsPerInvocation="2326"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="104" invocations="587" avgMicrosecondsPerInvocation="177" maxMicrosecondsPerInvocation="10658" standardDeviationMicrosecondsPerInvocation="699"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="93" invocations="360" avgMicrosecondsPerInvocation="260" maxMicrosecondsPerInvocation="22018" standardDeviationMicrosecondsPerInvocation="1276"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.UnconditionalValueDerefDataflowFactory" totalMilliseconds="88" invocations="336" avgMicrosecondsPerInvocation="263" maxMicrosecondsPerInvocation="48890" standardDeviationMicrosecondsPerInvocation="2670"/>
+      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="79" invocations="1808" avgMicrosecondsPerInvocation="43" maxMicrosecondsPerInvocation="2129" standardDeviationMicrosecondsPerInvocation="130"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="78" invocations="587" avgMicrosecondsPerInvocation="133" maxMicrosecondsPerInvocation="8898" standardDeviationMicrosecondsPerInvocation="504"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.CFGFactory" totalMilliseconds="69" invocations="355" avgMicrosecondsPerInvocation="195" maxMicrosecondsPerInvocation="5800" standardDeviationMicrosecondsPerInvocation="485"/>
+      <ClassProfile name="edu.umd.cs.findbugs.ba.npe.NullDerefAndRedundantComparisonFinder" totalMilliseconds="58" invocations="323" avgMicrosecondsPerInvocation="179" maxMicrosecondsPerInvocation="2824" standardDeviationMicrosecondsPerInvocation="343"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="56" invocations="367" avgMicrosecondsPerInvocation="154" maxMicrosecondsPerInvocation="38122" standardDeviationMicrosecondsPerInvocation="1986"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory" totalMilliseconds="54" invocations="364" avgMicrosecondsPerInvocation="150" maxMicrosecondsPerInvocation="4520" standardDeviationMicrosecondsPerInvocation="340"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindRefComparison" totalMilliseconds="54" invocations="99" avgMicrosecondsPerInvocation="551" maxMicrosecondsPerInvocation="26708" standardDeviationMicrosecondsPerInvocation="3165"/>
     </FindBugsProfile>
   </FindBugsSummary>
   <ClassFeatures></ClassFeatures>
