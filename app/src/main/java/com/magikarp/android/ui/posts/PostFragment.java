@@ -30,6 +30,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -313,11 +315,16 @@ public class PostFragment extends Fragment {
     StorageReference storageRef = storage.getReference();
 
     StorageReference ref = storageRef.child("images/" + imageName.toString() + ".png");
-
+    final EditText editText = getView().findViewById(R.id.create_post_caption);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
     byte[] data = baos.toByteArray();
-
+    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
+    String id = "noID";
+    if(account != null){
+      id = account.getId();
+    }
+    final String idfinal = id;
     UploadTask uploadTask = ref.putBytes(data);
     Task<Uri> urlTask =
         uploadTask.continueWithTask(task -> {
@@ -332,10 +339,10 @@ public class PostFragment extends Fragment {
             Uri downloadUri = task.getResult();
             // Create message body
             final NewMessageRequest body =
-                new NewMessageRequest(downloadUri.toString(), "test", latitude, longitude);
+                new NewMessageRequest(downloadUri.toString(), editText.getText().toString() , latitude, longitude);
 
             String url = getContext().getResources().getString(R.string.server_url)
-                + "/messages/tester/new";
+                + "/messages/" + idfinal + "/new";
             // Create a new GSON request.
             GsonRequest<NewMessageResponse> request =
                 new GsonRequest<>(Request.Method.POST, url, NewMessageResponse.class,
