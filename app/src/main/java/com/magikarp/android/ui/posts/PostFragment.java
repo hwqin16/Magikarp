@@ -223,10 +223,13 @@ public class PostFragment extends Fragment {
    * @param imageUrl image to load
    */
   private void loadImage(@NonNull String imageUrl) {
-    final NetworkImageView preview = getView().findViewById(R.id.create_post_image_preview);
-    imageLoader.get(imageUrl, ImageLoader
-        .getImageListener(preview, R.drawable.ic_menu_gallery, R.drawable.ic_menu_gallery));
-    preview.setImageUrl(imageUrl, imageLoader);
+    View view = getView();
+    if (view != null) {
+      final NetworkImageView preview = view.findViewById(R.id.create_post_image_preview);
+      imageLoader.get(imageUrl, ImageLoader
+              .getImageListener(preview, R.drawable.ic_menu_gallery, R.drawable.ic_menu_gallery));
+      preview.setImageUrl(imageUrl, imageLoader);
+    }
   }
 
   /**
@@ -235,9 +238,13 @@ public class PostFragment extends Fragment {
    * @param image image to load
    */
   private void loadImage(@NonNull Bitmap image) {
-    final NetworkImageView preview = getView().findViewById(R.id.create_post_image_preview);
-    preview.setImageBitmap(image);
-    this.imageBitmap = image;
+    View view = getView();
+    if (view != null) {
+      final NetworkImageView preview = view.findViewById(R.id.create_post_image_preview);
+      preview.setImageBitmap(image);
+      this.imageBitmap = image;
+    }
+
   }
 
   /**
@@ -326,37 +333,36 @@ public class PostFragment extends Fragment {
     }
     final String idfinal = id;
     UploadTask uploadTask = ref.putBytes(data);
-    Task<Uri> urlTask =
-        uploadTask.continueWithTask(task -> {
-          if (!task.isSuccessful()) {
-            throw task.getException();
-          }
+    uploadTask.continueWithTask(task -> {
+      if (!task.isSuccessful()) {
+        throw task.getException();
+      }
 
-          // Continue with the task to get the download URL
-          return ref.getDownloadUrl();
-        }).addOnCompleteListener(task -> {
-          if (task.isSuccessful()) {
-            Uri downloadUri = task.getResult();
-            // Create message body
-            final NewMessageRequest body =
-                new NewMessageRequest(downloadUri.toString(), editText.getText().toString(),
-                        latitude, longitude);
+      // Continue with the task to get the download URL
+      return ref.getDownloadUrl();
+    }).addOnCompleteListener(task -> {
+      if (task.isSuccessful()) {
+        Uri downloadUri = task.getResult();
+        // Create message body
+        final NewMessageRequest body =
+            new NewMessageRequest(downloadUri.toString(), editText.getText().toString(),
+                    latitude, longitude);
 
-            String url = getContext().getResources().getString(R.string.server_url)
-                + "/messages/" + idfinal + "/new";
-            // Create a new GSON request.
-            GsonRequest<NewMessageResponse> request =
-                new GsonRequest<>(Request.Method.POST, url, NewMessageResponse.class,
-                    new Gson().toJson(body), response -> {
-                }, error -> {
-                });
-            requestQueue.add(request);
+        String url = getContext().getResources().getString(R.string.server_url)
+            + "/messages/" + idfinal + "/new";
+        // Create a new GSON request.
+        GsonRequest<NewMessageResponse> request =
+            new GsonRequest<>(Request.Method.POST, url, NewMessageResponse.class,
+                new Gson().toJson(body), response -> {
+            }, error -> {
+            });
+        requestQueue.add(request);
 
-          } else {
-            // Handle failures
-            // ...
-          }
-        });
+      } else {
+        // Handle failures
+        // ...
+      }
+    });
 
     return true;
   }
