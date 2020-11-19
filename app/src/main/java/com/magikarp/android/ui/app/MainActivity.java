@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -30,7 +31,8 @@ import javax.inject.Inject;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuItemClickListener {
 
-  private static final int SIGN_IN_RESULT = 9001;
+  @VisibleForTesting
+  static final int SIGN_IN_RESULT = 9001;
 
   private AppBarConfiguration appBarConfiguration;
 
@@ -86,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
+    performOnActivityResult(requestCode, data);
+  }
+
+  @VisibleForTesting
+  void performOnActivityResult(int requestCode, Intent data) {
     if (requestCode == SIGN_IN_RESULT) {
       try {
         GoogleSignInAccount account =

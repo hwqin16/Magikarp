@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
+    <!-- Reason: no need to spotbugs in auto-generated files -->
     <Match>
-        <Source name="~.*MapsFragmentDirections\.java" />
+        <Or>
+            <Source name="~.*MapsFragmentDirections\.java" />
+            <Source name="~.*MapsFragmentWrapperDirections\.java" />
+            <Source name="~.*PostFragmentArgs\.java" />
+        </Or>
     </Match>
+    <!-- Weirdness in the android api leads to us to need to downcast a List to an ArrayList -->
     <Match>
-        <Source name="~.*MapsFragmentWrapperDirections\.java" />
-    </Match>
-    <Match>
-        <Source name="~.*PostFragmentArgs\.java" />
+        <Class name="com.magikarp.android.ui.maps.MapsFragment" />
+        <Method name="onChanged" />
+        <Bug pattern="BC_BAD_CAST_TO_CONCRETE_COLLECTION" />
     </Match>
 </FindBugsFilter>
