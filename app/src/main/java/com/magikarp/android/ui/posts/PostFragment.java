@@ -28,10 +28,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -46,7 +51,9 @@ import com.magikarp.android.data.MapsRepository;
 import com.magikarp.android.data.model.GetMessagesRequest;
 import com.magikarp.android.data.model.GetMessagesResponse;
 import com.magikarp.android.data.model.GetMessagesResponse;
+import com.magikarp.android.data.model.Message;
 import com.magikarp.android.data.model.NewMessageRequest;
+import com.magikarp.android.data.model.NewMessageResponse;
 import com.magikarp.android.network.GsonRequest;
 import com.magikarp.android.services.LocationService;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -54,9 +61,13 @@ import dagger.hilt.android.AndroidEntryPoint;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 
 /**
@@ -239,6 +250,7 @@ public class PostFragment extends Fragment {
     super.onActivityResult(requestCode, resultCode, data);
     if (resultCode == Activity.RESULT_OK) {
       if (requestCode == RESULT_LOAD_IMG) {
+
         loadImage(data.getData());
       } else {
         throw new IllegalStateException("Unexpected value: " + requestCode);
@@ -275,6 +287,7 @@ public class PostFragment extends Fragment {
     Intent photoSelectionIntent = new Intent(Intent.ACTION_PICK);
     photoSelectionIntent.setType("image/*");
     startActivityForResult(photoSelectionIntent, RESULT_LOAD_IMG);
+
   }
 
   /**
@@ -319,6 +332,7 @@ public class PostFragment extends Fragment {
     preview.setImageBitmap(selectedImage);
 
     this.image = selectedImage;
+
   }
 
   /**
@@ -401,11 +415,23 @@ public class PostFragment extends Fragment {
           Uri downloadUri = task.getResult();
           // Create message body
           final NewMessageRequest body = new NewMessageRequest(downloadUri.toString(), "test", latitude, longitude);
+
+          String url = getContext().getResources().getString(R.string.server_url) + "/messages/tester/new";
           // Create a new GSON request.
-          GsonRequest<GetMessagesResponse> request =
-                  new GsonRequest<>(Request.Method.POST, url, GetMessagesResponse.class,
-                          new Gson().toJson(body), new MapsRepository.GetMessagesResponseListener(listener), errorListener);
-          requestQueue.add(request);
+          GsonRequest<NewMessageResponse> request =
+                  new GsonRequest<>(Request.Method.POST, url, NewMessageResponse.class,
+                          new Gson().toJson(body), new Response.Listener<NewMessageResponse>() {
+                    @Override
+                    public void onResponse(NewMessageResponse response) {
+                    }
+                  }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                  });
+          RequestQueue queue = Volley.newRequestQueue(getContext());
+          queue.add(request);
 
         } else {
           // Handle failures
@@ -414,9 +440,8 @@ public class PostFragment extends Fragment {
       }
     });
 
-
-
-
    return true;
   }
 }
+
+
