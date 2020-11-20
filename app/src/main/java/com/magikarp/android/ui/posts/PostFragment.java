@@ -21,7 +21,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -360,10 +359,11 @@ public class PostFragment extends Fragment {
         requestQueue.add(request);
         Toast.makeText(requireActivity(), "Posted!",
             Toast.LENGTH_SHORT).show();
-        InputMethodManager inputMethodManager =
-            (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(
-            requireActivity().getCurrentFocus().getWindowToken(), 0);
+        // TODO Need to hide keyboard safely after finishing typing.
+        // InputMethodManager inputMethodManager =
+        //   (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        // inputMethodManager.hideSoftInputFromWindow(
+        //   requireActivity().getCurrentFocus().getWindowToken(), 0);
         requireActivity().onBackPressed();
       }
     });
