@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.android.volley.Request;
@@ -57,11 +58,16 @@ import org.jetbrains.annotations.NotNull;
 @AndroidEntryPoint
 public class PostFragment extends Fragment {
 
-  private static final int RESULT_LOAD_IMG = 1;
-  private static final String SAVESTATE_IMAGE_URI = "imageUri";
-  private static final String SAVESTATE_TEXT = "text";
-  private static final String SAVESTATE_LATITUDE = "latitude";
-  private static final String SAVESTATE_LONGITUDE = "longitude";
+  @VisibleForTesting
+  static final int RESULT_LOAD_IMG = 1;
+  @VisibleForTesting
+  static final String SAVESTATE_IMAGE_URI = "imageUri";
+  @VisibleForTesting
+  static final String SAVESTATE_TEXT = "text";
+  @VisibleForTesting
+  static final String SAVESTATE_LATITUDE = "latitude";
+  @VisibleForTesting
+  static final String SAVESTATE_LONGITUDE = "longitude";
 
   private double latitude;
   private double longitude;
@@ -76,7 +82,7 @@ public class PostFragment extends Fragment {
 
   private LocationService gpsService;
   private boolean isGpsServiceBound = false;
-  private final ServiceConnection gpsServiceConnection = new ServiceConnection() {
+  private ServiceConnection gpsServiceConnection = new ServiceConnection() {
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
@@ -95,13 +101,44 @@ public class PostFragment extends Fragment {
 
   };
 
+  public PostFragment() {
+  }
+
+  /**
+   * PostFragment constructor for testing.
+   *
+   * @param serviceConnection ServiceConnection for testing
+   * @param gpsService        LocationService for testing
+   * @param isGpsServiceBound boolean for testing
+   */
+  @VisibleForTesting
+  PostFragment(
+      ServiceConnection serviceConnection,
+      LocationService gpsService,
+      boolean isGpsServiceBound
+  ) {
+    this.gpsServiceConnection = serviceConnection;
+    this.gpsService = gpsService;
+    this.isGpsServiceBound = isGpsServiceBound;
+  }
+
+  @VisibleForTesting
+  PostFragment(ImageLoader imageLoader) {
+    this.imageLoader = imageLoader;
+  }
+
   @Override
   public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setHasOptionsMenu(true);
 
-    final Intent gpsIntent = new Intent(requireContext(), LocationService.class);
     final Context context = requireContext();
+    final Intent gpsIntent = new Intent(context, LocationService.class);
+    performOnCreate(context, gpsIntent);
+  }
+
+  @VisibleForTesting
+  void performOnCreate(Context context, Intent gpsIntent) {
+    setHasOptionsMenu(true);
     context.bindService(gpsIntent, gpsServiceConnection, Context.BIND_AUTO_CREATE);
     context.startService(gpsIntent);
   }
@@ -109,7 +146,16 @@ public class PostFragment extends Fragment {
   @Override
   public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
-    if (requireArguments().getBoolean(getString(R.string.args_is_editable))) {
+    performOnCreateOptionsMenu(
+        menu,
+        inflater,
+        requireArguments().getBoolean(getString(R.string.args_is_editable))
+    );
+  }
+
+  @VisibleForTesting
+  void performOnCreateOptionsMenu(Menu menu, MenuInflater inflater, boolean isEditable) {
+    if (isEditable) {
       inflater.inflate(R.menu.menu_post_edit, menu);
       menu.findItem(R.id.menu_get_location).setOnMenuItemClickListener(this::onGpsButtonClick);
       menu.findItem(R.id.menu_upload_content).setOnMenuItemClickListener(this::onPostButtonClick);
@@ -126,7 +172,21 @@ public class PostFragment extends Fragment {
 
   @Override
   public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
-    final Bundle args = requireArguments();
+    performOnViewCreated(
+        view,
+        savedInstanceState,
+        requireArguments(),
+        getString(R.string.args_is_editable)
+    );
+  }
+
+  @VisibleForTesting
+  void performOnViewCreated(
+      View view,
+      Bundle savedInstanceState,
+      Bundle args,
+      String argsIsEditable
+  ) {
     String imageUrl;
 
     // Load data from saved state or passed in arguments.
@@ -150,7 +210,7 @@ public class PostFragment extends Fragment {
     editText.setText(text);
 
     // Disable editing if UI is read only.
-    if (!args.getBoolean(getString(R.string.args_is_editable))) {
+    if (!args.getBoolean(argsIsEditable)) {
       editText.setEnabled(false);
       editText.setFocusable(false);
       editText.setFocusableInTouchMode(false);
@@ -167,7 +227,15 @@ public class PostFragment extends Fragment {
 
   @Override
   public void onSaveInstanceState(@NotNull Bundle bundle) {
-    if (requireArguments().getBoolean(getString(R.string.args_is_editable))) {
+    performOnSaveInstanceState(
+        bundle,
+        requireArguments().getBoolean(getString(R.string.args_is_editable))
+    );
+  }
+
+  @VisibleForTesting
+  void performOnSaveInstanceState(Bundle bundle, boolean argsIsEditable) {
+    if (argsIsEditable) {
       bundle.putDouble(SAVESTATE_LATITUDE, latitude);
       bundle.putDouble(SAVESTATE_LONGITUDE, longitude);
       if (imageUri != null) {
@@ -180,13 +248,23 @@ public class PostFragment extends Fragment {
   @Override
   public void onDestroy() {
     super.onDestroy();
+    performOnDestroy(requireContext());
+  }
+
+  @VisibleForTesting
+  void performOnDestroy(Context context) {
+    context.unbindService(gpsServiceConnection);
     gpsService.dispose();
-    requireContext().unbindService(gpsServiceConnection);
   }
 
   @Override
   public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
+    performOnActivityResult(requestCode, resultCode, data);
+  }
+
+  @VisibleForTesting
+  void performOnActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == RESULT_LOAD_IMG && resultCode == Activity.RESULT_OK) {
       loadImage(data.getData());
     }
@@ -210,11 +288,15 @@ public class PostFragment extends Fragment {
    * @param imageUri image to load
    */
   private void loadImage(@NonNull Uri imageUri) {
-    final NetworkImageView networkImageView =
-        requireView().findViewById(R.id.create_post_network_image);
-    final ImageView imageView = requireView().findViewById(R.id.create_post_local_image);
+    performLoadImage(requireView(), requireContext(), imageUri, imageUri.getScheme());
+  }
 
-    if (imageUri.getScheme().contains("http")) {
+  @VisibleForTesting
+  void performLoadImage(View view, Context context, Uri imageUri, String scheme) {
+    final NetworkImageView networkImageView = view.findViewById(R.id.create_post_network_image);
+    final ImageView imageView = view.findViewById(R.id.create_post_local_image);
+
+    if (scheme.contains("http")) {
       final String url = imageUri.toString();
       networkImageView.setVisibility(View.VISIBLE);
       imageView.setVisibility(View.INVISIBLE);
@@ -227,7 +309,7 @@ public class PostFragment extends Fragment {
         networkImageView.setVisibility(View.INVISIBLE);
         imageView.setVisibility(View.VISIBLE);
         final InputStream imageInput =
-            requireContext().getContentResolver().openInputStream(imageUri);
+            context.getContentResolver().openInputStream(imageUri);
         imageBitmap = BitmapFactory.decodeStream(imageInput);
         imageView.setImageBitmap(imageBitmap);
       } catch (final FileNotFoundException e) {
@@ -242,7 +324,8 @@ public class PostFragment extends Fragment {
    * @param item item clicked
    * @return always {@code true}
    */
-  private boolean onGpsButtonClick(@NonNull MenuItem item) {
+  @VisibleForTesting
+  boolean onGpsButtonClick(@NonNull MenuItem item) {
     if (isGpsServiceBound) {
       if (gpsService.isLocationEnabled()) {
         final Location location = gpsService.getLocation();
@@ -271,8 +354,15 @@ public class PostFragment extends Fragment {
   @Override
   public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions,
                                          @NotNull int[] grantResults) {
-    final Context context = requireContext();
+    performOnRequestPermissionsResult(requireContext(), requestCode, grantResults);
+  }
 
+  @VisibleForTesting
+  void performOnRequestPermissionsResult(
+      Context context,
+      int requestCode,
+      int[] grantResults
+  ) {
     if (requestCode == 1) {
       if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
         Toast.makeText(context, "Permission denied to access GPS location",
@@ -293,7 +383,8 @@ public class PostFragment extends Fragment {
    * @param item item clicked
    * @return always {@code true}
    */
-  private boolean onPostButtonClick(final MenuItem item) {
+  @VisibleForTesting
+  boolean onPostButtonClick(final MenuItem item) {
     if (Double.isNaN(latitude) || Double.isNaN(longitude)) {
       // GPS position wasn't fetched. Fetch it.
       onGpsButtonClick(item);
