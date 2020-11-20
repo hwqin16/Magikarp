@@ -12,8 +12,8 @@ jobs:
 
         strategy:
             matrix:
-                os: [ ubuntu-18.04, ubuntu-20.04 ]
-                build: [ Debug, Release ]
+                os: [ ubuntu-20.04 ]
+                build: [ Release ]
 
         steps:
             - uses: actions/checkout@v2
@@ -36,7 +36,7 @@ jobs:
               run: ./gradlew build :app:assemble${{ matrix.build }} -x test
 
             - name: Run Tests
-              run: ./gradlew test
+              run: ./gradlew test --stacktrace
               env:
                 MAGIKARP_JSON: ${{ secrets.MAGIKARP_JSON }}
 
