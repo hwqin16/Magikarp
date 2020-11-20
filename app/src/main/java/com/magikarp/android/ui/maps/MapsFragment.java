@@ -62,10 +62,28 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   public MapsFragment() {
   }
 
+  /**
+   * MapsFragment constructor for testing.
+   *
+   * @param mapsViewModel MapsViewModel to set
+   * @param googleMap GoogleMap to set
+   * @param preferences SharedPreferences to set
+   * @param isUserData boolean to set
+   * @param maxRecords int to set
+   */
   @VisibleForTesting
-  MapsFragment(MapsViewModel mapsViewModel, GoogleMap googleMap) {
+  MapsFragment(
+      MapsViewModel mapsViewModel,
+      GoogleMap googleMap,
+      SharedPreferences preferences,
+      boolean isUserData,
+      int maxRecords
+  ) {
     this.mapsViewModel = mapsViewModel;
     this.googleMap = googleMap;
+    this.preferences = preferences;
+    this.isUserData = isUserData;
+    this.maxRecords = maxRecords;
   }
 
   @VisibleForTesting
@@ -76,14 +94,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    performOnCreate(new ViewModelProvider(this), getString(R.string.args_is_user_data),
-        savedInstanceState);
+    performOnCreate(
+        new ViewModelProvider(this),
+        getString(R.string.args_is_user_data),
+        getString(R.string.max_records),
+        savedInstanceState
+    );
   }
 
   @VisibleForTesting
   void performOnCreate(
       ViewModelProvider viewModelProvider,
       String argsIsUserData,
+      String maxRecords,
       Bundle savedInstanceState
   ) {
     mapsViewModel = viewModelProvider.get(MapsViewModel.class);
@@ -94,7 +117,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
       messages = savedInstanceState.getParcelableArrayList(SAVED_STATE);
     }
     // Register preference listener to get max records to query.
-    maxRecords = Integer.parseInt(preferences.getString(getString(R.string.max_records), "20"));
+    this.maxRecords = Integer.parseInt(preferences.getString(maxRecords, "20"));
     preferences.registerOnSharedPreferenceChangeListener(this);
   }
 
@@ -158,12 +181,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
 
   @Override
   public void onMapReady(GoogleMap googleMap) {
+    performOnMapReady(googleMap, GoogleSignIn.getLastSignedInAccount(requireContext()));
+  }
+
+  @VisibleForTesting
+  void performOnMapReady(GoogleMap googleMap, GoogleSignInAccount account) {
     this.googleMap = googleMap;
     //googleMap.setMyLocationEnabled(true);
     googleMap.setOnCameraIdleListener(this);
     googleMap.setOnMarkerClickListener(this);
     // Get current signed in user. TODO need to get listener in case account changes while running
-    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
     if (isUserData && account != null) {
       userId = account.getId();
     }
@@ -222,6 +249,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     maxRecords = Integer.parseInt(preferences.getString(getString(R.string.max_records), "20"));
+  }
+
+  @VisibleForTesting
+  String getUserId() {
+    return this.userId;
+  }
+
+  @VisibleForTesting
+  int getMaxRecords() {
+    return this.maxRecords;
   }
 
 }
