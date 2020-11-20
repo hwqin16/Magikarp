@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -316,13 +317,21 @@ public class PostFragment extends Fragment {
           Toast.LENGTH_SHORT).show();
     }
 
+    final EditText editText = getView().findViewById(R.id.create_post_caption);
+
+    if ( imageBitmap == null || editText.getText().toString().isEmpty() ||  Double.isNaN(latitude)
+            || Double.isNaN(longitude) ) {
+      Toast.makeText(requireActivity(), "One or more fields missing",
+              Toast.LENGTH_SHORT).show();
+      return true;
+    }
+
     UUID imageName = UUID.randomUUID();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     // Create a storage reference from our app
     StorageReference storageRef = storage.getReference();
 
     StorageReference ref = storageRef.child("images/" + imageName.toString() + ".png");
-    final EditText editText = getView().findViewById(R.id.create_post_caption);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
     byte[] data = baos.toByteArray();
@@ -357,10 +366,16 @@ public class PostFragment extends Fragment {
             }, error -> {
             });
         requestQueue.add(request);
+        Toast.makeText(requireActivity(), "Posted!",
+                Toast.LENGTH_SHORT).show();
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) getActivity().getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                getActivity().getCurrentFocus().getWindowToken(), 0);
+        getParentFragmentManager().popBackStackImmediate();
 
-      } else {
-        // Handle failures
-        // ...
+
       }
     });
 
