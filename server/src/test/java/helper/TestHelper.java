@@ -22,10 +22,10 @@ public class TestHelper {
       Timestamp.MIN_VALUE.toDate().toInstant().toEpochMilli();
   private static final long MAX_DATE_LIMIT =
       Timestamp.MAX_VALUE.toDate().toInstant().toEpochMilli();
-  private static final double MIN_LATITUDE_LIMIT = -90;
-  private static final double MAX_LATITUDE_LIMIT = 90;
-  private static final double MIN_LONGITUDE_LIMIT = -180;
-  private static final double MAX_LONGITUDE_LIMIT = 180;
+  private static final double MIN_LATITUDE_LIMIT = -89;
+  private static final double MAX_LATITUDE_LIMIT = 89;
+  private static final double MIN_LONGITUDE_LIMIT = -179;
+  private static final double MAX_LONGITUDE_LIMIT = 179;
   private static final int LEFT_STRING_LIMIT = 97; // letter 'a'
   private static final int RIGHT_STRING_LIMIT = 122; // letter 'z'
 

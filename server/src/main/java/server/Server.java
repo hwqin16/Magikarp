@@ -90,8 +90,8 @@ public class Server {
       Integer maxRecords = request.getMaxRecords();
 
       System.out.println("Getting messages for latitude_top " + latitudeTop + ", latitude_bottom "
-          + latitudeBottom + ", longitude_left " + longitudeLeft + ", latitude_bottom "
-          + latitudeBottom + ", max_records " + maxRecords);
+          + latitudeBottom + ", longitude_left " + longitudeLeft + ", longitude_right "
+          + longitudeRight + ", max_records " + maxRecords);
 
       if (latitudeBottom == null || latitudeBottom < -90 || latitudeBottom > 90) {
         ctx.result("Invalid latitude_bottom");
@@ -160,7 +160,6 @@ public class Server {
       );
 
       ctx.result(gson.toJson(response));
-
     });
 
     app.post("/messages/:user_id/update/:record_id", ctx -> {
