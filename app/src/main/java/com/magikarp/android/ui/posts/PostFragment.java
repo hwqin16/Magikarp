@@ -319,8 +319,8 @@ public class PostFragment extends Fragment {
 
     final EditText editText = getView().findViewById(R.id.create_post_caption);
 
-    if ( imageBitmap == null || editText.getText().toString().isEmpty() ||  Double.isNaN(latitude)
-            || Double.isNaN(longitude) ) {
+    if (imageBitmap == null || editText.getText().toString().isEmpty() ||  Double.isNaN(latitude)
+            || Double.isNaN(longitude)) {
       Toast.makeText(requireActivity(), "One or more fields missing",
               Toast.LENGTH_SHORT).show();
       return true;
