@@ -127,6 +127,13 @@ public class PostFragment extends Fragment {
     this.imageLoader = imageLoader;
   }
 
+  @VisibleForTesting
+  PostFragment(Double latitude, Double longitude, Bitmap imageBitmap) {
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.imageBitmap = imageBitmap;
+  }
+
   @Override
   public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -385,6 +392,27 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   boolean onPostButtonClick(final MenuItem item) {
+    Activity activity = requireActivity();
+
+    return performOnPostButtonClick(
+        item,
+        requireContext(),
+        requireView(),
+        activity,
+        Toast.makeText(activity, "One or more fields missing", Toast.LENGTH_SHORT),
+        FirebaseStorage.getInstance()
+    );
+  }
+
+  @VisibleForTesting
+  boolean performOnPostButtonClick(
+      MenuItem item,
+      Context context,
+      View view,
+      Activity activity,
+      Toast oneOrMoreMissingFields,
+      FirebaseStorage storage
+  ) {
     if (Double.isNaN(latitude) || Double.isNaN(longitude)) {
       // GPS position wasn't fetched. Fetch it.
       onGpsButtonClick(item);
@@ -392,21 +420,19 @@ public class PostFragment extends Fragment {
     }
     // Recheck location.
     if (Double.isNaN(latitude) || Double.isNaN(longitude)) {
-      Toast.makeText(requireActivity(), "Permission denied to access GPS location",
+      Toast.makeText(activity, "Permission denied to access GPS location",
           Toast.LENGTH_SHORT).show();
     }
 
-    final EditText editText = requireView().findViewById(R.id.create_post_caption);
+    final EditText editText = view.findViewById(R.id.create_post_caption);
 
     if (imageBitmap == null || TextUtils.isEmpty(editText.getText()) || Double.isNaN(latitude)
         || Double.isNaN(longitude)) {
-      Toast.makeText(requireActivity(), "One or more fields missing",
-          Toast.LENGTH_SHORT).show();
+      oneOrMoreMissingFields.show();
       return true;
     }
 
     UUID imageName = UUID.randomUUID();
-    FirebaseStorage storage = FirebaseStorage.getInstance();
     // Create a storage reference from our app
     StorageReference storageRef = storage.getReference();
 
@@ -414,7 +440,7 @@ public class PostFragment extends Fragment {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
     byte[] data = baos.toByteArray();
-    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
+    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
     String id = "noID";
     if (account != null) {
       id = account.getId();
@@ -448,14 +474,13 @@ public class PostFragment extends Fragment {
             }, error -> {
             });
         requestQueue.add(request);
-        Toast.makeText(requireActivity(), "Posted!",
-            Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "Posted!", Toast.LENGTH_SHORT).show();
         // TODO Need to hide keyboard safely after finishing typing.
         // InputMethodManager inputMethodManager =
         //   (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         // inputMethodManager.hideSoftInputFromWindow(
         //   requireActivity().getCurrentFocus().getWindowToken(), 0);
-        requireActivity().onBackPressed();
+        activity.onBackPressed();
       }
     });
     return true;

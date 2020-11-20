@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<BugCollection version="4.1.1" sequence="0" timestamp="1605842912426" analysisTimestamp="1605842912432" release="8.0">
+<BugCollection version="4.1.1" sequence="0" timestamp="1605845794444" analysisTimestamp="1605845794447" release="8.0">
   <Project projectName="Magikarp (spotbugsRelease)">
     <Jar>/Users/csummers/school/COMS-W4156/Magikarp/app/build/intermediates/javac/release/classes/hilt_aggregated_deps/com_magikarp_android_ui_app_MagikarpApplication_GeneratedInjectorModuleDeps.class</Jar>
     <Jar>/Users/csummers/school/COMS-W4156/Magikarp/app/build/intermediates/javac/release/classes/hilt_aggregated_deps/com_magikarp_android_di_ViewModelModuleModuleDeps.class</Jar>
@@ -248,7 +248,7 @@
     <MissingClass>android.widget.TextView</MissingClass>
     <MissingClass>android.widget.Toast</MissingClass>
   </Errors>
-  <FindBugsSummary timestamp="Thu, 19 Nov 2020 19:28:32 -0800" total_classes="99" referenced_classes="586" total_bugs="0" total_size="1559" num_packages="10" java_version="1.8.0_222" vm_version="25.222-b10" cpu_seconds="4.77" clock_seconds="1.93" peak_mbytes="389.80" alloc_mbytes="455.50" gc_seconds="0.24">
+  <FindBugsSummary timestamp="Thu, 19 Nov 2020 20:16:34 -0800" total_classes="99" referenced_classes="586" total_bugs="0" total_size="1584" num_packages="10" java_version="1.8.0_222" vm_version="25.222-b10" cpu_seconds="4.15" clock_seconds="1.91" peak_mbytes="409.67" alloc_mbytes="455.50" gc_seconds="0.15">
     <FileStats path="com/magikarp/android/BuildConfig.java" bugCount="0" size="8"/>
     <FileStats path="com/magikarp/android/data/MapsRepository.java" bugCount="0" size="31"/>
     <FileStats path="com/magikarp/android/data/MapsRepository_Factory.java" bugCount="0" size="16"/>
@@ -278,7 +278,7 @@
     <FileStats path="com/magikarp/android/ui/app/MagikarpApplication.java" bugCount="0" size="3"/>
     <FileStats path="com/magikarp/android/ui/app/MagikarpApplication_GeneratedInjector.java" bugCount="0" size="2"/>
     <FileStats path="com/magikarp/android/ui/app/MagikarpApplication_HiltComponents.java" bugCount="0" size="43"/>
-    <FileStats path="com/magikarp/android/ui/app/MainActivity.java" bugCount="0" size="101"/>
+    <FileStats path="com/magikarp/android/ui/app/MainActivity.java" bugCount="0" size="116"/>
     <FileStats path="com/magikarp/android/ui/app/MainActivity_GeneratedInjector.java" bugCount="0" size="2"/>
     <FileStats path="com/magikarp/android/ui/app/MainActivity_MembersInjector.java" bugCount="0" size="22"/>
     <FileStats path="com/magikarp/android/ui/app/SettingsFragment.java" bugCount="0" size="6"/>
@@ -292,7 +292,7 @@
     <FileStats path="com/magikarp/android/ui/maps/MapsViewModel_AssistedFactory_Factory.java" bugCount="0" size="16"/>
     <FileStats path="com/magikarp/android/ui/maps/MapsViewModel_HiltModule.java" bugCount="0" size="2"/>
     <FileStats path="com/magikarp/android/ui/posts/Hilt_PostFragment.java" bugCount="0" size="51"/>
-    <FileStats path="com/magikarp/android/ui/posts/PostFragment.java" bugCount="0" size="246"/>
+    <FileStats path="com/magikarp/android/ui/posts/PostFragment.java" bugCount="0" size="256"/>
     <FileStats path="com/magikarp/android/ui/posts/PostFragment_GeneratedInjector.java" bugCount="0" size="2"/>
     <FileStats path="com/magikarp/android/ui/posts/PostFragment_MembersInjector.java" bugCount="0" size="22"/>
     <FileStats path="hilt_aggregated_deps/com_magikarp_android_di_ActivityModuleModuleDeps.java" bugCount="0" size="3"/>
@@ -344,7 +344,7 @@
       <ClassStats class="com.magikarp.android.services.LocationService" sourceFile="LocationService.java" interface="false" size="47" bugs="0"/>
       <ClassStats class="com.magikarp.android.services.LocationService$LocationServiceBinder" sourceFile="LocationService.java" interface="false" size="6" bugs="0"/>
     </PackageStats>
-    <PackageStats package="com.magikarp.android.ui.app" total_bugs="0" total_types="48" total_size="572">
+    <PackageStats package="com.magikarp.android.ui.app" total_bugs="0" total_types="48" total_size="587">
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="69" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$1" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="1" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.DaggerMagikarpApplication_HiltComponents_SingletonC$ActivityRetainedCBuilder" sourceFile="DaggerMagikarpApplication_HiltComponents_SingletonC.java" interface="false" size="8" bugs="0"/>
@@ -389,7 +389,7 @@
       <ClassStats class="com.magikarp.android.ui.app.MagikarpApplication_HiltComponents$ViewWithFragmentC" sourceFile="MagikarpApplication_HiltComponents.java" interface="false" size="3" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.MagikarpApplication_HiltComponents$ViewWithFragmentC$Builder" sourceFile="MagikarpApplication_HiltComponents.java" interface="true" size="1" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.MagikarpApplication_HiltComponents$ViewWithFragmentCBuilderModule" sourceFile="MagikarpApplication_HiltComponents.java" interface="true" size="2" bugs="0"/>
-      <ClassStats class="com.magikarp.android.ui.app.MainActivity" sourceFile="MainActivity.java" interface="false" size="101" bugs="0"/>
+      <ClassStats class="com.magikarp.android.ui.app.MainActivity" sourceFile="MainActivity.java" interface="false" size="116" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.MainActivity_GeneratedInjector" sourceFile="MainActivity_GeneratedInjector.java" interface="true" size="2" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.MainActivity_MembersInjector" sourceFile="MainActivity_MembersInjector.java" interface="false" size="22" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.app.SettingsFragment" sourceFile="SettingsFragment.java" interface="false" size="6" bugs="0"/>
@@ -405,9 +405,9 @@
       <ClassStats class="com.magikarp.android.ui.maps.MapsViewModel_AssistedFactory_Factory" sourceFile="MapsViewModel_AssistedFactory_Factory.java" interface="false" size="16" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.maps.MapsViewModel_HiltModule" sourceFile="MapsViewModel_HiltModule.java" interface="true" size="2" bugs="0"/>
     </PackageStats>
-    <PackageStats package="com.magikarp.android.ui.posts" total_bugs="0" total_types="5" total_size="321">
+    <PackageStats package="com.magikarp.android.ui.posts" total_bugs="0" total_types="5" total_size="331">
       <ClassStats class="com.magikarp.android.ui.posts.Hilt_PostFragment" sourceFile="Hilt_PostFragment.java" interface="false" size="51" bugs="0"/>
-      <ClassStats class="com.magikarp.android.ui.posts.PostFragment" sourceFile="PostFragment.java" interface="false" size="232" bugs="0"/>
+      <ClassStats class="com.magikarp.android.ui.posts.PostFragment" sourceFile="PostFragment.java" interface="false" size="242" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.posts.PostFragment$1" sourceFile="PostFragment.java" interface="false" size="14" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.posts.PostFragment_GeneratedInjector" sourceFile="PostFragment_GeneratedInjector.java" interface="true" size="2" bugs="0"/>
       <ClassStats class="com.magikarp.android.ui.posts.PostFragment_MembersInjector" sourceFile="PostFragment_MembersInjector.java" interface="false" size="22" bugs="0"/>
@@ -423,28 +423,30 @@
       <ClassStats class="hilt_aggregated_deps.com_magikarp_android_ui_posts_PostFragment_GeneratedInjectorModuleDeps" sourceFile="com_magikarp_android_ui_posts_PostFragment_GeneratedInjectorModuleDeps.java" interface="false" size="3" bugs="0"/>
     </PackageStats>
     <FindBugsProfile>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="239" invocations="1985" avgMicrosecondsPerInvocation="120" maxMicrosecondsPerInvocation="32373" standardDeviationMicrosecondsPerInvocation="772"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FindRefComparison$SpecialTypeAnalysis" totalMilliseconds="174" invocations="324" avgMicrosecondsPerInvocation="539" maxMicrosecondsPerInvocation="154693" standardDeviationMicrosecondsPerInvocation="8577"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="173" invocations="2004" avgMicrosecondsPerInvocation="86" maxMicrosecondsPerInvocation="1145" standardDeviationMicrosecondsPerInvocation="92"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="115" invocations="586" avgMicrosecondsPerInvocation="196" maxMicrosecondsPerInvocation="8910" standardDeviationMicrosecondsPerInvocation="592"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="105" invocations="586" avgMicrosecondsPerInvocation="179" maxMicrosecondsPerInvocation="8609" standardDeviationMicrosecondsPerInvocation="531"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="60" invocations="586" avgMicrosecondsPerInvocation="103" maxMicrosecondsPerInvocation="27489" standardDeviationMicrosecondsPerInvocation="1139"/>
-      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="49" invocations="766" avgMicrosecondsPerInvocation="64" maxMicrosecondsPerInvocation="2715" standardDeviationMicrosecondsPerInvocation="139"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.CalledMethods" totalMilliseconds="48" invocations="586" avgMicrosecondsPerInvocation="82" maxMicrosecondsPerInvocation="4163" standardDeviationMicrosecondsPerInvocation="322"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="41" invocations="586" avgMicrosecondsPerInvocation="70" maxMicrosecondsPerInvocation="3597" standardDeviationMicrosecondsPerInvocation="234"/>
-      <ClassProfile name="edu.umd.cs.findbugs.ba.npe.NullDerefAndRedundantComparisonFinder" totalMilliseconds="37" invocations="336" avgMicrosecondsPerInvocation="111" maxMicrosecondsPerInvocation="2422" standardDeviationMicrosecondsPerInvocation="246"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="33" invocations="368" avgMicrosecondsPerInvocation="92" maxMicrosecondsPerInvocation="1720" standardDeviationMicrosecondsPerInvocation="154"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="27" invocations="373" avgMicrosecondsPerInvocation="74" maxMicrosecondsPerInvocation="1058" standardDeviationMicrosecondsPerInvocation="104"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.CFGFactory" totalMilliseconds="26" invocations="368" avgMicrosecondsPerInvocation="71" maxMicrosecondsPerInvocation="1581" standardDeviationMicrosecondsPerInvocation="113"/>
-      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="25" invocations="1750" avgMicrosecondsPerInvocation="14" maxMicrosecondsPerInvocation="520" standardDeviationMicrosecondsPerInvocation="33"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.UnconditionalValueDerefDataflowFactory" totalMilliseconds="24" invocations="349" avgMicrosecondsPerInvocation="68" maxMicrosecondsPerInvocation="908" standardDeviationMicrosecondsPerInvocation="106"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="21" invocations="735" avgMicrosecondsPerInvocation="29" maxMicrosecondsPerInvocation="985" standardDeviationMicrosecondsPerInvocation="63"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="21" invocations="586" avgMicrosecondsPerInvocation="35" maxMicrosecondsPerInvocation="777" standardDeviationMicrosecondsPerInvocation="83"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical" totalMilliseconds="20" invocations="586" avgMicrosecondsPerInvocation="34" maxMicrosecondsPerInvocation="1271" standardDeviationMicrosecondsPerInvocation="87"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FindOpenStream" totalMilliseconds="20" invocations="99" avgMicrosecondsPerInvocation="205" maxMicrosecondsPerInvocation="19677" standardDeviationMicrosecondsPerInvocation="1966"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory" totalMilliseconds="20" invocations="377" avgMicrosecondsPerInvocation="53" maxMicrosecondsPerInvocation="648" standardDeviationMicrosecondsPerInvocation="81"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.ReflectiveClasses" totalMilliseconds="15" invocations="586" avgMicrosecondsPerInvocation="26" maxMicrosecondsPerInvocation="832" standardDeviationMicrosecondsPerInvocation="70"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildStringPassthruGraph" totalMilliseconds="15" invocations="586" avgMicrosecondsPerInvocation="26" maxMicrosecondsPerInvocation="799" standardDeviationMicrosecondsPerInvocation="68"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="220" invocations="2004" avgMicrosecondsPerInvocation="110" maxMicrosecondsPerInvocation="25573" standardDeviationMicrosecondsPerInvocation="593"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="201" invocations="586" avgMicrosecondsPerInvocation="344" maxMicrosecondsPerInvocation="97864" standardDeviationMicrosecondsPerInvocation="4064"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="197" invocations="1985" avgMicrosecondsPerInvocation="99" maxMicrosecondsPerInvocation="8842" standardDeviationMicrosecondsPerInvocation="292"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="98" invocations="586" avgMicrosecondsPerInvocation="168" maxMicrosecondsPerInvocation="5674" standardDeviationMicrosecondsPerInvocation="447"/>
+      <ClassProfile name="edu.umd.cs.findbugs.ba.npe.NullDerefAndRedundantComparisonFinder" totalMilliseconds="58" invocations="341" avgMicrosecondsPerInvocation="172" maxMicrosecondsPerInvocation="26544" standardDeviationMicrosecondsPerInvocation="1443"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindOpenStream" totalMilliseconds="58" invocations="99" avgMicrosecondsPerInvocation="591" maxMicrosecondsPerInvocation="57688" standardDeviationMicrosecondsPerInvocation="5767"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.CalledMethods" totalMilliseconds="50" invocations="586" avgMicrosecondsPerInvocation="85" maxMicrosecondsPerInvocation="6039" standardDeviationMicrosecondsPerInvocation="349"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="47" invocations="586" avgMicrosecondsPerInvocation="81" maxMicrosecondsPerInvocation="14349" standardDeviationMicrosecondsPerInvocation="603"/>
+      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="42" invocations="771" avgMicrosecondsPerInvocation="55" maxMicrosecondsPerInvocation="1298" standardDeviationMicrosecondsPerInvocation="101"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="38" invocations="373" avgMicrosecondsPerInvocation="102" maxMicrosecondsPerInvocation="3779" standardDeviationMicrosecondsPerInvocation="284"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="34" invocations="586" avgMicrosecondsPerInvocation="59" maxMicrosecondsPerInvocation="1666" standardDeviationMicrosecondsPerInvocation="130"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.UnconditionalValueDerefDataflowFactory" totalMilliseconds="31" invocations="354" avgMicrosecondsPerInvocation="89" maxMicrosecondsPerInvocation="9108" standardDeviationMicrosecondsPerInvocation="498"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory" totalMilliseconds="23" invocations="383" avgMicrosecondsPerInvocation="61" maxMicrosecondsPerInvocation="1574" standardDeviationMicrosecondsPerInvocation="131"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="23" invocations="378" avgMicrosecondsPerInvocation="62" maxMicrosecondsPerInvocation="620" standardDeviationMicrosecondsPerInvocation="76"/>
+      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="23" invocations="1750" avgMicrosecondsPerInvocation="13" maxMicrosecondsPerInvocation="372" standardDeviationMicrosecondsPerInvocation="27"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.CFGFactory" totalMilliseconds="22" invocations="373" avgMicrosecondsPerInvocation="60" maxMicrosecondsPerInvocation="632" standardDeviationMicrosecondsPerInvocation="69"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.LoadOfKnownNullValue" totalMilliseconds="21" invocations="99" avgMicrosecondsPerInvocation="219" maxMicrosecondsPerInvocation="11756" standardDeviationMicrosecondsPerInvocation="1207"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.WaitInLoop" totalMilliseconds="20" invocations="99" avgMicrosecondsPerInvocation="209" maxMicrosecondsPerInvocation="20012" standardDeviationMicrosecondsPerInvocation="2000"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="20" invocations="735" avgMicrosecondsPerInvocation="27" maxMicrosecondsPerInvocation="651" standardDeviationMicrosecondsPerInvocation="50"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="20" invocations="586" avgMicrosecondsPerInvocation="34" maxMicrosecondsPerInvocation="812" standardDeviationMicrosecondsPerInvocation="79"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteCheckReturnValueAnnotations" totalMilliseconds="19" invocations="586" avgMicrosecondsPerInvocation="32" maxMicrosecondsPerInvocation="14228" standardDeviationMicrosecondsPerInvocation="587"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical" totalMilliseconds="18" invocations="586" avgMicrosecondsPerInvocation="32" maxMicrosecondsPerInvocation="1397" standardDeviationMicrosecondsPerInvocation="85"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindRefComparison$SpecialTypeAnalysis" totalMilliseconds="17" invocations="329" avgMicrosecondsPerInvocation="51" maxMicrosecondsPerInvocation="1133" standardDeviationMicrosecondsPerInvocation="86"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildStringPassthruGraph" totalMilliseconds="15" invocations="586" avgMicrosecondsPerInvocation="25" maxMicrosecondsPerInvocation="559" standardDeviationMicrosecondsPerInvocation="64"/>
     </FindBugsProfile>
   </FindBugsSummary>
   <ClassFeatures></ClassFeatures>
