@@ -125,37 +125,63 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
    */
   private void updateSignInUi(@Nullable GoogleSignInAccount account) {
     Log.i("Main Activity", "Account: " + (account == null ? null : account.getEmail()));
+
+    if (account != null) {
+      // Set the user account text.
+      setLoggedInUi(account.getDisplayName(), account.getEmail(), account.getPhotoUrl());
+    } else {
+      setLoggedOutUi();
+    }
+  }
+
+  /**
+   * Sets the logged in UI.
+   *
+   * @param displayName display name
+   * @param userEmail user's email
+   * @param imageUri user's profile image
+   */
+  public void setLoggedInUi(final String displayName, final String userEmail, final Uri imageUri) {
     View headerView = navigationView.getHeaderView(0);
     TextView name = headerView.findViewById(R.id.drawer_header_name);
     TextView email = headerView.findViewById(R.id.drawer_header_email);
     NetworkImageView imageView = headerView.findViewById(R.id.drawer_header_image);
-    Menu menu = navigationView.getMenu();
-    if (account != null) {
-      // Set the user account text.
-      name.setText(account.getDisplayName());
-      email.setText(account.getEmail());
-      Uri url = account.getPhotoUrl();
-      // Set the user account profile picture.
-      if (url != null) {
-        String urlString = url.toString();
-        imageLoader.get(urlString, ImageLoader
-            .getImageListener(imageView, R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round));
-        imageView.setImageUrl(urlString, imageLoader);
-      }
-      // Set the menu choices.
-      menu.findItem(R.id.action_login).setVisible(false);
-      menu.findItem(R.id.nav_my_posts).setVisible(true);
-      menu.setGroupEnabled(R.id.menu_group_logout, true);
-      menu.setGroupVisible(R.id.menu_group_logout, true);
-    } else {
-      name.setText(null);
-      email.setText(null);
-      imageView.setImageUrl(null, null);
-      menu.findItem(R.id.action_login).setVisible(true);
-      menu.findItem(R.id.nav_my_posts).setVisible(false);
-      menu.setGroupEnabled(R.id.menu_group_logout, false);
-      menu.setGroupVisible(R.id.menu_group_logout, false);
+
+    name.setText(displayName);
+    email.setText(userEmail);
+    Uri url = imageUri;
+    // Set the user account profile picture.
+    if (url != null) {
+      String urlString = url.toString();
+      imageLoader.get(urlString, ImageLoader
+          .getImageListener(imageView, R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round));
+      imageView.setImageUrl(urlString, imageLoader);
     }
+    // Set the menu choices.
+    Menu menu = navigationView.getMenu();
+    menu.findItem(R.id.action_login).setVisible(false);
+    menu.findItem(R.id.nav_my_posts).setVisible(true);
+    menu.setGroupEnabled(R.id.menu_group_logout, true);
+    menu.setGroupVisible(R.id.menu_group_logout, true);
+  }
+
+  /**
+   * Sets the logged out UI.
+   */
+  public void setLoggedOutUi() {
+    View headerView = navigationView.getHeaderView(0);
+    TextView name = headerView.findViewById(R.id.drawer_header_name);
+    TextView email = headerView.findViewById(R.id.drawer_header_email);
+    NetworkImageView imageView = headerView.findViewById(R.id.drawer_header_image);
+
+    name.setText(null);
+    email.setText(null);
+    imageView.setImageUrl(null, null);
+    Menu menu = navigationView.getMenu();
+    menu.findItem(R.id.action_login).setVisible(true);
+    menu.findItem(R.id.nav_my_posts).setVisible(false);
+    menu.setGroupEnabled(R.id.menu_group_logout, false);
+    menu.setGroupVisible(R.id.menu_group_logout, false);
   }
 
   @VisibleForTesting
