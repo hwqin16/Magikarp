@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.magikarp.android.ui.maps.TestMapsViewModel" tests="3" skipped="0" failures="0" errors="0" timestamp="2020-11-19T23:43:06" hostname="henrys-mbp.lan" time="0.961">
+  <properties/>
+  <testcase name="testOnMessagesChanged" classname="com.magikarp.android.ui.maps.TestMapsViewModel" time="0.902"/>
+  <testcase name="testOnErrorResponse" classname="com.magikarp.android.ui.maps.TestMapsViewModel" time="0.054"/>
+  <testcase name="testSetMapsQuery" classname="com.magikarp.android.ui.maps.TestMapsViewModel" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

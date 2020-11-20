@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.magikarp.android.ui.maps.TestMapsFragment" tests="8" skipped="0" failures="0" errors="0" timestamp="2020-11-19T23:43:07" hostname="henrys-mbp.lan" time="1.205">
+  <properties/>
+  <testcase name="testOnMapReady" classname="com.magikarp.android.ui.maps.TestMapsFragment" time="0.274"/>
+  <testcase name="testOnCameraIdle" classname="com.magikarp.android.ui.maps.TestMapsFragment" time="0.019"/>
+  <testcase name="testOnChanged" classname="com.magikarp.android.ui.maps.TestMapsFragment" time="0.035"/>
+  <testcase name="testPerformOnCreateOptionsMenu" classname="com.magikarp.android.ui.maps.TestMapsFragment" time="0.073"/>
+  <testcase name="testOnOptionsItemSelected" classname="com.magikarp.android.ui.maps.TestMapsFragment" time="0.065"/>
+  <testcase name="testPrepareBundleFromMarker" classname="com.magikarp.android.ui.maps.TestMapsFragment" time="0.165"/>
+  <testcase name="testOnCreateView" classname="com.magikarp.android.ui.maps.TestMapsFragment" time="0.547"/>
+  <testcase name="testPerformOnCreate" classname="com.magikarp.android.ui.maps.TestMapsFragment" time="0.025"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
