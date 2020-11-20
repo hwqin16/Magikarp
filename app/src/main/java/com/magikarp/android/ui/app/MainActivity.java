@@ -49,6 +49,14 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
   @Inject
   ImageLoader imageLoader;
 
+  public MainActivity() {
+  }
+
+  @VisibleForTesting
+  MainActivity(NavigationView navigationView) {
+    this.navigationView = navigationView;
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -123,7 +131,8 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
    *
    * @param account account to retrieve login information
    */
-  private void updateSignInUi(@Nullable GoogleSignInAccount account) {
+  @VisibleForTesting
+  void updateSignInUi(@Nullable GoogleSignInAccount account) {
     Log.i("Main Activity", "Account: " + (account == null ? null : account.getEmail()));
 
     if (account != null) {
