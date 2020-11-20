@@ -1,113 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<BugCollection version="4.1.1" sequence="0" timestamp="1605830703057" analysisTimestamp="1605830703059" release="8.0">
+<BugCollection version="4.1.1" sequence="0" timestamp="1605831045843" analysisTimestamp="1605831045845" release="8.0">
   <Project projectName="Magikarp (spotbugsMain)">
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/auth/GoogleIdTokenAuthenticator.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/auth/InvalidTokenException.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/constants/Constants.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/responses/MessagesResponse.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/responses/NewPostResponse.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/responses/UpdatePostResponse.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/responses/DeletePostResponse.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/message/Message.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/message/MessagePosterImpl.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/message/MessageFinder.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/message/MessageFinderImpl.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/message/MessagePoster.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/server/Server.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/requests/FindMessagesByBoundingBoxRequest.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/requests/MessageRequest.class</Jar>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-admin/7.0.1/e7952372fbfe021c7d83bdcc1b86564ff06296bd/firebase-admin-7.0.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client-gson/1.30.11/4fa9e2ba07c06ed4df99e36e633c29f125ccbbe6/google-api-client-gson-1.30.11.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-firestore/2.1.0/e8aad17adcc379ec0f6792ac9b3ac653ac91531b/google-cloud-firestore-2.1.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-storage/1.113.2/a7dc61f4f61f5ca548e3fbd788fa0929cd46c354/google-cloud-storage-1.113.2.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client/1.30.11/8ec79dba7e5ed990690e9da14499edd9b07d50b4/google-api-client-1.30.11.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.oauth-client/google-oauth-client/1.31.2/eadca08c5e955aa90d77287ce39249473e677f03/google-oauth-client-1.31.2.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.javalin/javalin/3.11.0/4050dac2186c9d1a2d3b3f2cabe81f1d7a39c8fe/javalin-3.11.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-simple/1.7.30/e606eac955f55ecf1d8edcccba04eb8ac98088dd/slf4j-simple-1.7.30.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.8.0/92999e26e6534606b5678014e66948286298a35c/commons-io-2.8.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-gson/1.37.0/13626f6cdd327068adfe4c4a9a9873361990f1f3/google-http-client-gson-1.37.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core-grpc/1.93.8/b68151878f879c5c1085fc468909f9b268dc6578/google-cloud-core-grpc-1.93.8.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-core/1.31.1/5c28e92399f855e3341d0af3af0950323592e890/grpc-core-1.31.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.auth/google-auth-library-oauth2-http/0.22.0/57d513b3ac44f7837a23f8bbead708492eea73d4/google-auth-library-oauth2-http-0.22.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-jackson2/1.37.0/5ac03c410888d56c30fee69a9cdc549075363a0c/google-http-client-jackson2-1.37.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client/1.38.0/5575b97410c1909f2b5fb91d4fcaf16462d4eef7/google-http-client-1.38.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.11/3acb4705652e16236558f0f4f2192cc33c3bd189/commons-codec-1.11.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.13/853b96d3afbb7bf8cc303fe27ee96836a10c1834/httpcore-4.4.13.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.opencensus/opencensus-contrib-http-util/0.24.0/6d96406c272d884038eb63b262458df75b5445/opencensus-contrib-http-util-0.24.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-cloud-firestore-v1/2.1.0/a07acbe1bd49a33d2cb2f16cea697fe62e6660c3/proto-google-cloud-firestore-v1-2.1.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.api/api-common/1.10.1/d157681b5909cf959a9fa60ced9bed9da741ffef/api-common-1.10.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.auto.value/auto-value-annotations/1.7.4/eff48ed53995db2dadf0456426cc1f8700136f86/auto-value-annotations-1.7.4.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.opencensus/opencensus-contrib-grpc-util/0.24.0/1ac2f0c1a02c7ec0cd244e59228f687a90dfddab/opencensus-contrib-grpc-util-0.24.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/30.0-android/12aff8dd7211f090c35e4c51a4256f1d5569c2e7/guava-30.0-android.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/javax.annotation/javax.annotation-api/1.3.2/934c04d3cfef185a8008e7bf34331b79730a9d43/javax.annotation-api-1.3.2.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf/1.31.1/3f2721fd481627959a7d74f06d4472a0fef6598a/grpc-protobuf-1.31.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf-lite/1.31.1/15337822ee54a3db176aa56a53f189b34f310822/grpc-protobuf-lite-1.31.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.opencensus/opencensus-api/0.24.0/f974451b19007ce820f433311ce8adb88e2b7d2c/opencensus-api-0.24.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-context/1.32.2/52f4c00cd3dba3f2196796957a9d516736d0c470/grpc-context-1.32.2.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.13.0/c913f2b6021ca9606efba56d1a0d03e91e725e4c/protobuf-java-3.13.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-common-protos/2.0.0/63e6dbdb09af112cba5ac7358c56d834a843ad7e/proto-google-common-protos-2.0.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.api/gax/1.60.0/b340424c3ff0ae5843630c5c6dc4a9035114d7a0/gax-1.60.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-api/1.31.1/1b7f88d95aa1c5bc5a4c9a7e6a9e5f43499c3184/grpc-api-1.31.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.api/gax-grpc/1.58.2/54f953b27fd53316b5135ee4bf5332dc14bd358f/gax-grpc-1.58.2.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-auth/1.31.1/51070a34e168424d17b770bbedf4d7838b4b4277/grpc-auth-1.31.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.31.1/13b0b895c9850eb4463547a6cb3ef9dcab3ba514/grpc-netty-shaded-1.31.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-alts/1.31.1/5dcf0080fc6f422670282b227d01c1210a5e2a19/grpc-alts-1.31.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-grpclb/1.31.1/4e0fa38ca7c0bf6ad1ec20a710036ced5dccfce1/grpc-grpclb-1.31.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-openjdk-uber/2.2.1/59a346d64c0ddca750c5c877e274d5e6278e53ce/conscrypt-openjdk-uber-2.2.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-compat-qual/2.5.5/435dc33e3019c9f019e15f01aa111de9d6b2b79c/checker-compat-qual-2.5.5.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/32ecccc595e4e4d813a80ee9e3ab5813d65874eb/error_prone_annotations-2.4.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/1.3/ba035118bc8bac37d7eff77700720999acd9986d/j2objc-annotations-1.3.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.threeten/threetenbp/1.4.5/aed77167a23390a42a80153fe65493641a71699/threetenbp-1.4.5.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-stub/1.31.1/adfd282051587e889030d8b7ac23311c75ebc350/grpc-stub-1.31.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.auth/google-auth-library-credentials/0.22.0/f9c591c1d84ec6511fc0298a3f69a7ae7842b542/google-auth-library-credentials-0.22.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core/1.93.9/9664e8c72ca5c97c0a59527e96e8bc6d80989dc1/google-cloud-core-1.93.9.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-iam-v1/1.0.1/289dd8b33083b4a942e23e1a48ba4f679038edf4/proto-google-iam-v1-1.0.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.6/9180733b7df8542621dc12e21e87557e8c99b8cb/gson-2.8.6.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.11.3/c2351800432bdbdd8284c3f5a7f0782a352aa84a/jackson-core-2.11.3.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java-util/3.13.0/de4dcb930367f6148bc46100fd08a3f7094bf386/protobuf-java-util-3.13.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.30/b5a4b6d16ab13e34a88fae84c35cd5d68cac922c/slf4j-api-1.7.30.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http/4.1.50.Final/db33e6bc697a038dc110da4a2e2a8989257a6a11/netty-codec-http-4.1.50.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler/4.1.50.Final/dc0110fc4d22fb22f1038cd73a6f8a034928a2d7/netty-handler-4.1.50.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.50.Final/cbcb646c9380c6cdc3f56603ae6418a11418ce0f/netty-codec-4.1.50.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.50.Final/2e4f6b655933faca0deef8d234ac6725b598109a/netty-transport-4.1.50.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-storage/v1-rev20200927-1.30.10/92783ef74f445782d600456403e02cdb3ab95ee7/google-api-services-storage-v1-rev20200927-1.30.10.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core-http/1.93.9/698b4b45d30b5f5b2791e291cb219f9a70afa811/google-cloud-core-http-1.93.9.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-appengine/1.37.0/4e781b3b8a8ed07f8c000f091e8b153a5145e33d/google-http-client-appengine-1.37.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.api/gax-httpjson/0.77.0/c7c384f7002482c316c31e87fe5014f3b05e8220/gax-httpjson-0.77.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-webapp/9.4.31.v20200723/9e6716366f586307f253d1082cbae88f33c239cd/jetty-webapp-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-server/9.4.31.v20200723/e45865d39dd749c4feac66b8f6c2dd7df914e121/websocket-server-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-servlet/9.4.31.v20200723/dd1718a61f30e28b1cbf5a1c02997082d887c054/jetty-servlet-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-security/9.4.31.v20200723/6e37b3590820c5d8a466acd65d5c30672b2367f6/jetty-security-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-server/9.4.31.v20200723/b9043b4a0c17ee543aba97e80ea3a34cd8cdb600/jetty-server-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.3.71/4defc79915cf4f78b49bbc4a8f1e80e87767a5b/kotlin-stdlib-jdk8-1.3.71.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.50.Final/42b556977c572a376172a3270537ee22203c1a35/netty-buffer-4.1.50.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.50.Final/deb87b3c901142d73279a58e16867cf6f2b1c2e5/netty-resolver-4.1.50.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.50.Final/d2059030b86733c52fd999e63db7300414b487fa/netty-common-4.1.50.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-servlet/9.4.31.v20200723/c8688b80f740354f0da7e185ff70a9061e904683/websocket-servlet-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.1.0/3cd63d075497751784b2fa84be59432f4905bf7c/javax.servlet-api-3.1.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-client/9.4.31.v20200723/786dc9e2a6f5cb1e68229b1652c15d21b488f52b/websocket-client-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-client/9.4.31.v20200723/a4d779d1dcd7fa948d1175ebf3e20a0b0caacdc/jetty-client-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-http/9.4.31.v20200723/6862f0e6fc7e9f8828416a7cae1477b233d92f8/jetty-http-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-common/9.4.31.v20200723/aafea15d115377e05609a60ff10db0e9682a928e/websocket-common-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-io/9.4.31.v20200723/328e4562e0f30e01efea63efe4fc24b2b860d852/jetty-io-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-xml/9.4.31.v20200723/9cccd5b9d76324dac3f2ffc501adf10621250a78/jetty-xml-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.3.71/9180d3aec3f0b2ea6ef0dcf01b464a6e2219e381/kotlin-stdlib-jdk7-1.3.71.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.71/898273189ad22779da6bed88ded39b14cb5fd432/kotlin-stdlib-1.3.71.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-util/9.4.31.v20200723/b9c346da72d8715bdfb0373a123374ec6ac9e544/jetty-util-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-api/9.4.31.v20200723/56eb7d4002268c9f5f4bb4266cf0cb247bda49e0/websocket-api-9.4.31.v20200723.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.71/e71c3fef58e26affeb03d675e91fd8abdd44aa7b/kotlin-stdlib-common-1.3.71.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</AuxClasspathEntry>
-    <SrcDir>/Users/csummers/school/COMS-W4156/Magikarp/server/src/main/resources</SrcDir>
-    <SrcDir>/Users/csummers/school/COMS-W4156/Magikarp/server/src/main/java</SrcDir>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/auth/GoogleIdTokenAuthenticator.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/auth/InvalidTokenException.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/constants/Constants.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/responses/MessagesResponse.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/responses/NewPostResponse.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/responses/UpdatePostResponse.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/responses/DeletePostResponse.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/message/Message.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/message/MessagePosterImpl.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/message/MessageFinder.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/message/MessageFinderImpl.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/message/MessagePoster.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/server/Server.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/requests/FindMessagesByBoundingBoxRequest.class</Jar>
+    <Jar>/Users/henryqin/School/Magikarp/server/build/classes/java/main/requests/MessageRequest.class</Jar>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-admin/7.0.1/e7952372fbfe021c7d83bdcc1b86564ff06296bd/firebase-admin-7.0.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client-gson/1.30.11/4fa9e2ba07c06ed4df99e36e633c29f125ccbbe6/google-api-client-gson-1.30.11.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-firestore/2.1.0/e8aad17adcc379ec0f6792ac9b3ac653ac91531b/google-cloud-firestore-2.1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-storage/1.113.2/a7dc61f4f61f5ca548e3fbd788fa0929cd46c354/google-cloud-storage-1.113.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client/1.30.11/8ec79dba7e5ed990690e9da14499edd9b07d50b4/google-api-client-1.30.11.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.oauth-client/google-oauth-client/1.31.2/eadca08c5e955aa90d77287ce39249473e677f03/google-oauth-client-1.31.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.javalin/javalin/3.11.0/4050dac2186c9d1a2d3b3f2cabe81f1d7a39c8fe/javalin-3.11.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-simple/1.7.30/e606eac955f55ecf1d8edcccba04eb8ac98088dd/slf4j-simple-1.7.30.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.8.0/92999e26e6534606b5678014e66948286298a35c/commons-io-2.8.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-gson/1.37.0/13626f6cdd327068adfe4c4a9a9873361990f1f3/google-http-client-gson-1.37.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core-grpc/1.93.8/b68151878f879c5c1085fc468909f9b268dc6578/google-cloud-core-grpc-1.93.8.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-core/1.31.1/5c28e92399f855e3341d0af3af0950323592e890/grpc-core-1.31.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.auth/google-auth-library-oauth2-http/0.22.0/57d513b3ac44f7837a23f8bbead708492eea73d4/google-auth-library-oauth2-http-0.22.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-jackson2/1.37.0/5ac03c410888d56c30fee69a9cdc549075363a0c/google-http-client-jackson2-1.37.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client/1.38.0/5575b97410c1909f2b5fb91d4fcaf16462d4eef7/google-http-client-1.38.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.11/3acb4705652e16236558f0f4f2192cc33c3bd189/commons-codec-1.11.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.13/853b96d3afbb7bf8cc303fe27ee96836a10c1834/httpcore-4.4.13.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.opencensus/opencensus-contrib-http-util/0.24.0/6d96406c272d884038eb63b262458df75b5445/opencensus-contrib-http-util-0.24.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-cloud-firestore-v1/2.1.0/a07acbe1bd49a33d2cb2f16cea697fe62e6660c3/proto-google-cloud-firestore-v1-2.1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.api/api-common/1.10.1/d157681b5909cf959a9fa60ced9bed9da741ffef/api-common-1.10.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.auto.value/auto-value-annotations/1.7.4/eff48ed53995db2dadf0456426cc1f8700136f86/auto-value-annotations-1.7.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.opencensus/opencensus-contrib-grpc-util/0.24.0/1ac2f0c1a02c7ec0cd244e59228f687a90dfddab/opencensus-contrib-grpc-util-0.24.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/30.0-android/12aff8dd7211f090c35e4c51a4256f1d5569c2e7/guava-30.0-android.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/javax.annotation/javax.annotation-api/1.3.2/934c04d3cfef185a8008e7bf34331b79730a9d43/javax.annotation-api-1.3.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf/1.31.1/3f2721fd481627959a7d74f06d4472a0fef6598a/grpc-protobuf-1.31.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf-lite/1.31.1/15337822ee54a3db176aa56a53f189b34f310822/grpc-protobuf-lite-1.31.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.opencensus/opencensus-api/0.24.0/f974451b19007ce820f433311ce8adb88e2b7d2c/opencensus-api-0.24.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-context/1.32.2/52f4c00cd3dba3f2196796957a9d516736d0c470/grpc-context-1.32.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.13.0/c913f2b6021ca9606efba56d1a0d03e91e725e4c/protobuf-java-3.13.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-common-protos/2.0.0/63e6dbdb09af112cba5ac7358c56d834a843ad7e/proto-google-common-protos-2.0.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.api/gax/1.60.0/b340424c3ff0ae5843630c5c6dc4a9035114d7a0/gax-1.60.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-api/1.31.1/1b7f88d95aa1c5bc5a4c9a7e6a9e5f43499c3184/grpc-api-1.31.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.api/gax-grpc/1.58.2/54f953b27fd53316b5135ee4bf5332dc14bd358f/gax-grpc-1.58.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-auth/1.31.1/51070a34e168424d17b770bbedf4d7838b4b4277/grpc-auth-1.31.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.31.1/13b0b895c9850eb4463547a6cb3ef9dcab3ba514/grpc-netty-shaded-1.31.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-alts/1.31.1/5dcf0080fc6f422670282b227d01c1210a5e2a19/grpc-alts-1.31.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-grpclb/1.31.1/4e0fa38ca7c0bf6ad1ec20a710036ced5dccfce1/grpc-grpclb-1.31.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-openjdk-uber/2.2.1/59a346d64c0ddca750c5c877e274d5e6278e53ce/conscrypt-openjdk-uber-2.2.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-compat-qual/2.5.5/435dc33e3019c9f019e15f01aa111de9d6b2b79c/checker-compat-qual-2.5.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.4.0/32ecccc595e4e4d813a80ee9e3ab5813d65874eb/error_prone_annotations-2.4.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/1.3/ba035118bc8bac37d7eff77700720999acd9986d/j2objc-annotations-1.3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.threeten/threetenbp/1.4.5/aed77167a23390a42a80153fe65493641a71699/threetenbp-1.4.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-stub/1.31.1/adfd282051587e889030d8b7ac23311c75ebc350/grpc-stub-1.31.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.auth/google-auth-library-credentials/0.22.0/f9c591c1d84ec6511fc0298a3f69a7ae7842b542/google-auth-library-credentials-0.22.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core/1.93.9/9664e8c72ca5c97c0a59527e96e8bc6d80989dc1/google-cloud-core-1.93.9.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-iam-v1/1.0.1/289dd8b33083b4a942e23e1a48ba4f679038edf4/proto-google-iam-v1-1.0.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.6/9180733b7df8542621dc12e21e87557e8c99b8cb/gson-2.8.6.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.11.3/c2351800432bdbdd8284c3f5a7f0782a352aa84a/jackson-core-2.11.3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java-util/3.13.0/de4dcb930367f6148bc46100fd08a3f7094bf386/protobuf-java-util-3.13.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.30/b5a4b6d16ab13e34a88fae84c35cd5d68cac922c/slf4j-api-1.7.30.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http/4.1.50.Final/db33e6bc697a038dc110da4a2e2a8989257a6a11/netty-codec-http-4.1.50.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler/4.1.50.Final/dc0110fc4d22fb22f1038cd73a6f8a034928a2d7/netty-handler-4.1.50.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.50.Final/cbcb646c9380c6cdc3f56603ae6418a11418ce0f/netty-codec-4.1.50.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.50.Final/2e4f6b655933faca0deef8d234ac6725b598109a/netty-transport-4.1.50.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-storage/v1-rev20200927-1.30.10/92783ef74f445782d600456403e02cdb3ab95ee7/google-api-services-storage-v1-rev20200927-1.30.10.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core-http/1.93.9/698b4b45d30b5f5b2791e291cb219f9a70afa811/google-cloud-core-http-1.93.9.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-appengine/1.37.0/4e781b3b8a8ed07f8c000f091e8b153a5145e33d/google-http-client-appengine-1.37.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/com.google.api/gax-httpjson/0.77.0/c7c384f7002482c316c31e87fe5014f3b05e8220/gax-httpjson-0.77.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-webapp/9.4.31.v20200723/9e6716366f586307f253d1082cbae88f33c239cd/jetty-webapp-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-server/9.4.31.v20200723/e45865d39dd749c4feac66b8f6c2dd7df914e121/websocket-server-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-servlet/9.4.31.v20200723/dd1718a61f30e28b1cbf5a1c02997082d887c054/jetty-servlet-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-security/9.4.31.v20200723/6e37b3590820c5d8a466acd65d5c30672b2367f6/jetty-security-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-server/9.4.31.v20200723/b9043b4a0c17ee543aba97e80ea3a34cd8cdb600/jetty-server-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.3.71/4defc79915cf4f78b49bbc4a8f1e80e87767a5b/kotlin-stdlib-jdk8-1.3.71.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.50.Final/42b556977c572a376172a3270537ee22203c1a35/netty-buffer-4.1.50.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.50.Final/deb87b3c901142d73279a58e16867cf6f2b1c2e5/netty-resolver-4.1.50.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.50.Final/d2059030b86733c52fd999e63db7300414b487fa/netty-common-4.1.50.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-servlet/9.4.31.v20200723/c8688b80f740354f0da7e185ff70a9061e904683/websocket-servlet-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.1.0/3cd63d075497751784b2fa84be59432f4905bf7c/javax.servlet-api-3.1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-client/9.4.31.v20200723/786dc9e2a6f5cb1e68229b1652c15d21b488f52b/websocket-client-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-client/9.4.31.v20200723/a4d779d1dcd7fa948d1175ebf3e20a0b0caacdc/jetty-client-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-http/9.4.31.v20200723/6862f0e6fc7e9f8828416a7cae1477b233d92f8/jetty-http-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-common/9.4.31.v20200723/aafea15d115377e05609a60ff10db0e9682a928e/websocket-common-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-io/9.4.31.v20200723/328e4562e0f30e01efea63efe4fc24b2b860d852/jetty-io-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-xml/9.4.31.v20200723/9cccd5b9d76324dac3f2ffc501adf10621250a78/jetty-xml-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.3.71/9180d3aec3f0b2ea6ef0dcf01b464a6e2219e381/kotlin-stdlib-jdk7-1.3.71.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.71/898273189ad22779da6bed88ded39b14cb5fd432/kotlin-stdlib-1.3.71.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-util/9.4.31.v20200723/b9c346da72d8715bdfb0373a123374ec6ac9e544/jetty-util-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-api/9.4.31.v20200723/56eb7d4002268c9f5f4bb4266cf0cb247bda49e0/websocket-api-9.4.31.v20200723.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.71/e71c3fef58e26affeb03d675e91fd8abdd44aa7b/kotlin-stdlib-common-1.3.71.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/henryqin/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</AuxClasspathEntry>
+    <SrcDir>/Users/henryqin/School/Magikarp/server/src/main/resources</SrcDir>
+    <SrcDir>/Users/henryqin/School/Magikarp/server/src/main/java</SrcDir>
   </Project>
   <Errors errors="0" missingClasses="0"></Errors>
-  <FindBugsSummary timestamp="Thu, 19 Nov 2020 16:05:03 -0800" total_classes="15" referenced_classes="99" total_bugs="0" total_size="384" num_packages="6" java_version="1.8.0_222" vm_version="25.222-b10" cpu_seconds="4.44" clock_seconds="1.29" peak_mbytes="253.50" alloc_mbytes="455.50" gc_seconds="0.04">
+  <FindBugsSummary timestamp="Thu, 19 Nov 2020 16:10:45 -0800" total_classes="15" referenced_classes="102" total_bugs="0" total_size="384" num_packages="6" java_version="15.0.1" vm_version="15.0.1+9-18" cpu_seconds="4.96" clock_seconds="2.45" peak_mbytes="329.24" alloc_mbytes="512.00" gc_seconds="0.03">
     <FileStats path="auth/GoogleIdTokenAuthenticator.java" bugCount="0" size="11"/>
     <FileStats path="auth/InvalidTokenException.java" bugCount="0" size="4"/>
     <FileStats path="constants/Constants.java" bugCount="0" size="11"/>
@@ -151,18 +151,13 @@
       <ClassStats class="server.Server" sourceFile="Server.java" interface="false" size="119" bugs="0"/>
     </PackageStats>
     <FindBugsProfile>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="388" invocations="1068" avgMicrosecondsPerInvocation="364" maxMicrosecondsPerInvocation="32981" standardDeviationMicrosecondsPerInvocation="1560"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="163" invocations="1073" avgMicrosecondsPerInvocation="152" maxMicrosecondsPerInvocation="4888" standardDeviationMicrosecondsPerInvocation="291"/>
-      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="73" invocations="1026" avgMicrosecondsPerInvocation="71" maxMicrosecondsPerInvocation="5915" standardDeviationMicrosecondsPerInvocation="257"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="45" invocations="99" avgMicrosecondsPerInvocation="458" maxMicrosecondsPerInvocation="3911" standardDeviationMicrosecondsPerInvocation="684"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="43" invocations="99" avgMicrosecondsPerInvocation="443" maxMicrosecondsPerInvocation="4965" standardDeviationMicrosecondsPerInvocation="727"/>
-      <ClassProfile name="edu.umd.cs.findbugs.ba.npe.NullDerefAndRedundantComparisonFinder" totalMilliseconds="28" invocations="61" avgMicrosecondsPerInvocation="462" maxMicrosecondsPerInvocation="5344" standardDeviationMicrosecondsPerInvocation="982"/>
-      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="25" invocations="255" avgMicrosecondsPerInvocation="101" maxMicrosecondsPerInvocation="1613" standardDeviationMicrosecondsPerInvocation="156"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="19" invocations="61" avgMicrosecondsPerInvocation="319" maxMicrosecondsPerInvocation="4752" standardDeviationMicrosecondsPerInvocation="651"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="17" invocations="63" avgMicrosecondsPerInvocation="282" maxMicrosecondsPerInvocation="1945" standardDeviationMicrosecondsPerInvocation="389"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.impl.ZipCodeBaseFactory" totalMilliseconds="16" invocations="101" avgMicrosecondsPerInvocation="161" maxMicrosecondsPerInvocation="619" standardDeviationMicrosecondsPerInvocation="84"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="15" invocations="99" avgMicrosecondsPerInvocation="158" maxMicrosecondsPerInvocation="1724" standardDeviationMicrosecondsPerInvocation="245"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.UnconditionalValueDerefDataflowFactory" totalMilliseconds="15" invocations="61" avgMicrosecondsPerInvocation="255" maxMicrosecondsPerInvocation="2597" standardDeviationMicrosecondsPerInvocation="448"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="979" invocations="1165" avgMicrosecondsPerInvocation="841" maxMicrosecondsPerInvocation="39116" standardDeviationMicrosecondsPerInvocation="2402"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="217" invocations="1171" avgMicrosecondsPerInvocation="185" maxMicrosecondsPerInvocation="10500" standardDeviationMicrosecondsPerInvocation="482"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="136" invocations="102" avgMicrosecondsPerInvocation="1336" maxMicrosecondsPerInvocation="15898" standardDeviationMicrosecondsPerInvocation="2458"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="99" invocations="102" avgMicrosecondsPerInvocation="974" maxMicrosecondsPerInvocation="8168" standardDeviationMicrosecondsPerInvocation="1572"/>
+      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="88" invocations="1121" avgMicrosecondsPerInvocation="78" maxMicrosecondsPerInvocation="7173" standardDeviationMicrosecondsPerInvocation="336"/>
+      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="64" invocations="276" avgMicrosecondsPerInvocation="233" maxMicrosecondsPerInvocation="4979" standardDeviationMicrosecondsPerInvocation="470"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="43" invocations="102" avgMicrosecondsPerInvocation="430" maxMicrosecondsPerInvocation="13928" standardDeviationMicrosecondsPerInvocation="1525"/>
     </FindBugsProfile>
   </FindBugsSummary>
   <ClassFeatures></ClassFeatures>

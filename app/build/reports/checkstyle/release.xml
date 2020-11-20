@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.27">
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/MapsRepository.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/data/MapsRepository.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/model/GetMessagesRequest.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/data/model/GetMessagesRequest.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/model/GetMessagesResponse.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/data/model/GetMessagesResponse.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/model/Message.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/data/model/Message.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/model/NewMessageRequest.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/data/model/NewMessageRequest.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/model/NewMessageResponse.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/data/model/NewMessageResponse.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/di/ActivityModule.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/di/ActivityModule.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/di/ApplicationModule.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/di/ApplicationModule.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/di/HiltQualifiers.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/di/HiltQualifiers.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/di/ViewModelModule.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/di/ViewModelModule.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/network/GsonRequest.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/network/GsonRequest.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/network/ImageCache.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/network/ImageCache.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/network/LruBitmapCache.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/network/LruBitmapCache.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/services/LocationService.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/services/LocationService.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/app/HelpFragment.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/ui/app/HelpFragment.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/app/MagikarpApplication.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/ui/app/MagikarpApplication.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/app/MainActivity.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/ui/app/MainActivity.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/app/SettingsFragment.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/ui/app/SettingsFragment.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/maps/MapsFragment.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/ui/maps/MapsFragment.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/maps/MapsFragmentWrapper.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/ui/maps/MapsFragmentWrapper.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/maps/MapsViewModel.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/ui/maps/MapsViewModel.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/posts/PostFragment.java">
+<file name="/Users/henryqin/School/Magikarp/app/src/main/java/com/magikarp/android/ui/posts/PostFragment.java">
 </file>
 </checkstyle>
