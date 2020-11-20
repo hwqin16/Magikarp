@@ -158,6 +158,11 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
     }
   }
 
+  @VisibleForTesting
+  public void setDrawerItemVisibility(final int id, final boolean visible) {
+    navigationView.getMenu().findItem(id).setVisible(visible);
+  }
+
   @Override
   public boolean onMenuItemClick(MenuItem item) {
     int id = item.getItemId();

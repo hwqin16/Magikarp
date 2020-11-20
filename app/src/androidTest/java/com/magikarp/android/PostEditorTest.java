@@ -49,7 +49,11 @@ public class PostEditorTest {
   @Before
   public void navigateToPostEditor() {
     onView(withContentDescription(R.string.nav_app_bar_open_drawer_description)).perform(click());
-    onView(withId(R.id.nav_post_sideload)).perform(click());
+    intentsRule.getActivity().runOnUiThread(() -> {
+      intentsRule.getActivity().setDrawerItemVisibility(R.id.nav_my_posts, true);
+    });
+    onView(withId(R.id.nav_my_posts)).perform(click());
+    onView(withId(R.id.nav_post_editor)).perform(click());
 
     final Intent imageClickIntent = new Intent();
     imageClickIntent.setData(Uri.parse(DUMMY_URI));
@@ -86,7 +90,7 @@ public class PostEditorTest {
   public void testTypeClickImage() {
     onView(withId(R.id.menu_upload_content)).check(matches(isDisplayed()));
     onView(withId(R.id.menu_get_location)).check(matches(isDisplayed()));
-    onView(withId(R.id.create_post_image_preview)).perform(click());
+    onView(withId(R.id.create_post_local_image)).perform(click());
     intended(allOf(hasAction(Intent.ACTION_PICK)));
   }
 }
