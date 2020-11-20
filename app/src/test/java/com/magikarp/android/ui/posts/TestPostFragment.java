@@ -22,12 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.magikarp.android.R;
 import com.magikarp.android.services.LocationService;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import org.junit.Test;
 
 public class TestPostFragment {
@@ -188,8 +187,22 @@ public class TestPostFragment {
 
     PostFragment postFragment = new PostFragment();
 
-    postFragment.performOnRequestPermissionsResult(context, 0, new int[]{});
+    postFragment.performOnRequestPermissionsResult(context, 0, new int[] {});
 
     verifyNoInteractions(context);
+  }
+
+  @Test
+  public void testPerformOnPostButtonClick() {
+    EditText mockEditText = mock(EditText.class);
+    View mockView = mock(View.class);
+    when(mockView.findViewById(R.id.create_post_caption)).thenReturn(mockEditText);
+    Toast mockOneOrMoreFields = mock(Toast.class);
+
+    PostFragment postFragment = new PostFragment(2.2, 3.3, null);
+
+    postFragment.performOnPostButtonClick(null, null, mockView, null, mockOneOrMoreFields, null);
+
+    verify(mockOneOrMoreFields).show();
   }
 }
