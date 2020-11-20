@@ -1,5 +1,6 @@
 package com.magikarp.android.ui.maps;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -7,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
@@ -30,20 +33,30 @@ import org.junit.Test;
 public class TestMapsFragment {
   @Test
   public void testPerformOnCreate() {
+    int maxRecords = 10;
     MapsViewModel mockMapsViewModel = mock(MapsViewModel.class);
     ViewModelProvider mockViewModelProvider = mock(ViewModelProvider.class);
     when(mockViewModelProvider.get(MapsViewModel.class)).thenReturn(mockMapsViewModel);
+    SharedPreferences mockSharedPreferences = mock(SharedPreferences.class);
+    when(mockSharedPreferences.getString(any(), any())).thenReturn(Integer.toString(maxRecords));
 
     boolean hasOptionsMenu = true;
     String argsIsUserData = "arrrg";
     Bundle mockArguments = mock(Bundle.class);
     when(mockArguments.getBoolean(argsIsUserData)).thenReturn(hasOptionsMenu);
-    MapsFragment mapsFragment = new MapsFragment();
+    MapsFragment mapsFragment = new MapsFragment(
+        null,
+        null,
+        mockSharedPreferences,
+        false,
+        0
+    );
     mapsFragment.setArguments(mockArguments);
 
-    mapsFragment.performOnCreate(mockViewModelProvider, argsIsUserData, null);
+    mapsFragment.performOnCreate(mockViewModelProvider, argsIsUserData, "any", null);
 
     assertTrue(mapsFragment.hasOptionsMenu());
+    assertEquals(maxRecords, mapsFragment.getMaxRecords());
   }
 
   @Test
@@ -82,23 +95,28 @@ public class TestMapsFragment {
   }
 
   @Test
-  public void testOnMapReady() {
+  public void testPerformOnMapReady() {
     GoogleMap mockGoogleMap = mock(GoogleMap.class);
     LiveData mockLiveData = mock(LiveData.class);
     MapsViewModel mockMapsViewModel = mock(MapsViewModel.class);
     when(mockMapsViewModel.getMessages()).thenReturn(mockLiveData);
+    String userId = "user123";
+    GoogleSignInAccount mockAccount = mock(GoogleSignInAccount.class);
+    when(mockAccount.getId()).thenReturn(userId);
 
-    MapsFragment mapsFragment = new MapsFragment(mockMapsViewModel, null);
+    MapsFragment mapsFragment = new MapsFragment(mockMapsViewModel, null, null, true, 0);
 
-    mapsFragment.onMapReady(mockGoogleMap);
+    mapsFragment.performOnMapReady(mockGoogleMap, mockAccount);
 
     verify(mockGoogleMap).setOnCameraIdleListener(mapsFragment);
     verify(mockGoogleMap).setOnMarkerClickListener(mapsFragment);
     verify(mockLiveData).observe(mapsFragment, mapsFragment);
+    assertEquals(userId, mapsFragment.getUserId());
   }
 
   @Test
   public void testOnCameraIdle() {
+    int maxRecords = 10;
     LatLngBounds latLngBounds = new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(1.0, 1.0));
     VisibleRegion visibleRegion = new VisibleRegion(null, null, null, null, latLngBounds);
     Projection mockProjection = mock(Projection.class);
@@ -107,11 +125,17 @@ public class TestMapsFragment {
     when(mockGoogleMap.getProjection()).thenReturn(mockProjection);
     MapsViewModel mockMapsViewModel = mock(MapsViewModel.class);
 
-    MapsFragment mapsFragment = new MapsFragment(mockMapsViewModel, mockGoogleMap);
+    MapsFragment mapsFragment = new MapsFragment(
+        mockMapsViewModel,
+        mockGoogleMap,
+        null,
+        false,
+        maxRecords
+    );
 
     mapsFragment.onCameraIdle();
 
-    verify(mockMapsViewModel).setMapsQuery(null, latLngBounds, 20);
+    verify(mockMapsViewModel).setMapsQuery(null, latLngBounds, maxRecords);
   }
 
   @Test
@@ -121,7 +145,7 @@ public class TestMapsFragment {
     GoogleMap mockGoogleMap = mock(GoogleMap.class);
     when(mockGoogleMap.addMarker(any())).thenReturn(mockMarker);
 
-    MapsFragment mapsFragment = new MapsFragment(null, mockGoogleMap);
+    MapsFragment mapsFragment = new MapsFragment(null, mockGoogleMap, null, false, 0);
 
     ArrayList<Message> mockMessages = new ArrayList<>();
     mockMessages.add(mockMessage);
