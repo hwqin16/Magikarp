@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<BugCollection version="4.1.1" sequence="0" timestamp="1605836287180" analysisTimestamp="1605836287208" release="8.0">
-  <Project projectName="Magikarp (spotbugsMain)">
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/auth/GoogleIdTokenAuthenticator.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/auth/InvalidTokenException.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/constants/Constants.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/responses/MessagesResponse.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/responses/NewPostResponse.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/responses/UpdatePostResponse.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/responses/DeletePostResponse.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/message/Message.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/message/MessagePosterImpl.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/message/MessageFinder.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/message/MessageFinderImpl.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/message/MessagePoster.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/server/Server.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/requests/FindMessagesByBoundingBoxRequest.class</Jar>
-    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main/requests/MessageRequest.class</Jar>
+<BugCollection version="4.1.1" sequence="0" timestamp="1605836285304" analysisTimestamp="1605836285305" release="8.0">
+  <Project projectName="Magikarp (spotbugsTest)">
+    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/test/auth/TestGoogleIdTokenAuthenticator.class</Jar>
+    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/test/message/TestMessagePosterImpl.class</Jar>
+    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/test/message/TestMessageFinderImpl.class</Jar>
+    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/test/server/TestServerComponent$TestServerComponentHelper.class</Jar>
+    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/test/server/TestServerComponent.class</Jar>
+    <Jar>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/test/helper/TestHelper.class</Jar>
+    <AuxClasspathEntry>/Users/csummers/school/COMS-W4156/Magikarp/server/build/classes/java/main</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/school/COMS-W4156/Magikarp/server/build/resources/main</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-admin/7.0.1/e7952372fbfe021c7d83bdcc1b86564ff06296bd/firebase-admin-7.0.1.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client-gson/1.30.11/4fa9e2ba07c06ed4df99e36e633c29f125ccbbe6/google-api-client-gson-1.30.11.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-firestore/2.1.0/e8aad17adcc379ec0f6792ac9b3ac653ac91531b/google-cloud-firestore-2.1.0.jar</AuxClasspathEntry>
@@ -26,15 +19,22 @@
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.javalin/javalin/3.11.0/4050dac2186c9d1a2d3b3f2cabe81f1d7a39c8fe/javalin-3.11.0.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-simple/1.7.30/e606eac955f55ecf1d8edcccba04eb8ac98088dd/slf4j-simple-1.7.30.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.8.0/92999e26e6534606b5678014e66948286298a35c/commons-io-2.8.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/1.7.0/84e309fbf21d857aac079a3c1fffd84284e1114d/junit-platform-commons-1.7.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/5.7.0/b25f3815c4c1860a73041e733a14a0379d00c4d5/junit-jupiter-api-5.7.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-core/3.6.0/48657987075fea2e2176634ae35aaa5e93c929ef/mockito-core-3.6.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.konghq/unirest-java/3.11.05/3079f2af20696ce7a8a9363a8dae1efaac2a5854/unirest-java-3.11.05.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-gson/1.37.0/13626f6cdd327068adfe4c4a9a9873361990f1f3/google-http-client-gson-1.37.0.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core-grpc/1.93.8/b68151878f879c5c1085fc468909f9b268dc6578/google-cloud-core-grpc-1.93.8.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-core/1.31.1/5c28e92399f855e3341d0af3af0950323592e890/grpc-core-1.31.1.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.auth/google-auth-library-oauth2-http/0.22.0/57d513b3ac44f7837a23f8bbead708492eea73d4/google-auth-library-oauth2-http-0.22.0.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-jackson2/1.37.0/5ac03c410888d56c30fee69a9cdc549075363a0c/google-http-client-jackson2-1.37.0.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client/1.38.0/5575b97410c1909f2b5fb91d4fcaf16462d4eef7/google-http-client-1.38.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.5.13/efc110bad4a0d45cda7858e6beee1d8a8313da5a/httpmime-4.5.13.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpasyncclient/4.1.4/f3a3240681faae3fa46b573a4c7e50cec9db0d86/httpasyncclient-4.1.4.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.11/3acb4705652e16236558f0f4f2192cc33c3bd189/commons-codec-1.11.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore-nio/4.4.13/3f897ace4d7f10f0ea6a58f524a3b105dd483653/httpcore-nio-4.4.13.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.13/853b96d3afbb7bf8cc303fe27ee96836a10c1834/httpcore-4.4.13.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.opencensus/opencensus-contrib-http-util/0.24.0/6d96406c272d884038eb63b262458df75b5445/opencensus-contrib-http-util-0.24.0.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-cloud-firestore-v1/2.1.0/a07acbe1bd49a33d2cb2f16cea697fe62e6660c3/proto-google-cloud-firestore-v1-2.1.0.jar</AuxClasspathEntry>
@@ -86,6 +86,11 @@
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-security/9.4.31.v20200723/6e37b3590820c5d8a466acd65d5c30672b2367f6/jetty-security-9.4.31.v20200723.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-server/9.4.31.v20200723/b9043b4a0c17ee543aba97e80ea3a34cd8cdb600/jetty-server-9.4.31.v20200723.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.3.71/4defc79915cf4f78b49bbc4a8f1e80e87767a5b/kotlin-stdlib-jdk8-1.3.71.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.apiguardian/apiguardian-api/1.1.0/fc9dff4bb36d627bdc553de77e1f17efd790876c/apiguardian-api-1.1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.opentest4j/opentest4j/1.2.0/28c11eb91f9b6d8e200631d46e20a7f407f2a046/opentest4j-1.2.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy/1.10.15/259957c76d345cb3db5411f57a0654300aaca04c/byte-buddy-1.10.15.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.10.15/7f0cc687ee3177fd451d17b9b80325a8cdd1c7ff/byte-buddy-agent-1.10.15.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.objenesis/objenesis/3.1/48f12deaae83a8dfc3775d830c9fd60ea59bbbca/objenesis-3.1.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.50.Final/42b556977c572a376172a3270537ee22203c1a35/netty-buffer-4.1.50.Final.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.50.Final/deb87b3c901142d73279a58e16867cf6f2b1c2e5/netty-resolver-4.1.50.Final.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.50.Final/d2059030b86733c52fd999e63db7300414b487fa/netty-common-4.1.50.Final.jar</AuxClasspathEntry>
@@ -103,72 +108,41 @@
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-api/9.4.31.v20200723/56eb7d4002268c9f5f4bb4266cf0cb247bda49e0/websocket-api-9.4.31.v20200723.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.71/e71c3fef58e26affeb03d675e91fd8abdd44aa7b/kotlin-stdlib-common-1.3.71.jar</AuxClasspathEntry>
     <AuxClasspathEntry>/Users/csummers/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</AuxClasspathEntry>
-    <SrcDir>/Users/csummers/school/COMS-W4156/Magikarp/server/src/main/resources</SrcDir>
-    <SrcDir>/Users/csummers/school/COMS-W4156/Magikarp/server/src/main/java</SrcDir>
+    <SrcDir>/Users/csummers/school/COMS-W4156/Magikarp/server/src/test/resources</SrcDir>
+    <SrcDir>/Users/csummers/school/COMS-W4156/Magikarp/server/src/test/java</SrcDir>
   </Project>
   <Errors errors="0" missingClasses="0"></Errors>
-  <FindBugsSummary timestamp="Thu, 19 Nov 2020 17:38:07 -0800" total_classes="15" referenced_classes="99" total_bugs="0" total_size="384" num_packages="6" java_version="1.8.0_222" vm_version="25.222-b10" cpu_seconds="7.95" clock_seconds="1.82" peak_mbytes="213.51" alloc_mbytes="455.50" gc_seconds="0.12">
-    <FileStats path="auth/GoogleIdTokenAuthenticator.java" bugCount="0" size="11"/>
-    <FileStats path="auth/InvalidTokenException.java" bugCount="0" size="4"/>
-    <FileStats path="constants/Constants.java" bugCount="0" size="11"/>
-    <FileStats path="message/Message.java" bugCount="0" size="38"/>
-    <FileStats path="message/MessageFinder.java" bugCount="0" size="3"/>
-    <FileStats path="message/MessageFinderImpl.java" bugCount="0" size="52"/>
-    <FileStats path="message/MessagePoster.java" bugCount="0" size="4"/>
-    <FileStats path="message/MessagePosterImpl.java" bugCount="0" size="46"/>
-    <FileStats path="requests/FindMessagesByBoundingBoxRequest.java" bugCount="0" size="24"/>
-    <FileStats path="requests/MessageRequest.java" bugCount="0" size="20"/>
-    <FileStats path="responses/DeletePostResponse.java" bugCount="0" size="12"/>
-    <FileStats path="responses/MessagesResponse.java" bugCount="0" size="12"/>
-    <FileStats path="responses/NewPostResponse.java" bugCount="0" size="16"/>
-    <FileStats path="responses/UpdatePostResponse.java" bugCount="0" size="12"/>
-    <FileStats path="server/Server.java" bugCount="0" size="119"/>
-    <PackageStats package="auth" total_bugs="0" total_types="2" total_size="15">
-      <ClassStats class="auth.GoogleIdTokenAuthenticator" sourceFile="GoogleIdTokenAuthenticator.java" interface="false" size="11" bugs="0"/>
-      <ClassStats class="auth.InvalidTokenException" sourceFile="InvalidTokenException.java" interface="false" size="4" bugs="0"/>
+  <FindBugsSummary timestamp="Thu, 19 Nov 2020 17:38:05 -0800" total_classes="6" referenced_classes="94" total_bugs="0" total_size="494" num_packages="4" java_version="1.8.0_222" vm_version="25.222-b10" cpu_seconds="2.81" clock_seconds="1.23" peak_mbytes="382.45" alloc_mbytes="455.50" gc_seconds="0.10">
+    <FileStats path="auth/TestGoogleIdTokenAuthenticator.java" bugCount="0" size="23"/>
+    <FileStats path="helper/TestHelper.java" bugCount="0" size="49"/>
+    <FileStats path="message/TestMessageFinderImpl.java" bugCount="0" size="175"/>
+    <FileStats path="message/TestMessagePosterImpl.java" bugCount="0" size="131"/>
+    <FileStats path="server/TestServerComponent.java" bugCount="0" size="116"/>
+    <PackageStats package="auth" total_bugs="0" total_types="1" total_size="23">
+      <ClassStats class="auth.TestGoogleIdTokenAuthenticator" sourceFile="TestGoogleIdTokenAuthenticator.java" interface="false" size="23" bugs="0"/>
     </PackageStats>
-    <PackageStats package="constants" total_bugs="0" total_types="1" total_size="11">
-      <ClassStats class="constants.Constants" sourceFile="Constants.java" interface="false" size="11" bugs="0"/>
+    <PackageStats package="helper" total_bugs="0" total_types="1" total_size="49">
+      <ClassStats class="helper.TestHelper" sourceFile="TestHelper.java" interface="false" size="49" bugs="0"/>
     </PackageStats>
-    <PackageStats package="message" total_bugs="0" total_types="5" total_size="143">
-      <ClassStats class="message.Message" sourceFile="Message.java" interface="false" size="38" bugs="0"/>
-      <ClassStats class="message.MessageFinder" sourceFile="MessageFinder.java" interface="true" size="3" bugs="0"/>
-      <ClassStats class="message.MessageFinderImpl" sourceFile="MessageFinderImpl.java" interface="false" size="52" bugs="0"/>
-      <ClassStats class="message.MessagePoster" sourceFile="MessagePoster.java" interface="true" size="4" bugs="0"/>
-      <ClassStats class="message.MessagePosterImpl" sourceFile="MessagePosterImpl.java" interface="false" size="46" bugs="0"/>
+    <PackageStats package="message" total_bugs="0" total_types="2" total_size="306">
+      <ClassStats class="message.TestMessageFinderImpl" sourceFile="TestMessageFinderImpl.java" interface="false" size="175" bugs="0"/>
+      <ClassStats class="message.TestMessagePosterImpl" sourceFile="TestMessagePosterImpl.java" interface="false" size="131" bugs="0"/>
     </PackageStats>
-    <PackageStats package="requests" total_bugs="0" total_types="2" total_size="44">
-      <ClassStats class="requests.FindMessagesByBoundingBoxRequest" sourceFile="FindMessagesByBoundingBoxRequest.java" interface="false" size="24" bugs="0"/>
-      <ClassStats class="requests.MessageRequest" sourceFile="MessageRequest.java" interface="false" size="20" bugs="0"/>
-    </PackageStats>
-    <PackageStats package="responses" total_bugs="0" total_types="4" total_size="52">
-      <ClassStats class="responses.DeletePostResponse" sourceFile="DeletePostResponse.java" interface="false" size="12" bugs="0"/>
-      <ClassStats class="responses.MessagesResponse" sourceFile="MessagesResponse.java" interface="false" size="12" bugs="0"/>
-      <ClassStats class="responses.NewPostResponse" sourceFile="NewPostResponse.java" interface="false" size="16" bugs="0"/>
-      <ClassStats class="responses.UpdatePostResponse" sourceFile="UpdatePostResponse.java" interface="false" size="12" bugs="0"/>
-    </PackageStats>
-    <PackageStats package="server" total_bugs="0" total_types="1" total_size="119">
-      <ClassStats class="server.Server" sourceFile="Server.java" interface="false" size="119" bugs="0"/>
+    <PackageStats package="server" total_bugs="0" total_types="2" total_size="116">
+      <ClassStats class="server.TestServerComponent" sourceFile="TestServerComponent.java" interface="false" size="76" bugs="0"/>
+      <ClassStats class="server.TestServerComponent$TestServerComponentHelper" sourceFile="TestServerComponent.java" interface="false" size="40" bugs="0"/>
     </PackageStats>
     <FindBugsProfile>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="261" invocations="1068" avgMicrosecondsPerInvocation="245" maxMicrosecondsPerInvocation="17798" standardDeviationMicrosecondsPerInvocation="739"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="87" invocations="99" avgMicrosecondsPerInvocation="884" maxMicrosecondsPerInvocation="9838" standardDeviationMicrosecondsPerInvocation="1459"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="82" invocations="66" avgMicrosecondsPerInvocation="1249" maxMicrosecondsPerInvocation="76853" standardDeviationMicrosecondsPerInvocation="9378"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="79" invocations="1073" avgMicrosecondsPerInvocation="73" maxMicrosecondsPerInvocation="1021" standardDeviationMicrosecondsPerInvocation="59"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="71" invocations="99" avgMicrosecondsPerInvocation="724" maxMicrosecondsPerInvocation="7469" standardDeviationMicrosecondsPerInvocation="1223"/>
-      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="52" invocations="255" avgMicrosecondsPerInvocation="205" maxMicrosecondsPerInvocation="3383" standardDeviationMicrosecondsPerInvocation="324"/>
-      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="38" invocations="1026" avgMicrosecondsPerInvocation="37" maxMicrosecondsPerInvocation="1277" standardDeviationMicrosecondsPerInvocation="83"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="36" invocations="153" avgMicrosecondsPerInvocation="240" maxMicrosecondsPerInvocation="12432" standardDeviationMicrosecondsPerInvocation="1044"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="33" invocations="99" avgMicrosecondsPerInvocation="333" maxMicrosecondsPerInvocation="5804" standardDeviationMicrosecondsPerInvocation="687"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="28" invocations="63" avgMicrosecondsPerInvocation="448" maxMicrosecondsPerInvocation="8026" standardDeviationMicrosecondsPerInvocation="1071"/>
-      <ClassProfile name="edu.umd.cs.findbugs.ba.npe.NullDerefAndRedundantComparisonFinder" totalMilliseconds="26" invocations="61" avgMicrosecondsPerInvocation="436" maxMicrosecondsPerInvocation="2439" standardDeviationMicrosecondsPerInvocation="563"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="26" invocations="99" avgMicrosecondsPerInvocation="266" maxMicrosecondsPerInvocation="3380" standardDeviationMicrosecondsPerInvocation="553"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="25" invocations="61" avgMicrosecondsPerInvocation="420" maxMicrosecondsPerInvocation="3947" standardDeviationMicrosecondsPerInvocation="703"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.CFGFactory" totalMilliseconds="23" invocations="61" avgMicrosecondsPerInvocation="386" maxMicrosecondsPerInvocation="9021" standardDeviationMicrosecondsPerInvocation="1166"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory" totalMilliseconds="21" invocations="63" avgMicrosecondsPerInvocation="347" maxMicrosecondsPerInvocation="7094" standardDeviationMicrosecondsPerInvocation="912"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical" totalMilliseconds="20" invocations="99" avgMicrosecondsPerInvocation="207" maxMicrosecondsPerInvocation="6924" standardDeviationMicrosecondsPerInvocation="720"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildStringPassthruGraph" totalMilliseconds="20" invocations="99" avgMicrosecondsPerInvocation="205" maxMicrosecondsPerInvocation="7394" standardDeviationMicrosecondsPerInvocation="759"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="19" invocations="99" avgMicrosecondsPerInvocation="195" maxMicrosecondsPerInvocation="2033" standardDeviationMicrosecondsPerInvocation="314"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="360" invocations="1011" avgMicrosecondsPerInvocation="356" maxMicrosecondsPerInvocation="1337" standardDeviationMicrosecondsPerInvocation="127"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="244" invocations="1009" avgMicrosecondsPerInvocation="242" maxMicrosecondsPerInvocation="91336" standardDeviationMicrosecondsPerInvocation="2885"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="52" invocations="94" avgMicrosecondsPerInvocation="557" maxMicrosecondsPerInvocation="16008" standardDeviationMicrosecondsPerInvocation="1693"/>
+      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="35" invocations="277" avgMicrosecondsPerInvocation="128" maxMicrosecondsPerInvocation="12769" standardDeviationMicrosecondsPerInvocation="782"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="31" invocations="94" avgMicrosecondsPerInvocation="332" maxMicrosecondsPerInvocation="2347" standardDeviationMicrosecondsPerInvocation="457"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="29" invocations="55" avgMicrosecondsPerInvocation="545" maxMicrosecondsPerInvocation="6091" standardDeviationMicrosecondsPerInvocation="1066"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory" totalMilliseconds="23" invocations="73" avgMicrosecondsPerInvocation="326" maxMicrosecondsPerInvocation="3703" standardDeviationMicrosecondsPerInvocation="536"/>
+      <ClassProfile name="edu.umd.cs.findbugs.ba.npe.NullDerefAndRedundantComparisonFinder" totalMilliseconds="22" invocations="55" avgMicrosecondsPerInvocation="401" maxMicrosecondsPerInvocation="4777" standardDeviationMicrosecondsPerInvocation="820"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.UnconditionalValueDerefDataflowFactory" totalMilliseconds="21" invocations="55" avgMicrosecondsPerInvocation="391" maxMicrosecondsPerInvocation="4047" standardDeviationMicrosecondsPerInvocation="763"/>
+      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="21" invocations="972" avgMicrosecondsPerInvocation="21" maxMicrosecondsPerInvocation="452" standardDeviationMicrosecondsPerInvocation="37"/>
     </FindBugsProfile>
   </FindBugsSummary>
   <ClassFeatures></ClassFeatures>

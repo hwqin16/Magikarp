@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.27">
+<file name="/Users/csummers/school/COMS-W4156/Magikarp/server/src/test/java/auth/TestGoogleIdTokenAuthenticator.java">
+</file>
+<file name="/Users/csummers/school/COMS-W4156/Magikarp/server/src/test/java/helper/TestHelper.java">
+</file>
+<file name="/Users/csummers/school/COMS-W4156/Magikarp/server/src/test/java/message/TestMessageFinderImpl.java">
+</file>
+<file name="/Users/csummers/school/COMS-W4156/Magikarp/server/src/test/java/message/TestMessagePosterImpl.java">
+</file>
+<file name="/Users/csummers/school/COMS-W4156/Magikarp/server/src/test/java/server/TestServerComponent.java">
+</file>
+</checkstyle>

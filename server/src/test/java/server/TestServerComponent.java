@@ -1,12 +1,15 @@
 package server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.google.gson.Gson;
 import helper.TestHelper;
 import java.io.IOException;
+import java.util.Iterator;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,7 +40,7 @@ public class TestServerComponent {
 
   @Test
   @Order(1)
-  public void newPostTest() throws IOException {
+  public void newPostTest() throws InterruptedException {
     // Create HTTP request and get response
     HttpResponse<String> response =
         helper.writeDataToEndpoint(endpoint + helper.getUserId() + "/new");
@@ -46,6 +49,8 @@ public class TestServerComponent {
     JSONObject responseJson = new JSONObject(response.getBody());
 
     assertEquals(201, responseJson.get("response_code"));
+
+    Thread.sleep(500); // wait a bit to ensure following tests pass
   }
 
   @Test
@@ -56,7 +61,7 @@ public class TestServerComponent {
         helper.getLatitude() + 0.5,
         helper.getLongitude() - 0.5,
         helper.getLongitude() + 0.5,
-        5
+        50
     );
     HttpResponse<String> response = Unirest.post(endpoint)
         .body(gson.toJson(request))
@@ -66,14 +71,26 @@ public class TestServerComponent {
 
     assertEquals(1, responseJson.getInt("record_count"));
 
-    JSONObject recordJson = responseJson.getJSONArray("records").getJSONObject(0);
+    JSONArray recordsJson = responseJson.getJSONArray("records");
+
+    JSONObject recordJson = null;
+
+    for (Iterator<Object> it = recordsJson.iterator(); it.hasNext(); ) {
+      JSONObject jsonObject = (JSONObject) it.next();
+
+      if (jsonObject.getString("user_id").equals(helper.getUserId())) {
+        recordJson = jsonObject;
+      }
+    }
+
+    assertNotNull(recordJson);
 
     helper.assertResponseIsEquivalent(recordJson);
   }
 
   @Test
   @Order(3)
-  public void updatePostTest() throws IOException {
+  public void updatePostTest() {
     String recordId = getFirstRecordIdFromHelper();
 
     // Update test helper to new values
