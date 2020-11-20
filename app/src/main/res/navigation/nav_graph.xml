@@ -45,6 +45,33 @@
         tools:layout="@layout/fragment_help" />
 
     <fragment
+        android:id="@+id/nav_post_editor"
+        android:name="com.magikarp.android.ui.posts.PostFragment"
+        android:label="@string/title_fragment_edit_post"
+        tools:layout="@layout/fragment_post">
+        <argument
+            android:name="@string/args_is_editable"
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <argument
+            android:name="@string/args_latitude"
+            app:argType="java.lang.Double"
+            app:nullable="true" />
+        <argument
+            android:name="@string/args_longitude"
+            app:argType="java.lang.Double"
+            app:nullable="true" />
+        <argument
+            android:name="@string/args_text"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="@string/args_image_uri"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_post_viewer"
         android:name="com.magikarp.android.ui.posts.PostFragment"
         android:label="@string/title_fragment_view_post"
@@ -66,35 +93,6 @@
         <argument
             android:name="@string/args_image_uri"
             app:argType="string"
-            app:nullable="true" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_post_sideload"
-        android:name="com.magikarp.android.ui.posts.PostFragment"
-        android:label="@string/title_fragment_edit_post"
-        tools:layout="@layout/fragment_post">
-        <argument
-            android:name="@string/args_is_editable"
-            android:defaultValue="true"
-            app:argType="boolean" />
-        <argument
-            android:name="@string/args_latitude"
-            app:argType="float"
-            app:defaultValue="37.7749" />
-        <argument
-            android:name="@string/args_longitude"
-            app:argType="float"
-            app:defaultValue="-122.4194" />
-        <argument
-            android:name="@string/args_text"
-            app:argType="string"
-            app:defaultValue="San Francisco"
-            app:nullable="true" />
-        <argument
-            android:name="@string/args_image_uri"
-            app:argType="string"
-            app:defaultValue="https://simple.wikipedia.org/wiki/San_Francisco#/media/File:SF_From_Marin_Highlands3.jpg"
             app:nullable="true" />
     </fragment>
 
