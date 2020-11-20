@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.magikarp.android.ui.app.TestMainActivity" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-11-19T23:43:04" hostname="henrys-mbp.lan" time="0.101">
-  <properties/>
-  <testcase name="testPerformOnActivityResult" classname="com.magikarp.android.ui.app.TestMainActivity" time="0.098"/>
-  <testcase name="testOnMenuItemClick" classname="com.magikarp.android.ui.app.TestMainActivity" time="0.002"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

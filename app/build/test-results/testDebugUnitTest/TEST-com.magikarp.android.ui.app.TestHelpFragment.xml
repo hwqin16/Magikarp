@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.magikarp.android.ui.app.TestHelpFragment" tests="3" skipped="0" failures="0" errors="0" timestamp="2020-11-19T23:43:04" hostname="henrys-mbp.lan" time="0.004">
-  <properties/>
-  <testcase name="testPerformOnCreateOptionsMenu" classname="com.magikarp.android.ui.app.TestHelpFragment" time="0.002"/>
-  <testcase name="testOnCreateView" classname="com.magikarp.android.ui.app.TestHelpFragment" time="0.002"/>
-  <testcase name="testPerformOnCreate" classname="com.magikarp.android.ui.app.TestHelpFragment" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
