@@ -13,6 +13,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,7 +35,6 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -58,15 +59,16 @@ import org.jetbrains.annotations.NotNull;
 public class PostFragment extends Fragment {
 
   private static final int RESULT_LOAD_IMG = 1;
-  private static final String SAVESTATE_IMAGE = "imageUri";
+  private static final String SAVESTATE_IMAGE_URI = "imageUri";
   private static final String SAVESTATE_TEXT = "text";
   private static final String SAVESTATE_LATITUDE = "latitude";
   private static final String SAVESTATE_LONGITUDE = "longitude";
 
   private double latitude;
   private double longitude;
-  private Bitmap imageBitmap;
+  private Uri imageUri;
   private String text;
+  private Bitmap imageBitmap;
 
   @Inject
   ImageLoader imageLoader;
@@ -108,7 +110,7 @@ public class PostFragment extends Fragment {
   @Override
   public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
-    if (requireArguments().getBoolean(getResources().getString(R.string.args_is_editable))) {
+    if (requireArguments().getBoolean(getString(R.string.args_is_editable))) {
       inflater.inflate(R.menu.menu_post_edit, menu);
       menu.findItem(R.id.menu_get_location).setOnMenuItemClickListener(this::onGpsButtonClick);
       menu.findItem(R.id.menu_upload_content).setOnMenuItemClickListener(this::onPostButtonClick);
@@ -126,13 +128,13 @@ public class PostFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
     final Bundle args = requireArguments();
-    String imageUrl = null;
+    String imageUrl;
 
     // Load data from saved state or passed in arguments.
     if (savedInstanceState != null) {
       latitude = savedInstanceState.getDouble(SAVESTATE_LATITUDE);
       longitude = savedInstanceState.getDouble(SAVESTATE_LONGITUDE);
-      imageBitmap = savedInstanceState.getParcelable(SAVESTATE_IMAGE);
+      imageUrl = savedInstanceState.getString(SAVESTATE_IMAGE_URI);
       text = savedInstanceState.getString(SAVESTATE_TEXT);
     } else {
       latitude = args.getDouble(getString(R.string.args_latitude), Double.NaN);
@@ -142,7 +144,7 @@ public class PostFragment extends Fragment {
     }
 
     // Set up the image and text views.
-    final NetworkImageView imageView = view.findViewById(R.id.create_post_image_preview);
+    final NetworkImageView imageView = view.findViewById(R.id.create_post_network_image);
     imageView.setDefaultImageResId(R.drawable.ic_menu_gallery);
     imageView.setErrorImageResId(R.drawable.ic_menu_gallery);
     final EditText editText = view.findViewById(R.id.create_post_caption);
@@ -158,10 +160,9 @@ public class PostFragment extends Fragment {
     }
 
     // Load image.
-    if (imageBitmap != null) {
-      loadImage(imageBitmap);
-    } else if (imageUrl != null) {
-      loadImage(imageUrl);
+    if (imageUrl != null) {
+      imageUri = Uri.parse(imageUrl);
+      loadImage(imageUri);
     }
   }
 
@@ -170,7 +171,9 @@ public class PostFragment extends Fragment {
     if (requireArguments().getBoolean(getString(R.string.args_is_editable))) {
       bundle.putDouble(SAVESTATE_LATITUDE, latitude);
       bundle.putDouble(SAVESTATE_LONGITUDE, longitude);
-      bundle.putParcelable(SAVESTATE_IMAGE, imageBitmap);
+      if (imageUri != null) {
+        bundle.putString(SAVESTATE_IMAGE_URI, imageUri.toString());
+      }
       bundle.putString(SAVESTATE_TEXT, text);
     }
   }
@@ -208,44 +211,30 @@ public class PostFragment extends Fragment {
    * @param imageUri image to load
    */
   private void loadImage(@NonNull Uri imageUri) {
-    try {
-      final InputStream imageInput =
-          requireContext().getContentResolver().openInputStream(imageUri);
-      final Bitmap selectedImage = BitmapFactory.decodeStream(imageInput);
-      loadImage(selectedImage);
-    } catch (final FileNotFoundException e) {
-      Log.e("onActivityResult", "Failed to load image.", e);
-    }
-  }
+    final NetworkImageView networkImageView =
+        requireView().findViewById(R.id.create_post_network_image);
+    final ImageView imageView = requireView().findViewById(R.id.create_post_local_image);
 
-  /**
-   * Loads an image from a URL into the image view.
-   *
-   * @param imageUrl image to load
-   */
-  private void loadImage(@NonNull String imageUrl) {
-    View view = getView();
-    if (view != null) {
-      final NetworkImageView preview = view.findViewById(R.id.create_post_image_preview);
-      imageLoader.get(imageUrl, ImageLoader
-              .getImageListener(preview, R.drawable.ic_menu_gallery, R.drawable.ic_menu_gallery));
-      preview.setImageUrl(imageUrl, imageLoader);
+    if (imageUri.getScheme().contains("http")) {
+      final String url = imageUri.toString();
+      networkImageView.setVisibility(View.VISIBLE);
+      imageView.setVisibility(View.INVISIBLE);
+      imageLoader.get(url, ImageLoader
+          .getImageListener(networkImageView, R.drawable.ic_menu_gallery,
+              R.drawable.ic_menu_gallery));
+      networkImageView.setImageUrl(url, imageLoader);
+    } else {
+      try {
+        networkImageView.setVisibility(View.INVISIBLE);
+        imageView.setVisibility(View.VISIBLE);
+        final InputStream imageInput =
+            requireContext().getContentResolver().openInputStream(imageUri);
+        imageBitmap = BitmapFactory.decodeStream(imageInput);
+        imageView.setImageBitmap(imageBitmap);
+      } catch (final FileNotFoundException e) {
+        Log.e("onActivityResult", "Failed to load image.", e);
+      }
     }
-  }
-
-  /**
-   * Loads an image into the image view.
-   *
-   * @param image image to load
-   */
-  private void loadImage(@NonNull Bitmap image) {
-    View view = getView();
-    if (view != null) {
-      final NetworkImageView preview = view.findViewById(R.id.create_post_image_preview);
-      preview.setImageBitmap(image);
-      this.imageBitmap = image;
-    }
-
   }
 
   /**
@@ -317,12 +306,12 @@ public class PostFragment extends Fragment {
           Toast.LENGTH_SHORT).show();
     }
 
-    final EditText editText = getView().findViewById(R.id.create_post_caption);
+    final EditText editText = requireView().findViewById(R.id.create_post_caption);
 
-    if (imageBitmap == null || editText.getText().toString().isEmpty() ||  Double.isNaN(latitude)
-            || Double.isNaN(longitude)) {
+    if (imageBitmap == null || TextUtils.isEmpty(editText.getText()) || Double.isNaN(latitude)
+        || Double.isNaN(longitude)) {
       Toast.makeText(requireActivity(), "One or more fields missing",
-              Toast.LENGTH_SHORT).show();
+          Toast.LENGTH_SHORT).show();
       return true;
     }
 
@@ -344,7 +333,9 @@ public class PostFragment extends Fragment {
     UploadTask uploadTask = ref.putBytes(data);
     uploadTask.continueWithTask(task -> {
       if (!task.isSuccessful()) {
-        throw task.getException();
+        if (task.getException() != null) {
+          throw task.getException();
+        }
       }
 
       // Continue with the task to get the download URL
@@ -352,12 +343,13 @@ public class PostFragment extends Fragment {
     }).addOnCompleteListener(task -> {
       if (task.isSuccessful()) {
         Uri downloadUri = task.getResult();
+        assert downloadUri != null;
         // Create message body
         final NewMessageRequest body =
             new NewMessageRequest(downloadUri.toString(), editText.getText().toString(),
-                    latitude, longitude);
+                latitude, longitude);
 
-        String url = getContext().getResources().getString(R.string.server_url)
+        String url = getString(R.string.server_url)
             + "/messages/" + idfinal + "/new";
         // Create a new GSON request.
         GsonRequest<NewMessageResponse> request =
@@ -367,18 +359,14 @@ public class PostFragment extends Fragment {
             });
         requestQueue.add(request);
         Toast.makeText(requireActivity(), "Posted!",
-                Toast.LENGTH_SHORT).show();
+            Toast.LENGTH_SHORT).show();
         InputMethodManager inputMethodManager =
-                (InputMethodManager) getActivity().getSystemService(
-                        Activity.INPUT_METHOD_SERVICE);
+            (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(
-                getActivity().getCurrentFocus().getWindowToken(), 0);
-        getParentFragmentManager().popBackStackImmediate();
-
-
+            requireActivity().getCurrentFocus().getWindowToken(), 0);
+        requireActivity().onBackPressed();
       }
     });
-
     return true;
   }
 
