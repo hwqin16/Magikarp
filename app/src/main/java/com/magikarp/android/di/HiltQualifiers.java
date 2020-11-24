@@ -11,12 +11,12 @@ public class HiltQualifiers {
 
   @Qualifier
   @Retention(RetentionPolicy.RUNTIME)
-  public @interface GetMessagesUrl {
+  public @interface UrlGetMessages {
   }
 
   @Qualifier
   @Retention(RetentionPolicy.RUNTIME)
-  public @interface GetUserMessagesUrl {
+  public @interface UrlGetUserMessages {
   }
 
 }

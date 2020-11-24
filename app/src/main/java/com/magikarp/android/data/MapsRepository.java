@@ -11,11 +11,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
 import com.magikarp.android.data.model.GetMessagesRequest;
 import com.magikarp.android.data.model.GetMessagesResponse;
-import com.magikarp.android.data.model.Message;
-import com.magikarp.android.di.HiltQualifiers.GetMessagesUrl;
+import com.magikarp.android.di.HiltQualifiers.UrlGetMessages;
 import com.magikarp.android.network.GsonRequest;
-import java.util.Collections;
-import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -37,7 +34,7 @@ public class MapsRepository {
    */
   @Inject
   public MapsRepository(@NonNull RequestQueue requestQueue,
-                        @NonNull @GetMessagesUrl String urlGetMessages) {
+                        @NonNull @UrlGetMessages String urlGetMessages) {
     this.requestQueue = requestQueue;
     this.urlGetMessages = urlGetMessages;
   }
@@ -52,63 +49,19 @@ public class MapsRepository {
    * @param errorListener error listener
    */
   public void getMessages(@Nullable String userId, @NonNull LatLngBounds bounds, int maxRecords,
-                          @NonNull MessagesListener listener,
+                          @NonNull Response.Listener<GetMessagesResponse> listener,
                           @Nullable ErrorListener errorListener) {
     // Create message body.
     final GetMessagesRequest body = new GetMessagesRequest(bounds.northeast.latitude,
         bounds.southwest.longitude, bounds.southwest.latitude, bounds.northeast.longitude,
         maxRecords);
     // Build endpoint URL.
-    String url;
-    if (TextUtils.isEmpty(userId)) {
-      url = urlGetMessages;
-    } else {
-      url = urlGetMessages + "/" + userId;
-    }
+    final String url = TextUtils.isEmpty(userId) ? urlGetMessages : urlGetMessages + "/" + userId;
     // Create a new GSON request.
-    GsonRequest<GetMessagesResponse> request =
+    final GsonRequest<GetMessagesResponse> request =
         new GsonRequest<>(Request.Method.POST, url, GetMessagesResponse.class,
-            new Gson().toJson(body), new GetMessagesResponseListener(listener), errorListener);
+            new Gson().toJson(body), listener, errorListener);
     requestQueue.add(request);
-  }
-
-  /**
-   * Listener for message responses.
-   */
-  protected static class GetMessagesResponseListener implements
-      Response.Listener<GetMessagesResponse> {
-
-    private final MessagesListener listener;
-
-    /**
-     * Create a new message response listener.
-     *
-     * @param listener listener for message responses
-     */
-    public GetMessagesResponseListener(@NonNull MessagesListener listener) {
-      this.listener = listener;
-    }
-
-    @Override
-    public void onResponse(GetMessagesResponse response) {
-      final List<Message> messages = response.getMessages();
-      listener.onMessagesChanged((messages == null) ? Collections.emptyList() : messages);
-    }
-
-  }
-
-  /**
-   * Interface for delivering messages.
-   */
-  public interface MessagesListener {
-
-    /**
-     * Listener for message changes.
-     *
-     * @param messages a list of messages
-     */
-    void onMessagesChanged(@NonNull List<Message> messages);
-
   }
 
 }
