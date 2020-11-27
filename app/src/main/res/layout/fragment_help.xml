@@ -23,6 +23,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="16dp"
+            android:contentDescription="@string/text_call"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_call" />
 
@@ -46,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="Call" />
+                android:text="@string/text_call" />
 
             <TextView
                 android:id="@+id/second_text_view1"
@@ -54,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="1-800-555-5555" />
+                android:text="@string/text_phone_number" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -78,6 +79,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="16dp"
+            android:contentDescription="@string/text_email"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_email" />
 
@@ -101,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="Email" />
+                android:text="@string/text_email" />
 
             <TextView
                 android:id="@+id/second_text_view"
@@ -109,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="help@example.com" />
+                android:text="@string/text_email_address" />
         </LinearLayout>
 
     </RelativeLayout>

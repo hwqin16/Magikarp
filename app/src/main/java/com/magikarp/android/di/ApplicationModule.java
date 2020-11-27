@@ -18,6 +18,7 @@ import com.google.android.gms.location.LocationServices;
 import com.magikarp.android.R;
 import com.magikarp.android.data.model.Message;
 import com.magikarp.android.di.HiltQualifiers.UrlGetMessages;
+import com.magikarp.android.di.HiltQualifiers.UrlGetUserMessages;
 import com.magikarp.android.network.ImageCache;
 import com.magikarp.android.network.LruBitmapCache;
 import dagger.Module;
@@ -48,7 +49,7 @@ public class ApplicationModule {
   }
 
   /**
-   * Injector for creating a mutable live data object.
+   * Injector for creating a Google Sign In account mutable live data object.
    *
    * @return a mutable live data object
    */
@@ -57,6 +58,11 @@ public class ApplicationModule {
     return new MutableLiveData<>();
   }
 
+  /**
+   * Injector for creating a message list mutable live data.
+   *
+   * @return a mutable live data object
+   */
   @Provides
   public static MutableLiveData<List<Message>> provideMessageListLiveData() {
     return new MutableLiveData<>();
@@ -138,6 +144,20 @@ public class ApplicationModule {
     final Resources resources = applicationContext.getResources();
     return resources.getString(R.string.server_url)
         + resources.getString(R.string.server_get_messages);
+  }
+
+  /**
+   * Injector for creating a URL for get user messages endpoint.
+   *
+   * @param applicationContext the application context
+   * @return a URL for get user messages endpoint
+   */
+  @UrlGetUserMessages
+  @Provides
+  public static String provideGetUserMessagesUrl(@ApplicationContext Context applicationContext) {
+    final Resources resources = applicationContext.getResources();
+    return resources.getString(R.string.server_url)
+        + resources.getString(R.string.server_get_user_messages);
   }
 
 }

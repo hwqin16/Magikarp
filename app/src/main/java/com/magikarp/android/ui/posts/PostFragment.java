@@ -211,8 +211,8 @@ public class PostFragment extends Fragment {
 
     // Set up the image and text views.
     final NetworkImageView imageView = view.findViewById(R.id.create_post_network_image);
-    imageView.setDefaultImageResId(R.drawable.ic_menu_gallery);
-    imageView.setErrorImageResId(R.drawable.ic_menu_gallery);
+    imageView.setDefaultImageResId(android.R.drawable.ic_menu_gallery);
+    imageView.setErrorImageResId(android.R.drawable.ic_menu_gallery);
     final EditText editText = view.findViewById(R.id.create_post_caption);
     editText.setText(text);
 
@@ -308,8 +308,8 @@ public class PostFragment extends Fragment {
       networkImageView.setVisibility(View.VISIBLE);
       imageView.setVisibility(View.INVISIBLE);
       imageLoader.get(url, ImageLoader
-          .getImageListener(networkImageView, R.drawable.ic_menu_gallery,
-              R.drawable.ic_menu_gallery));
+          .getImageListener(networkImageView, android.R.drawable.ic_menu_gallery,
+              android.R.drawable.ic_menu_gallery));
       networkImageView.setImageUrl(url, imageLoader);
     } else {
       try {

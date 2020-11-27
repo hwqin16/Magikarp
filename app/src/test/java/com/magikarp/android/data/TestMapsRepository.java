@@ -27,7 +27,7 @@ public class TestMapsRepository {
 
   private final String urlGetMessages = "https://www.example.com";
 
-  private final String userId = "userId";
+  private final String urlGetUserMessages = "https://www.example.com/%s";
 
   @Mock
   RequestQueue requestQueue;
@@ -38,7 +38,7 @@ public class TestMapsRepository {
 
   @Before
   public void setup() {
-    mapsRepository = new MapsRepository(requestQueue, urlGetMessages);
+    mapsRepository = new MapsRepository(requestQueue, urlGetMessages, urlGetUserMessages);
   }
 
   @Test
@@ -60,6 +60,7 @@ public class TestMapsRepository {
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testGetMessagesWithUserId() {
+    final String userId = "userId";
     ArgumentCaptor<GsonRequest> captor = ArgumentCaptor.forClass(GsonRequest.class);
     LatLngBounds bounds = new LatLngBounds(new LatLng(1, 2), new LatLng(3, 4));
 
@@ -69,7 +70,7 @@ public class TestMapsRepository {
     GsonRequest<GetMessagesResponse> request = captor.getValue();
 
     GetMessagesRequest body = new GetMessagesRequest(3.0, 2.0, 1.0, 4.0, 1);
-    assertEquals(request.getUrl(), urlGetMessages + "/" + userId);
+    assertEquals(request.getUrl(), String.format(urlGetUserMessages, userId));
     assertEquals(new String(request.getBody()), new Gson().toJson(body));
   }
 

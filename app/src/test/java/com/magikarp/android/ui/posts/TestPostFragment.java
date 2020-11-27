@@ -97,8 +97,8 @@ public class TestPostFragment {
 
     postFragment.performOnViewCreated(mockView, mockSavedInstanceState, mockArgs, isEditable);
 
-    verify(mockNetworkImageView).setDefaultImageResId(R.drawable.ic_menu_gallery);
-    verify(mockNetworkImageView).setErrorImageResId(R.drawable.ic_menu_gallery);
+    verify(mockNetworkImageView).setDefaultImageResId(android.R.drawable.ic_menu_gallery);
+    verify(mockNetworkImageView).setErrorImageResId(android.R.drawable.ic_menu_gallery);
     verify(mockEditText).setText(text);
     verify(mockEditText).setEnabled(false);
     verify(mockEditText).setFocusable(false);

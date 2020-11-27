@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.magikarp.android.data.model.GetMessagesRequest;
 import com.magikarp.android.data.model.GetMessagesResponse;
 import com.magikarp.android.di.HiltQualifiers.UrlGetMessages;
+import com.magikarp.android.di.HiltQualifiers.UrlGetUserMessages;
 import com.magikarp.android.network.GsonRequest;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -26,6 +27,8 @@ public class MapsRepository {
 
   private final String urlGetMessages;
 
+  private final String urlGetUserMessages;
+
   /**
    * Create a new map item repository.
    *
@@ -34,9 +37,11 @@ public class MapsRepository {
    */
   @Inject
   public MapsRepository(@NonNull RequestQueue requestQueue,
-                        @NonNull @UrlGetMessages String urlGetMessages) {
+                        @NonNull @UrlGetMessages String urlGetMessages,
+                        @NonNull @UrlGetUserMessages String urlGetUserMessages) {
     this.requestQueue = requestQueue;
     this.urlGetMessages = urlGetMessages;
+    this.urlGetUserMessages = urlGetUserMessages;
   }
 
   /**
@@ -56,7 +61,8 @@ public class MapsRepository {
         bounds.southwest.longitude, bounds.southwest.latitude, bounds.northeast.longitude,
         maxRecords);
     // Build endpoint URL.
-    final String url = TextUtils.isEmpty(userId) ? urlGetMessages : urlGetMessages + "/" + userId;
+    final String url =
+        TextUtils.isEmpty(userId) ? urlGetMessages : String.format(urlGetUserMessages, userId);
     // Create a new GSON request.
     final GsonRequest<GetMessagesResponse> request =
         new GsonRequest<>(Request.Method.POST, url, GetMessagesResponse.class,

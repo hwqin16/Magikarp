@@ -38,6 +38,7 @@ public class TestApplicationModule {
     assertNotNull(ApplicationModule.provideRequestQueue(context));
     assertNotNull(ApplicationModule.provideSharedPreferences(context));
     assertNotNull(ApplicationModule.provideGetMessagesUrl(context));
+    assertNotNull(ApplicationModule.provideGetUserMessagesUrl(context));
   }
 
 }

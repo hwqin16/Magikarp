@@ -45,6 +45,8 @@ public class MapsFragment extends Fragment
     implements OnMapReadyCallback, OnCameraIdleListener, OnMarkerClickListener,
     OnSharedPreferenceChangeListener, ActivityResultCallback<Boolean> {
 
+  private ActivityResultLauncher<String> requestPermissionLauncher;
+
   private boolean isUserData;
 
   private GoogleMap googleMap;
@@ -92,9 +94,13 @@ public class MapsFragment extends Fragment
     // Set up account listener (used to determine if fragment should quit while in edit mode).
     new ViewModelProvider(requireActivity()).get(GoogleSignInViewModel.class).getSignedInAccount()
         .observe(this, this::onGoogleSignInAccountChanged);
+    // Set up activity to request permissions (i.e. fine location).
+    requestPermissionLauncher =
+        registerForActivityResult(new ActivityResultContracts.RequestPermission(), this);
     // Register preference listener for max records to query.
     maxRecords = Integer.parseInt(preferences
-        .getString(getString(R.string.max_records), getString(R.string.max_records_default)));
+        .getString(getString(R.string.preference_key_max_records),
+            getString(R.string.max_records_default)));
     preferences.registerOnSharedPreferenceChangeListener(this);
   }
 
@@ -152,9 +158,6 @@ public class MapsFragment extends Fragment
         == PackageManager.PERMISSION_GRANTED) {
       googleMap.setMyLocationEnabled(true);
     } else {
-      final ActivityResultLauncher<String> requestPermissionLauncher =
-          requireActivity()
-              .registerForActivityResult(new ActivityResultContracts.RequestPermission(), this);
       requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
     }
     googleMap.setOnCameraIdleListener(this);
@@ -234,7 +237,7 @@ public class MapsFragment extends Fragment
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    if (getString(R.string.max_records).equals(key)) {
+    if (getString(R.string.preference_key_max_records).equals(key)) {
       maxRecords = Integer
           .parseInt(sharedPreferences.getString(key, getString(R.string.max_records_default)));
     }
