@@ -115,11 +115,6 @@ public class MapsFragment extends Fragment
   @Override
   public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
-    performOnCreateOptionsMenu(menu, inflater);
-  }
-
-  @VisibleForTesting
-  void performOnCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     inflater.inflate(R.menu.menu_maps, menu);
   }
 
@@ -165,8 +160,8 @@ public class MapsFragment extends Fragment
   public void onMapReady(GoogleMap googleMap) {
     this.googleMap = googleMap;
     if (ActivityCompat
-        .checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) ==
-        PackageManager.PERMISSION_GRANTED) {
+        .checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        == PackageManager.PERMISSION_GRANTED) {
       googleMap.setMyLocationEnabled(true);
     } else {
       final ActivityResultLauncher<String> requestPermissionLauncher =
@@ -249,7 +244,10 @@ public class MapsFragment extends Fragment
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    maxRecords = Integer.parseInt(preferences.getString(getString(R.string.max_records), "20"));
+    if (getString(R.string.max_records).equals(key)) {
+      maxRecords = Integer
+          .parseInt(sharedPreferences.getString(key, getString(R.string.max_records_default)));
+    }
   }
 
   @VisibleForTesting

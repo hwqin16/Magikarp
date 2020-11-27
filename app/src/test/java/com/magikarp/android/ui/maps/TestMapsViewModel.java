@@ -1,6 +1,5 @@
 package com.magikarp.android.ui.maps;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -11,22 +10,33 @@ import com.android.volley.VolleyError;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.magikarp.android.data.MapsRepository;
+import com.magikarp.android.data.model.GetMessagesResponse;
 import com.magikarp.android.data.model.Message;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
+/**
+ * Class for testing {@code MapsViewModel}.
+ */
+@RunWith(MockitoJUnitRunner.class)
 public class TestMapsViewModel {
 
   @Mock
   MapsRepository mapsRepository;
   @Mock
   SavedStateHandle savedStateHandle;
+  @Mock
+  GetMessagesResponse getMessagesResponse;
+  @Mock
+  VolleyError volleyError;
 
   private MapsViewModel viewModel;
-
-//  private final SavedStateHandle savedStateHandle;
 
   @Before
   public void setup() {
@@ -34,9 +44,12 @@ public class TestMapsViewModel {
   }
 
   @Test
+  @SuppressWarnings({"unchecked", "rawtypes"})
   public void testGetMessages() {
     final MutableLiveData messages = new MutableLiveData();
-    when(savedStateHandle.getLiveData("messages", Collections.emptyList())).thenReturn(messages);
+    when(savedStateHandle.getLiveData(MapsViewModel.KEY_MESSAGES, Collections.emptyList()))
+        .thenReturn(messages);
+
     assert (viewModel.getMessages() == messages);
   }
 
@@ -52,29 +65,29 @@ public class TestMapsViewModel {
   }
 
   @Test
-  public void testOnMessagesChanged() {
-    MapsRepository mockMapsRepository = mock(MapsRepository.class);
-    MutableLiveData mockLiveData = mock(MutableLiveData.class);
-    Message mockMessage = mock(Message.class);
+  public void testOnResponseMessagesNull() {
+    when(getMessagesResponse.getMessages()).thenReturn(null);
 
-    MapsViewModel mapsViewModel = new MapsViewModel(mockMapsRepository, mockLiveData);
+    viewModel.onResponse(getMessagesResponse);
 
-    mapsViewModel.onMessagesChanged(Collections.singletonList(mockMessage));
+    verify(savedStateHandle).set("messages", Collections.emptyList());
+  }
 
-    verify(mockLiveData).setValue(Collections.singletonList(mockMessage));
+  @Test
+  public void testOnResponseMessagesNotNull() {
+    final List<Message> messages = new ArrayList<>();
+    when(getMessagesResponse.getMessages()).thenReturn(messages);
+
+    viewModel.onResponse(getMessagesResponse);
+
+    verify(savedStateHandle).set("messages", messages);
   }
 
   @Test
   public void testOnErrorResponse() {
-    VolleyError volleyError = mock(VolleyError.class);
-    MapsRepository mockMapsRepository = mock(MapsRepository.class);
-    MutableLiveData mockLiveData = mock(MutableLiveData.class);
+    viewModel.onErrorResponse(volleyError);
 
-    MapsViewModel mapsViewModel = new MapsViewModel(mockMapsRepository, mockLiveData);
-
-    mapsViewModel.onErrorResponse(volleyError);
-
-    verify(mockLiveData).setValue(Collections.EMPTY_LIST);
+    verify(savedStateHandle).set("messages", Collections.emptyList());
   }
 
 }

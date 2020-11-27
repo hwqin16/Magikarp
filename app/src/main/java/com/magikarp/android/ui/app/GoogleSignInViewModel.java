@@ -7,14 +7,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
 /**
  * Class to provide the current signed in user.
  */
 public class GoogleSignInViewModel extends ViewModel {
-
-  private final GoogleSignInClient signInClient;
 
   private final MutableLiveData<GoogleSignInAccount> liveData;
 
@@ -24,9 +21,7 @@ public class GoogleSignInViewModel extends ViewModel {
    * @param liveData repository for accessing data
    */
   @ViewModelInject
-  public GoogleSignInViewModel(@NonNull GoogleSignInClient signInClient,
-                               @NonNull MutableLiveData<GoogleSignInAccount> liveData) {
-    this.signInClient = signInClient;
+  public GoogleSignInViewModel(@NonNull MutableLiveData<GoogleSignInAccount> liveData) {
     this.liveData = liveData;
   }
 

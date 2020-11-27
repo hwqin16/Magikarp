@@ -16,7 +16,6 @@ import com.magikarp.android.data.model.GetMessagesResponse;
 import com.magikarp.android.data.model.Message;
 import java.util.Collections;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Class to provide map items from the map item repository.
@@ -24,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public class MapsViewModel extends ViewModel
     implements Response.Listener<GetMessagesResponse>, ErrorListener {
 
-  private static final String KEY_MESSAGES = "messages";
+  static final String KEY_MESSAGES = "messages";
 
   private final MapsRepository mapsRepository;
 
@@ -65,7 +64,7 @@ public class MapsViewModel extends ViewModel
   }
 
   @Override
-  public void onResponse(@NotNull GetMessagesResponse response) {
+  public void onResponse(GetMessagesResponse response) {
     final List<Message> messages = response.getMessages();
     // Messages list from the server should not be null, but checking will ensure app doesn't crash.
     savedStateHandle.set(KEY_MESSAGES, (messages == null) ? Collections.emptyList() : messages);

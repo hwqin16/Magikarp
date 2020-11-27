@@ -16,6 +16,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.magikarp.android.R;
+import com.magikarp.android.data.model.Message;
 import com.magikarp.android.di.HiltQualifiers.UrlGetMessages;
 import com.magikarp.android.network.ImageCache;
 import com.magikarp.android.network.LruBitmapCache;
@@ -24,6 +25,7 @@ import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
+import java.util.List;
 import javax.inject.Singleton;
 
 /**
@@ -40,7 +42,7 @@ public class ApplicationModule {
    * @param applicationContext the application context
    */
   @Provides
-  public FusedLocationProviderClient provideFusedLocationProviderClient(
+  public static FusedLocationProviderClient provideFusedLocationProviderClient(
       @ApplicationContext Context applicationContext) {
     return LocationServices.getFusedLocationProviderClient(applicationContext);
   }
@@ -52,6 +54,11 @@ public class ApplicationModule {
    */
   @Provides
   public static MutableLiveData<GoogleSignInAccount> provideGoogleSignInAccountLiveData() {
+    return new MutableLiveData<>();
+  }
+
+  @Provides
+  public static MutableLiveData<List<Message>> provideMessageListLiveData() {
     return new MutableLiveData<>();
   }
 
