@@ -48,28 +48,7 @@
         android:id="@+id/nav_post_editor"
         android:name="com.magikarp.android.ui.posts.PostFragment"
         android:label="@string/title_fragment_edit_post"
-        tools:layout="@layout/fragment_post">
-        <argument
-            android:name="@string/args_is_editable"
-            android:defaultValue="true"
-            app:argType="boolean" />
-        <argument
-            android:name="@string/args_latitude"
-            app:argType="java.lang.Double"
-            app:nullable="true" />
-        <argument
-            android:name="@string/args_longitude"
-            app:argType="java.lang.Double"
-            app:nullable="true" />
-        <argument
-            android:name="@string/args_text"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="@string/args_image_uri"
-            app:argType="string"
-            app:nullable="true" />
-    </fragment>
+        tools:layout="@layout/fragment_post" />
 
     <fragment
         android:id="@+id/nav_post_viewer"

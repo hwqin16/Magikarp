@@ -1,4 +1,4 @@
-package com.magikarp.android;
+package com.magikarp.android.ui.app;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -11,17 +11,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
-import com.magikarp.android.ui.app.MainActivity;
+import com.magikarp.android.R;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * UI tests for the main activity.
+ * Class for testing {@code MainActivity}.
  */
-@LargeTest
-@RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class TestMainActivity {
 
   /**
    * Rule for main activity
@@ -89,4 +87,5 @@ public class MainActivityTest {
     onView(withId(R.id.nav_settings)).check(matches(isDisplayed()));
     onView(withId(R.id.nav_help)).check(matches(isDisplayed()));
   }
+
 }

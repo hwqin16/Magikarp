@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -22,8 +22,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -45,7 +43,7 @@ import javax.inject.Inject;
 @AndroidEntryPoint
 public class MapsFragment extends Fragment
     implements OnMapReadyCallback, OnCameraIdleListener, OnMarkerClickListener,
-    OnSharedPreferenceChangeListener {
+    OnSharedPreferenceChangeListener, ActivityResultCallback<Boolean> {
 
   private boolean isUserData;
 
@@ -57,13 +55,11 @@ public class MapsFragment extends Fragment
 
   private String userId;
   @Inject
-  FusedLocationProviderClient fusedLocationClient;
-  @Inject
-  LocationRequest locationRequest;
-  @Inject
   SharedPreferences preferences;
 
-  @VisibleForTesting
+  /**
+   * Default constructor.
+   */
   public MapsFragment() {
   }
 
@@ -86,36 +82,20 @@ public class MapsFragment extends Fragment
     this.maxRecords = maxRecords;
   }
 
-  @VisibleForTesting
-  MapsFragment(boolean isUserData) {
-    this.isUserData = isUserData;
-  }
-
   @Override
-  public void onCreate(Bundle savedInstanceState) {
+  public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    performOnCreate(new ViewModelProvider(this), getString(R.string.args_is_user_data),
-        getString(R.string.max_records), getString(R.string.max_records_default));
-  }
-
-  @VisibleForTesting
-  void performOnCreate(ViewModelProvider viewModelProvider, String argsIsUserData,
-                       String maxRecords, String maxRecordsDefault) {
-    isUserData = requireArguments().getBoolean(argsIsUserData);
-    mapsViewModel = viewModelProvider.get(MapsViewModel.class);
-    new ViewModelProvider(requireActivity()).get(GoogleSignInViewModel.class)
-        .getSignedInAccount()
+    isUserData = requireArguments().getBoolean(getString(R.string.args_is_user_data));
+    setHasOptionsMenu(isUserData);
+    // Set up map data repository.
+    mapsViewModel = new ViewModelProvider(this).get(MapsViewModel.class);
+    // Set up account listener (used to determine if fragment should quit while in edit mode).
+    new ViewModelProvider(requireActivity()).get(GoogleSignInViewModel.class).getSignedInAccount()
         .observe(this, this::onGoogleSignInAccountChanged);
-    setHasOptionsMenu(requireArguments().getBoolean(argsIsUserData));
-    // Register preference listener to get max records to query.
-    this.maxRecords = Integer.parseInt(preferences.getString(maxRecords, maxRecordsDefault));
+    // Register preference listener for max records to query.
+    maxRecords = Integer.parseInt(preferences
+        .getString(getString(R.string.max_records), getString(R.string.max_records_default)));
     preferences.registerOnSharedPreferenceChangeListener(this);
-  }
-
-  @Override
-  public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-    super.onCreateOptionsMenu(menu, inflater);
-    inflater.inflate(R.menu.menu_maps, menu);
   }
 
   @Nullable
@@ -126,27 +106,35 @@ public class MapsFragment extends Fragment
   }
 
   @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    final SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+        .findFragmentByTag(getString(R.string.fragment_tag_maps));
+    // Map fragment should never be null (spotbugs).
+    assert mapFragment != null;
+    mapFragment.getMapAsync(this);
+  }
+
+  @Override
+  public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    super.onCreateOptionsMenu(menu, inflater);
+    inflater.inflate(R.menu.menu_maps, menu);
+  }
+
+  @Override
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     final int itemId = item.getItemId();
-    if (itemId == R.id.nav_post_editor) {
+    if (itemId == R.id.action_new_post) {
+      // Build arguments bundle for creating a new post in the post editor.
       final Bundle args = new Bundle();
-      args.putBoolean(getString(R.string.args_is_user_data), true);
+      args.putBoolean(getString(R.string.args_is_editable), true);
       args.putDouble(getString(R.string.args_latitude), Double.NaN);
       args.putDouble(getString(R.string.args_longitude), Double.NaN);
+      // Launch post editor.
       NavHostFragment.findNavController(this).navigate(R.id.action_nav_maps_to_post_editor, args);
       return true;
     }
     return super.onOptionsItemSelected(item);
-  }
-
-  @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    final SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-        .findFragmentByTag(getResources().getString(R.string.fragment_tag_maps));
-    if (mapFragment != null) {
-      mapFragment.getMapAsync(this);
-    }
   }
 
   @Override
@@ -166,23 +154,23 @@ public class MapsFragment extends Fragment
     } else {
       final ActivityResultLauncher<String> requestPermissionLauncher =
           requireActivity()
-              .registerForActivityResult(new ActivityResultContracts.RequestPermission(),
-                  isGranted -> {
-                    if (isGranted && (googleMap != null)) {
-                      try {
-                        googleMap.setMyLocationEnabled(true);
-                        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-                      } catch (SecurityException unlikely) {
-                        googleMap.setMyLocationEnabled(false);
-                        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-                      }
-                    }
-                  });
+              .registerForActivityResult(new ActivityResultContracts.RequestPermission(), this);
       requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
     }
     googleMap.setOnCameraIdleListener(this);
     googleMap.setOnMarkerClickListener(this);
     mapsViewModel.getMessages().observe(this, this::onMessagesChanged);
+  }
+
+  @Override
+  public void onActivityResult(Boolean result) {
+    if (result && (googleMap != null)) {
+      try {
+        googleMap.setMyLocationEnabled(true);
+      } catch (SecurityException unlikely) {
+        googleMap.setMyLocationEnabled(false);
+      }
+    }
   }
 
   @Override
@@ -197,8 +185,15 @@ public class MapsFragment extends Fragment
    *
    * @param account the current signed-in account
    */
+  @VisibleForTesting
   void onGoogleSignInAccountChanged(GoogleSignInAccount account) {
-    userId = (account == null) ? null : account.getId(); // TODO handle activity state
+    // Quit fragment if user logs out while in edit mode.
+    // Note: it should not be possible for user to change accounts without explicitly logging out.
+    if (isUserData && (userId != null) && ((account == null) || !userId.equals(account.getId()))) {
+      requireActivity().onBackPressed();
+    } else {
+      userId = (account == null) ? null : account.getId();
+    }
   }
 
   /**
@@ -220,26 +215,21 @@ public class MapsFragment extends Fragment
 
   @Override
   public boolean onMarkerClick(Marker marker) {
+    final Message message = (Message) marker.getTag();
+    // Message should never be null (spotbugs).
+    assert message != null;
+    // Build arguments bundle for editing/viewing an existing post in the post editor.
     final Bundle bundle = new Bundle();
-    prepareBundleFromMarker(bundle, marker, getResources());
+    bundle.putBoolean(getString(R.string.args_is_editable), isUserData);
+    bundle.putDouble(getString(R.string.args_latitude), message.getLatitude());
+    bundle.putDouble(getString(R.string.args_longitude), message.getLongitude());
+    bundle.putString(getString(R.string.args_text), message.getText());
+    bundle.putString(getString(R.string.args_image_uri), message.getImageUrl());
+    // Launch post editor.
     int action =
         isUserData ? R.id.action_nav_maps_to_post_editor : R.id.action_nav_maps_to_post_viewer;
     NavHostFragment.findNavController(this).navigate(action, bundle);
     return true;
-  }
-
-  @VisibleForTesting
-  Bundle prepareBundleFromMarker(Bundle bundle, Marker marker, Resources resources) {
-    LatLng latLng = marker.getPosition();
-    Message message = (Message) marker.getTag();
-    assert message != null;
-
-    bundle.putBoolean(resources.getString(R.string.args_is_user_data), isUserData);
-    bundle.putDouble(resources.getString(R.string.args_latitude), latLng.latitude);
-    bundle.putDouble(resources.getString(R.string.args_longitude), latLng.longitude);
-    bundle.putString(resources.getString(R.string.args_text), message.getText());
-    bundle.putString(resources.getString(R.string.args_image_uri), message.getImageUrl());
-    return bundle;
   }
 
   @Override
@@ -248,16 +238,6 @@ public class MapsFragment extends Fragment
       maxRecords = Integer
           .parseInt(sharedPreferences.getString(key, getString(R.string.max_records_default)));
     }
-  }
-
-  @VisibleForTesting
-  String getUserId() {
-    return this.userId;
-  }
-
-  @VisibleForTesting
-  int getMaxRecords() {
-    return this.maxRecords;
   }
 
 }

@@ -1,6 +1,5 @@
 package com.magikarp.android.ui.app;
 
-import android.accounts.Account;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -50,10 +49,8 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
   private NavController navController;
 
   private NavigationView navigationView;
-
   @Inject
   GoogleSignInClient googleSignInClient;
-
   @Inject
   ImageLoader imageLoader;
 
@@ -100,13 +97,9 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
     // Set the default shared preferences for the application on first run.
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-    // Check for existing Google Sign In account, if the user is already signed in
-    // the GoogleSignInAccount will be non-null.
-    final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+    // Set up Google Sign In UI and view model.
     viewModel = new ViewModelProvider(this).get(GoogleSignInViewModel.class);
-    viewModel.setAccount(account);
-    Log.i("Main Activity", "Account: " + account);
-    updateSignInUi(account);
+    updateSignInUi(GoogleSignIn.getLastSignedInAccount(this));
   }
 
   @Override
@@ -144,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
    */
   @VisibleForTesting
   void updateSignInUi(@Nullable GoogleSignInAccount account) {
+    viewModel.setAccount(account);
     if (account != null) {
       // Set the user account text.
       setLoggedInUi(account.getDisplayName(), account.getEmail(), account.getPhotoUrl());
@@ -224,7 +218,6 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
 
   @Override
   public void onComplete(@NonNull Task task) {
-    viewModel.setAccount(null);
     updateSignInUi(null);
   }
 
