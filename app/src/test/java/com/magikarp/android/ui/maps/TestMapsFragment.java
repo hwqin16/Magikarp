@@ -1,24 +1,22 @@
 package com.magikarp.android.ui.maps;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
@@ -28,90 +26,172 @@ import com.google.android.gms.maps.model.VisibleRegion;
 import com.magikarp.android.R;
 import com.magikarp.android.data.model.Message;
 import java.util.ArrayList;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
+/**
+ * Class for testing {@code MapsFragment}.
+ */
+@RunWith(MockitoJUnitRunner.class)
 public class TestMapsFragment {
-  @Test
-  public void testPerformOnCreate() {
-    int maxRecords = 10;
-    MapsViewModel mockMapsViewModel = mock(MapsViewModel.class);
-    ViewModelProvider mockViewModelProvider = mock(ViewModelProvider.class);
-    when(mockViewModelProvider.get(MapsViewModel.class)).thenReturn(mockMapsViewModel);
-    SharedPreferences mockSharedPreferences = mock(SharedPreferences.class);
-    when(mockSharedPreferences.getString(any(), any())).thenReturn(Integer.toString(maxRecords));
 
-    boolean hasOptionsMenu = true;
-    String argsIsUserData = "arrrg";
-    Bundle mockArguments = mock(Bundle.class);
-    when(mockArguments.getBoolean(argsIsUserData)).thenReturn(hasOptionsMenu);
-    MapsFragment mapsFragment = new MapsFragment(
-        null,
-        null,
-        mockSharedPreferences,
-        false,
-        0
-    );
-    mapsFragment.setArguments(mockArguments);
+  private GoogleMap googleMap;
 
-    mapsFragment.performOnCreate(mockViewModelProvider, argsIsUserData, "any", null);
+  private MapsViewModel mapsViewModel;
 
-    assertTrue(mapsFragment.hasOptionsMenu());
-    assertEquals(maxRecords, mapsFragment.getMaxRecords());
+  private SharedPreferences preferences;
+
+  private MapsFragment fragment;
+
+  @Before
+  public void setup() {
+    fragment = new MapsFragment();
+    googleMap = mock(GoogleMap.class);
+    mapsViewModel = mock(MapsViewModel.class);
+    preferences = mock(SharedPreferences.class);
   }
 
-  @Test
-  public void testPerformOnCreateOptionsMenu() {
-    Menu mockMenu = mock(Menu.class);
-    MenuInflater mockMenuInflater = mock(MenuInflater.class);
-
-    MapsFragment mapsFragment = new MapsFragment();
-
-    mapsFragment.performOnCreateOptionsMenu(mockMenu, mockMenuInflater);
-
-    verify(mockMenuInflater).inflate(R.menu.menu_maps, mockMenu);
-  }
+//    int maxRecords = 10;
+//    MapsViewModel mockMapsViewModel = mock(MapsViewModel.class);
+//    ViewModelProvider mockViewModelProvider = mock(ViewModelProvider.class);
+//    when(mockViewModelProvider.get(MapsViewModel.class)).thenReturn(mockMapsViewModel);
+//    SharedPreferences mockSharedPreferences = mock(SharedPreferences.class);
+//    when(mockSharedPreferences.getString(any(), any())).thenReturn(Integer.toString(maxRecords));
+//
+//    boolean hasOptionsMenu = true;
+//    String argsIsUserData = "arrrg";
+//    Bundle mockArguments = mock(Bundle.class);
+//    when(mockArguments.getBoolean(argsIsUserData)).thenReturn(hasOptionsMenu);
+//    MapsFragment mapsFragment = new MapsFragment(
+//        null,
+//        null,
+//        mockSharedPreferences,
+//        false,
+//        0
+//    );
+//    mapsFragment.setArguments(mockArguments);
+//
+//    mapsFragment.performOnCreate(mockViewModelProvider, argsIsUserData, "any", null);
+//
+//    assertTrue(mapsFragment.hasOptionsMenu());
+//    assertEquals(maxRecords, mapsFragment.getMaxRecords());
+//  }
 
   @Test
   public void testOnCreateView() {
-    ViewGroup mockViewGroup = mock(ViewGroup.class);
-    LayoutInflater mockLayoutInflater = mock(LayoutInflater.class);
+    final LayoutInflater inflater = mock(LayoutInflater.class);
+    final ViewGroup container = mock(ViewGroup.class);
+    final Bundle savedInstanceState = mock(Bundle.class);
 
-    MapsFragment mapsFragment = new MapsFragment();
+    fragment.onCreateView(inflater, container, savedInstanceState);
 
-    mapsFragment.onCreateView(mockLayoutInflater, mockViewGroup, null);
+    verify(inflater).inflate(R.layout.fragment_maps, container, false);
+  }
 
-    verify(mockLayoutInflater).inflate(R.layout.fragment_maps, mockViewGroup, false);
+
+  @Test
+  public void testOnCreateOptionsMenu() {
+    final Menu menu = mock(Menu.class);
+    final MenuInflater inflater = mock(MenuInflater.class);
+
+    fragment.onCreateOptionsMenu(menu, inflater);
+
+    verify(inflater).inflate(R.menu.menu_maps, menu);
   }
 
   @Test
-  public void testOnOptionsItemSelected() {
+  public void testOnOptionsItemSelectedInvalidItem() {
     int id = R.id.nav_post_editor - 1;
-    MenuItem mockMenuItem = mock(MenuItem.class);
-    when(mockMenuItem.getItemId()).thenReturn(id);
+    final MenuItem item = mock(MenuItem.class);
+    when(item.getItemId()).thenReturn(id);
 
-    MapsFragment mapsFragment = new MapsFragment();
-
-    assertFalse(mapsFragment.onOptionsItemSelected(mockMenuItem));
+    assertFalse(fragment.onOptionsItemSelected(item));
   }
 
   @Test
-  public void testPerformOnMapReady() {
-    GoogleMap mockGoogleMap = mock(GoogleMap.class);
-    LiveData mockLiveData = mock(LiveData.class);
-    MapsViewModel mockMapsViewModel = mock(MapsViewModel.class);
-    when(mockMapsViewModel.getMessages()).thenReturn(mockLiveData);
-    String userId = "user123";
-    GoogleSignInAccount mockAccount = mock(GoogleSignInAccount.class);
-    when(mockAccount.getId()).thenReturn(userId);
+  public void testOnDestroy() {
+    final MapsFragment mockFragment = new MapsFragment(mapsViewModel, googleMap, preferences,
+        true, 20);
 
-    MapsFragment mapsFragment = new MapsFragment(mockMapsViewModel, null, null, true, 0);
+    mockFragment.onDestroy();
 
-    mapsFragment.performOnMapReady(mockGoogleMap, mockAccount);
+    verify(preferences).unregisterOnSharedPreferenceChangeListener(mockFragment);
+  }
 
-    verify(mockGoogleMap).setOnCameraIdleListener(mapsFragment);
-    verify(mockGoogleMap).setOnMarkerClickListener(mapsFragment);
-    verify(mockLiveData).observe(mapsFragment, mapsFragment);
-    assertEquals(userId, mapsFragment.getUserId());
+//  @Test
+//  public void testOnSharedPreferenceChangedMaxRecords() {
+//    final String key = context.getString(R.string.max_records);
+//    final String value = context.getString(R.string.max_records_default);
+//    final int maxRecords = 100;
+//    SharedPreferences preferences = mock(SharedPreferences.class);
+//    when(preferences.getString(key, value)).thenReturn(Integer.toString(maxRecords));
+//
+//    fragment.onSharedPreferenceChanged(preferences, key);
+//
+//    assertEquals(fragment.maxRecords, maxRecords);
+//  }
+
+//  @Test
+//  public void testPerformOnMapReady() {
+//    GoogleMap mockGoogleMap = mock(GoogleMap.class);
+//    LiveData mockLiveData = mock(LiveData.class);
+//    MapsViewModel mockMapsViewModel = mock(MapsViewModel.class);
+//    when(mockMapsViewModel.getMessages()).thenReturn(mockLiveData);
+//    String userId = "user123";
+//    GoogleSignInAccount mockAccount = mock(GoogleSignInAccount.class);
+//    when(mockAccount.getId()).thenReturn(userId);
+//
+//    MapsFragment mapsFragment = new MapsFragment(mockMapsViewModel, null, null, true, 0);
+//
+//    mapsFragment.performOnMapReady(mockGoogleMap, mockAccount);
+//
+//    verify(mockGoogleMap).setOnCameraIdleListener(mapsFragment);
+//    verify(mockGoogleMap).setOnMarkerClickListener(mapsFragment);
+//    verify(mockLiveData).observe(mapsFragment, mapsFragment);
+//    assertEquals(userId, mapsFragment.getUserId());
+//  }
+
+  @Test
+  public void testOnActivityResultTrue() {
+    final MapsFragment fragment = new MapsFragment(mapsViewModel, googleMap, preferences, false, 0);
+
+    fragment.onActivityResult(true);
+
+    verify(googleMap, times(1)).setMyLocationEnabled(true);
+    verify(googleMap, never()).setMyLocationEnabled(false);
+  }
+
+  @Test
+  public void testOnActivityResultFalse() {
+    final MapsFragment fragment = new MapsFragment(mapsViewModel, googleMap, preferences, false, 0);
+
+    fragment.onActivityResult(false);
+
+    verify(googleMap, never()).setMyLocationEnabled(true);
+    verify(googleMap, never()).setMyLocationEnabled(false);
+  }
+
+  @Test
+  public void testOnActivityResultNoMap() {
+    final MapsFragment fragment = new MapsFragment(mapsViewModel, null, preferences, false, 0);
+
+    fragment.onActivityResult(false);
+
+    verify(googleMap, never()).setMyLocationEnabled(true);
+    verify(googleMap, never()).setMyLocationEnabled(false);
+  }
+
+  @Test
+  public void testOnActivityResultSecurityException() {
+    doThrow(new SecurityException()).when(googleMap).setMyLocationEnabled(true);
+    final MapsFragment fragment = new MapsFragment(mapsViewModel, googleMap, preferences, false, 0);
+
+    fragment.onActivityResult(true);
+
+    verify(googleMap, times(1)).setMyLocationEnabled(true);
+    verify(googleMap, times(1)).setMyLocationEnabled(false);
   }
 
   @Test
@@ -149,36 +229,36 @@ public class TestMapsFragment {
 
     ArrayList<Message> mockMessages = new ArrayList<>();
     mockMessages.add(mockMessage);
-    mapsFragment.onChanged(mockMessages);
+    mapsFragment.onMessagesChanged(mockMessages);
 
     verify(mockGoogleMap).clear();
     verify(mockMarker).setTag(mockMessage);
   }
 
-  @Test
-  public void testPrepareBundleFromMarker() {
-    LatLng latLng = new LatLng(4.5, 6.7);
-    Message mockMessage = mock(Message.class);
-    when(mockMessage.getText()).thenReturn("spongebob");
-    when(mockMessage.getImageUrl()).thenReturn("squarepants.com");
-    Marker mockMarker = mock(Marker.class);
-    when(mockMarker.getPosition()).thenReturn(latLng);
-    when(mockMarker.getTag()).thenReturn(mockMessage);
-    Resources mockResources = mock(Resources.class);
-    when(mockResources.getString(R.string.args_is_user_data)).thenReturn("1");
-    when(mockResources.getString(R.string.args_latitude)).thenReturn("2");
-    when(mockResources.getString(R.string.args_longitude)).thenReturn("3");
-    when(mockResources.getString(R.string.args_text)).thenReturn("4");
-    when(mockResources.getString(R.string.args_image_uri)).thenReturn("5");
-    Bundle mockBundle = mock(Bundle.class);
+//  @Test
+//  public void testPrepareBundleFromMarker() {
+//    final double
+//    final LatLng latLng = new LatLng(4.5, 6.7);
+//    final Message message =
+//        new Message("id", "userId", "https://www.example.com", "text", 12.3d, 23.4d, "timestamp");
+//    Marker mockMarker = mock(Marker.class);
+//    when(mockMarker.getPosition()).thenReturn(latLng);
+//    when(mockMarker.getTag()).thenReturn(mockMessage);
+//    Resources mockResources = mock(Resources.class);
+//    when(mockResources.getString(R.string.args_is_user_data)).thenReturn("1");
+//    when(mockResources.getString(R.string.args_latitude)).thenReturn("2");
+//    when(mockResources.getString(R.string.args_longitude)).thenReturn("3");
+//    when(mockResources.getString(R.string.args_text)).thenReturn("4");
+//    when(mockResources.getString(R.string.args_image_uri)).thenReturn("5");
+//    Bundle mockBundle = mock(Bundle.class);
+//
+//    Bundle res = fragment.prepareBundleFromMarker(mockBundle, mockMarker, mockResources);
+//
+//    verify(res).putBoolean("1", true);
+//    verify(res).putDouble("2", 4.5);
+//    verify(res).putDouble("3", 6.7);
+//    verify(res).putString("4", "spongebob");
+//    verify(res).putString("5", "squarepants.com");
+//  }
 
-    MapsFragment mapsFragment = new MapsFragment(true);
-
-    Bundle res = mapsFragment.prepareBundleFromMarker(mockBundle, mockMarker, mockResources);
-    verify(res).putBoolean("1", true);
-    verify(res).putDouble("2", 4.5);
-    verify(res).putDouble("3", 6.7);
-    verify(res).putString("4", "spongebob");
-    verify(res).putString("5", "squarepants.com");
-  }
 }

@@ -8,11 +8,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -24,13 +26,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.magikarp.android.R;
 import dagger.hilt.android.AndroidEntryPoint;
 import javax.inject.Inject;
 
 @AndroidEntryPoint
-public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuItemClickListener,
+    OnCompleteListener<Void> {
 
   @VisibleForTesting
   static final int SIGN_IN_RESULT = 9001;
@@ -39,13 +44,13 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
 
   private DrawerLayout drawerLayout;
 
+  private GoogleSignInViewModel viewModel;
+
   private NavController navController;
 
   private NavigationView navigationView;
-
   @Inject
   GoogleSignInClient googleSignInClient;
-
   @Inject
   ImageLoader imageLoader;
 
@@ -92,9 +97,8 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
     // Set the default shared preferences for the application on first run.
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-    // Check for existing Google Sign In account, if the user is already signed in
-    // the GoogleSignInAccount will be non-null.
-    Log.i("Main Activity", "Account: " + GoogleSignIn.getLastSignedInAccount(this));
+    // Set up Google Sign In UI and view model.
+    viewModel = new ViewModelProvider(this).get(GoogleSignInViewModel.class);
     updateSignInUi(GoogleSignIn.getLastSignedInAccount(this));
   }
 
@@ -133,8 +137,7 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
    */
   @VisibleForTesting
   void updateSignInUi(@Nullable GoogleSignInAccount account) {
-    Log.i("Main Activity", "Account: " + (account == null ? null : account.getEmail()));
-
+    viewModel.setAccount(account);
     if (account != null) {
       // Set the user account text.
       setLoggedInUi(account.getDisplayName(), account.getEmail(), account.getPhotoUrl());
@@ -147,8 +150,8 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
    * Sets the logged in UI.
    *
    * @param displayName display name
-   * @param userEmail user's email
-   * @param imageUri user's profile image
+   * @param userEmail   user's email
+   * @param imageUri    user's profile image
    */
   public void setLoggedInUi(final String displayName, final String userEmail, final Uri imageUri) {
     View headerView = navigationView.getHeaderView(0);
@@ -158,10 +161,9 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
 
     name.setText(displayName);
     email.setText(userEmail);
-    Uri url = imageUri;
     // Set the user account profile picture.
-    if (url != null) {
-      String urlString = url.toString();
+    if (imageUri != null) {
+      String urlString = imageUri.toString();
       imageLoader.get(urlString, ImageLoader
           .getImageListener(imageView, R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round));
       imageView.setImageUrl(urlString, imageLoader);
@@ -207,11 +209,16 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
       drawerLayout.closeDrawers();
       return true;
     } else if (id == R.id.action_logout) {
-      googleSignInClient.signOut().addOnCompleteListener(this, task -> updateSignInUi(null));
+      googleSignInClient.signOut().addOnCompleteListener(this, this);
       drawerLayout.closeDrawers();
       return true;
     }
     return false;
+  }
+
+  @Override
+  public void onComplete(@NonNull Task task) {
+    updateSignInUi(null);
   }
 
 }
