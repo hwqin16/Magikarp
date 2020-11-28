@@ -1,4 +1,4 @@
-package com.magikarp.android.app;
+package com.magikarp.android.ui.app;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

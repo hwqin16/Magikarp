@@ -2,6 +2,7 @@ package com.magikarp.android.ui.maps;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.hilt.Assisted;
 import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.LiveData;
@@ -23,6 +24,7 @@ import java.util.List;
 public class MapsViewModel extends ViewModel
     implements Response.Listener<GetMessagesResponse>, ErrorListener {
 
+  @VisibleForTesting
   static final String KEY_MESSAGES = "messages";
 
   private final MapsRepository mapsRepository;
