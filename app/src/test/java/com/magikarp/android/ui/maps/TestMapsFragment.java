@@ -8,7 +8,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.robolectric.annotation.Config.OLDEST_SDK;
 
 
 import android.content.SharedPreferences;
@@ -18,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
@@ -31,13 +29,12 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.annotation.Config;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Class for testing {@code MapsFragment}.
  */
-@RunWith(AndroidJUnit4.class)
-@Config(sdk = OLDEST_SDK)
+@RunWith(MockitoJUnitRunner.class)
 public class TestMapsFragment {
 
   private GoogleMap googleMap;
@@ -56,8 +53,6 @@ public class TestMapsFragment {
     preferences = mock(SharedPreferences.class);
   }
 
-//  @Test
-//  public void testPerformOnCreate() {
 //    int maxRecords = 10;
 //    MapsViewModel mockMapsViewModel = mock(MapsViewModel.class);
 //    ViewModelProvider mockViewModelProvider = mock(ViewModelProvider.class);
@@ -198,15 +193,6 @@ public class TestMapsFragment {
     verify(googleMap, times(1)).setMyLocationEnabled(true);
     verify(googleMap, times(1)).setMyLocationEnabled(false);
   }
-
-//    if (result && (googleMap != null)) {
-//      try {
-//        googleMap.setMyLocationEnabled(true);
-//      } catch (SecurityException unlikely) {
-//        googleMap.setMyLocationEnabled(false);
-//      }
-//    }
-//  }
 
   @Test
   public void testOnCameraIdle() {
