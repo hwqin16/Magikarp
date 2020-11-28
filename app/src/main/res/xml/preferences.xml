@@ -6,7 +6,7 @@
             app:defaultValue="20"
             app:entries="@array/max_records"
             app:entryValues="@array/max_records"
-            app:key="@string/max_records"
+            app:key="@string/preference_key_max_records"
             app:title="@string/max_records_description"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>

@@ -4,7 +4,7 @@
     <!-- Server endpoints -->
     <string name="server_url">http://35.190.179.162:7000</string>
     <string name="server_get_messages">/messages</string>
-    <string name="server_get_user_messages">/messages/?</string>
+    <string name="server_get_user_messages">/messages/%s</string>
 
     <!-- Fragment arguments -->
     <string name="args_is_editable">is_editable</string>
@@ -16,6 +16,9 @@
     <string name="fragment_tag_maps">tag_maps</string>
 
     <!-- Settings UI -->
-    <string name="array_max_records">max_records</string>
+    <string name="preference_key_max_records">max_records</string>
+
+    <!-- Maps fragment -->
+    <string name="max_records_default">20</string>
 
 </resources>
