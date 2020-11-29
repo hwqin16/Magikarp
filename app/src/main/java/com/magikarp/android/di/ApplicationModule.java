@@ -1,5 +1,6 @@
 package com.magikarp.android.di;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -15,10 +16,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.magikarp.android.R;
+import com.magikarp.android.data.PostRepository.FileNameGenerator;
 import com.magikarp.android.data.model.Message;
+import com.magikarp.android.di.HiltQualifiers.UrlDeleteMessage;
 import com.magikarp.android.di.HiltQualifiers.UrlGetMessages;
 import com.magikarp.android.di.HiltQualifiers.UrlGetUserMessages;
+import com.magikarp.android.di.HiltQualifiers.UrlNewMessage;
+import com.magikarp.android.di.HiltQualifiers.UrlUpdateMessage;
 import com.magikarp.android.network.ImageCache;
 import com.magikarp.android.network.LruBitmapCache;
 import dagger.Module;
@@ -27,6 +34,7 @@ import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import java.util.List;
+import java.util.UUID;
 import javax.inject.Singleton;
 
 /**
@@ -36,6 +44,37 @@ import javax.inject.Singleton;
 @Module
 @InstallIn(ApplicationComponent.class)
 public class ApplicationModule {
+
+  /**
+   * Injector for creating a content resolver.
+   *
+   * @return a content resolver
+   */
+  @Provides
+  public static ContentResolver provideContentResolver(
+      @ApplicationContext Context applicationContext) {
+    return applicationContext.getContentResolver();
+  }
+
+  /**
+   * Injector for creating a filename generator.
+   *
+   * @return a Firebase storage reference
+   */
+  @Provides
+  public static FileNameGenerator provideFileNameGenerator() {
+    return (seed, fileExtension) -> UUID.randomUUID().toString() + "." + fileExtension;
+  }
+
+  /**
+   * Injector for creating a Firebase storage reference.
+   *
+   * @return a Firebase storage reference
+   */
+  @Provides
+  public static StorageReference provideFirebaseStorageReference() {
+    return FirebaseStorage.getInstance().getReference();
+  }
 
   /**
    * Injector for creating a fused location provider client.
@@ -141,9 +180,8 @@ public class ApplicationModule {
   @UrlGetMessages
   @Provides
   public static String provideGetMessagesUrl(@ApplicationContext Context applicationContext) {
-    final Resources resources = applicationContext.getResources();
-    return resources.getString(R.string.server_url)
-        + resources.getString(R.string.server_get_messages);
+    return applicationContext.getString(R.string.server_url)
+        + applicationContext.getString(R.string.server_get_messages);
   }
 
   /**
@@ -158,6 +196,48 @@ public class ApplicationModule {
     final Resources resources = applicationContext.getResources();
     return resources.getString(R.string.server_url)
         + resources.getString(R.string.server_get_user_messages);
+  }
+
+  /**
+   * Injector for creating a URL for new messages endpoint.
+   *
+   * @param applicationContext the application context
+   * @return a URL for new messages endpoint
+   */
+  @UrlNewMessage
+  @Provides
+  public static String provideNewMessageUrl(@ApplicationContext Context applicationContext) {
+    final Resources resources = applicationContext.getResources();
+    return resources.getString(R.string.server_url)
+        + resources.getString(R.string.server_new_message);
+  }
+
+  /**
+   * Injector for creating a URL for update messages endpoint.
+   *
+   * @param applicationContext the application context
+   * @return a URL for update messages endpoint
+   */
+  @UrlUpdateMessage
+  @Provides
+  public static String provideUpdateMessageUrl(@ApplicationContext Context applicationContext) {
+    final Resources resources = applicationContext.getResources();
+    return resources.getString(R.string.server_url)
+        + resources.getString(R.string.server_update_message);
+  }
+
+  /**
+   * Injector for creating a URL for delete messages endpoint.
+   *
+   * @param applicationContext the application context
+   * @return a URL for delete messages endpoint
+   */
+  @UrlDeleteMessage
+  @Provides
+  public static String provideDeleteMessageUrl(@ApplicationContext Context applicationContext) {
+    final Resources resources = applicationContext.getResources();
+    return resources.getString(R.string.server_url)
+        + resources.getString(R.string.server_delete_message);
   }
 
 }
