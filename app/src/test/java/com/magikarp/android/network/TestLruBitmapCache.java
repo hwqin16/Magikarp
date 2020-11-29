@@ -15,11 +15,9 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 /**
- * Class for unit tests.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * Class for testing {@code LruBitmapCache}.
  */
-public class NetworkTest {
+public class TestLruBitmapCache {
 
   @Test
   public void testGsonRequestParseNetworkResponse() {

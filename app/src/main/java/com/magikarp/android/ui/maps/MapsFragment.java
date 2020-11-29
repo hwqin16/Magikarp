@@ -1,8 +1,9 @@
 package com.magikarp.android.ui.maps;
 
+import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.Resources;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,14 +11,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -29,8 +32,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.magikarp.android.R;
 import com.magikarp.android.data.model.Message;
+import com.magikarp.android.ui.app.GoogleSignInViewModel;
 import dagger.hilt.android.AndroidEntryPoint;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -38,12 +41,11 @@ import javax.inject.Inject;
  * A fragment for providing a map interface.
  */
 @AndroidEntryPoint
-public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener,
-    Observer<List<Message>>, OnMarkerClickListener, OnSharedPreferenceChangeListener {
+public class MapsFragment extends Fragment
+    implements OnMapReadyCallback, OnCameraIdleListener, OnMarkerClickListener,
+    OnSharedPreferenceChangeListener, ActivityResultCallback<Boolean> {
 
-  private static final String SAVED_STATE = "savedState";
-
-  private ArrayList<Message> messages;
+  private ActivityResultLauncher<String> requestPermissionLauncher;
 
   private boolean isUserData;
 
@@ -53,12 +55,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
 
   private MapsViewModel mapsViewModel;
 
-  @Inject
-  protected SharedPreferences preferences;
-
   private String userId;
+  @Inject
+  SharedPreferences preferences;
 
-  @VisibleForTesting
+  /**
+   * Default constructor.
+   */
   public MapsFragment() {
   }
 
@@ -66,19 +69,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
    * MapsFragment constructor for testing.
    *
    * @param mapsViewModel MapsViewModel to set
-   * @param googleMap GoogleMap to set
-   * @param preferences SharedPreferences to set
-   * @param isUserData boolean to set
-   * @param maxRecords int to set
+   * @param googleMap     GoogleMap to set
+   * @param preferences   SharedPreferences to set
+   * @param isUserData    boolean to set
+   * @param maxRecords    int to set
    */
   @VisibleForTesting
-  MapsFragment(
-      MapsViewModel mapsViewModel,
-      GoogleMap googleMap,
-      SharedPreferences preferences,
-      boolean isUserData,
-      int maxRecords
-  ) {
+  MapsFragment(MapsViewModel mapsViewModel, GoogleMap googleMap, SharedPreferences preferences,
+               boolean isUserData, int maxRecords) {
     this.mapsViewModel = mapsViewModel;
     this.googleMap = googleMap;
     this.preferences = preferences;
@@ -86,50 +84,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
     this.maxRecords = maxRecords;
   }
 
-  @VisibleForTesting
-  MapsFragment(boolean isUserData) {
-    this.isUserData = isUserData;
-  }
-
   @Override
-  public void onCreate(Bundle savedInstanceState) {
+  public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    performOnCreate(
-        new ViewModelProvider(this),
-        getString(R.string.args_is_user_data),
-        getString(R.string.max_records),
-        savedInstanceState
-    );
-  }
-
-  @VisibleForTesting
-  void performOnCreate(
-      ViewModelProvider viewModelProvider,
-      String argsIsUserData,
-      String maxRecords,
-      Bundle savedInstanceState
-  ) {
-    mapsViewModel = viewModelProvider.get(MapsViewModel.class);
-    isUserData = requireArguments().getBoolean(argsIsUserData);
+    isUserData = requireArguments().getBoolean(getString(R.string.args_is_user_data));
     setHasOptionsMenu(isUserData);
-    // Get saved messages, if applicable.
-    if (savedInstanceState != null) {
-      messages = savedInstanceState.getParcelableArrayList(SAVED_STATE);
-    }
-    // Register preference listener to get max records to query.
-    this.maxRecords = Integer.parseInt(preferences.getString(maxRecords, "20"));
+    // Set up map data repository.
+    mapsViewModel = new ViewModelProvider(this).get(MapsViewModel.class);
+    // Set up account listener (used to determine if fragment should quit while in edit mode).
+    new ViewModelProvider(requireActivity()).get(GoogleSignInViewModel.class).getSignedInAccount()
+        .observe(this, this::onGoogleSignInAccountChanged);
+    // Set up activity to request permissions (i.e. fine location).
+    requestPermissionLauncher =
+        registerForActivityResult(new ActivityResultContracts.RequestPermission(), this);
+    // Register preference listener for max records to query.
+    maxRecords = Integer.parseInt(preferences
+        .getString(getString(R.string.preference_key_max_records),
+            getString(R.string.max_records_default)));
     preferences.registerOnSharedPreferenceChangeListener(this);
-  }
-
-  @Override
-  public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-    super.onCreateOptionsMenu(menu, inflater);
-    performOnCreateOptionsMenu(menu, inflater);
-  }
-
-  @VisibleForTesting
-  void performOnCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-    inflater.inflate(R.menu.menu_maps, menu);
   }
 
   @Nullable
@@ -140,28 +112,35 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   }
 
   @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    final int itemId = item.getItemId();
-    if (itemId == R.id.nav_post_editor) {
-      Resources resources = getResources();
-      Bundle bundle = new Bundle();
-      bundle.putBoolean(resources.getString(R.string.args_is_user_data), true);
-      bundle.putDouble(resources.getString(R.string.args_latitude), Double.NaN);
-      bundle.putDouble(resources.getString(R.string.args_longitude), Double.NaN);
-      NavHostFragment.findNavController(this).navigate(R.id.action_nav_maps_to_post_editor, bundle);
-      return true;
-    }
-    return super.onOptionsItemSelected(item);
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    final SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+        .findFragmentByTag(getString(R.string.fragment_tag_maps));
+    // Map fragment should never be null (spotbugs).
+    assert mapFragment != null;
+    mapFragment.getMapAsync(this);
   }
 
   @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-        .findFragmentByTag(getResources().getString(R.string.fragment_tag_maps));
-    if (mapFragment != null) {
-      mapFragment.getMapAsync(this);
+  public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    super.onCreateOptionsMenu(menu, inflater);
+    inflater.inflate(R.menu.menu_maps, menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    final int itemId = item.getItemId();
+    if (itemId == R.id.action_new_post) {
+      // Build arguments bundle for creating a new post in the post editor.
+      final Bundle args = new Bundle();
+      args.putBoolean(getString(R.string.args_is_editable), true);
+      args.putDouble(getString(R.string.args_latitude), Double.NaN);
+      args.putDouble(getString(R.string.args_longitude), Double.NaN);
+      // Launch post editor.
+      NavHostFragment.findNavController(this).navigate(R.id.action_nav_maps_to_post_editor, args);
+      return true;
     }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override
@@ -172,51 +151,66 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
   }
 
   @Override
-  public void onSaveInstanceState(@NonNull Bundle outState) {
-    super.onSaveInstanceState(outState);
-    if (messages != null) {
-      outState.putParcelableArrayList(SAVED_STATE, messages);
+  public void onMapReady(GoogleMap googleMap) {
+    this.googleMap = googleMap;
+    if (ActivityCompat
+        .checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        == PackageManager.PERMISSION_GRANTED) {
+      googleMap.setMyLocationEnabled(true);
+    } else {
+      requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
     }
+    googleMap.setOnCameraIdleListener(this);
+    googleMap.setOnMarkerClickListener(this);
+    mapsViewModel.getMessages().observe(this, this::onMessagesChanged);
   }
 
   @Override
-  public void onMapReady(GoogleMap googleMap) {
-    performOnMapReady(googleMap, GoogleSignIn.getLastSignedInAccount(requireContext()));
-  }
-
-  @VisibleForTesting
-  void performOnMapReady(GoogleMap googleMap, GoogleSignInAccount account) {
-    this.googleMap = googleMap;
-    //googleMap.setMyLocationEnabled(true);
-    googleMap.setOnCameraIdleListener(this);
-    googleMap.setOnMarkerClickListener(this);
-    // Get current signed in user. TODO need to get listener in case account changes while running
-    if (isUserData && account != null) {
-      userId = account.getId();
+  public void onActivityResult(Boolean result) {
+    if (result && (googleMap != null)) {
+      try {
+        googleMap.setMyLocationEnabled(true);
+      } catch (SecurityException unlikely) {
+        googleMap.setMyLocationEnabled(false);
+      }
     }
-    // Load saved messages.
-    if (messages != null) {
-      onChanged(messages);
-    }
-    mapsViewModel.getMessages().observe(this, this);
   }
 
   @Override
   public void onCameraIdle() {
-    mapsViewModel.setMapsQuery(userId, googleMap.getProjection().getVisibleRegion().latLngBounds,
+    final String id = (isUserData) ? userId : null;
+    mapsViewModel.setMapsQuery(id, googleMap.getProjection().getVisibleRegion().latLngBounds,
         maxRecords);
   }
 
-  @Override
-  public void onChanged(@NonNull List<Message> messages) {
+  /**
+   * Callback for Google Sign-In account changes.
+   *
+   * @param account the current signed-in account
+   */
+  @VisibleForTesting
+  void onGoogleSignInAccountChanged(GoogleSignInAccount account) {
+    // Quit fragment if user logs out while in edit mode.
+    // Note: it should not be possible for user to change accounts without explicitly logging out.
+    if (isUserData && (userId != null) && ((account == null) || !userId.equals(account.getId()))) {
+      requireActivity().onBackPressed();
+    } else {
+      userId = (account == null) ? null : account.getId();
+    }
+  }
+
+  /**
+   * Callback for messages changes.
+   *
+   * @param messages the current list of messages
+   */
+  void onMessagesChanged(List<Message> messages) {
     // Do not update messages if there are none (ex. no network, etc.).
-    if (!messages.isEmpty()) {
-      this.messages = (ArrayList<Message>) messages;
+    if ((googleMap != null) && (messages != null) && !messages.isEmpty()) {
       googleMap.clear();
       for (Message message : messages) {
-        Marker marker = googleMap.addMarker(
-            new MarkerOptions()
-                .position(new LatLng(message.getLatitude(), message.getLongitude())));
+        final Marker marker = googleMap.addMarker(new MarkerOptions()
+            .position(new LatLng(message.getLatitude(), message.getLongitude())));
         marker.setTag(message);
       }
     }
@@ -224,41 +218,29 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, OnCame
 
   @Override
   public boolean onMarkerClick(Marker marker) {
-    Bundle bundle = new Bundle();
-    prepareBundleFromMarker(bundle, marker, getResources());
+    final Message message = (Message) marker.getTag();
+    // Message should never be null (spotbugs).
+    assert message != null;
+    // Build arguments bundle for editing/viewing an existing post in the post editor.
+    final Bundle bundle = new Bundle();
+    bundle.putBoolean(getString(R.string.args_is_editable), isUserData);
+    bundle.putDouble(getString(R.string.args_latitude), message.getLatitude());
+    bundle.putDouble(getString(R.string.args_longitude), message.getLongitude());
+    bundle.putString(getString(R.string.args_text), message.getText());
+    bundle.putString(getString(R.string.args_image_uri), message.getImageUrl());
+    // Launch post editor.
     int action =
         isUserData ? R.id.action_nav_maps_to_post_editor : R.id.action_nav_maps_to_post_viewer;
     NavHostFragment.findNavController(this).navigate(action, bundle);
     return true;
   }
 
-  @VisibleForTesting
-  Bundle prepareBundleFromMarker(Bundle bundle, Marker marker, Resources resources) {
-    LatLng latLng = marker.getPosition();
-    Message message = (Message) marker.getTag();
-    assert message != null;
-
-    bundle.putBoolean(resources.getString(R.string.args_is_user_data), isUserData);
-    bundle.putDouble(resources.getString(R.string.args_latitude), latLng.latitude);
-    bundle.putDouble(resources.getString(R.string.args_longitude), latLng.longitude);
-    bundle.putString(resources.getString(R.string.args_text), message.getText());
-    bundle.putString(resources.getString(R.string.args_image_uri), message.getImageUrl());
-    return bundle;
-  }
-
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    maxRecords = Integer.parseInt(preferences.getString(getString(R.string.max_records), "20"));
-  }
-
-  @VisibleForTesting
-  String getUserId() {
-    return this.userId;
-  }
-
-  @VisibleForTesting
-  int getMaxRecords() {
-    return this.maxRecords;
+    if (getString(R.string.preference_key_max_records).equals(key)) {
+      maxRecords = Integer
+          .parseInt(sharedPreferences.getString(key, getString(R.string.max_records_default)));
+    }
   }
 
 }

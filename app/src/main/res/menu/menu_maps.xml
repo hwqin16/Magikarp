@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/nav_post_editor"
+        android:id="@+id/action_new_post"
         android:icon="@drawable/ic_add"
         android:menuCategory="secondary"
         android:orderInCategory="100"
