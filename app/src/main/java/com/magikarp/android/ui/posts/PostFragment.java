@@ -194,21 +194,22 @@ public class PostFragment extends Fragment {
     final String postTypeView = context.getString(R.string.arg_post_type_view);
 
     String text = null;
+    String url = null;
     if (savedInstanceState != null) {
       location = savedInstanceState.getParcelable(SAVESTATE_LOCATION);
-      imageUrl = savedInstanceState.getString(SAVESTATE_IMAGE_URL);
+      url = savedInstanceState.getString(SAVESTATE_IMAGE_URL);
       text = savedInstanceState.getString(SAVESTATE_TEXT);
     } else if (postType.equals(postTypeUpdate) || postType.equals(postTypeView)) {
       final Message message = arguments.getParcelable(context.getString(R.string.args_message));
       location = new LatLng(message.getLatitude(), message.getLongitude());
-      imageUrl = message.getImageUrl();
+      url = message.getImageUrl();
       text = message.getText();
     }
 
     // Set up the image and text views.
     final NetworkImageView imageView = binding.createPostNetworkImage;
-    imageView.setDefaultImageResId(android.R.drawable.ic_menu_gallery);
-    imageView.setErrorImageResId(android.R.drawable.ic_menu_gallery);
+    imageView.setDefaultImageResId(R.drawable.ic_insert_photo);
+    imageView.setErrorImageResId(R.drawable.ic_broken_image);
     final EditText editText = binding.createPostCaption;
     editText.setText(text);
 
@@ -218,12 +219,13 @@ public class PostFragment extends Fragment {
       editText.setFocusable(false);
       editText.setFocusableInTouchMode(false);
     } else {
-      imageView.setOnClickListener(this::selectImageAction);
+      // Enable click listener for selecting an image.
+      binding.imageContainer.setOnClickListener(this::selectImageAction);
     }
 
     // Load image.
-    if (imageUrl != null) {
-      loadImage(imageUrl);
+    if (url != null) {
+      loadImage(url);
     }
   }
 
@@ -286,6 +288,7 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void loadImage(@NonNull String imageUrl) {
+    this.imageUrl = imageUrl;
     final Uri imageUri = Uri.parse(imageUrl);
     final NetworkImageView networkImageView = binding.createPostNetworkImage;
     final ImageView imageView = binding.createPostLocalImage;
@@ -294,18 +297,20 @@ public class PostFragment extends Fragment {
       networkImageView.setVisibility(View.VISIBLE);
       imageView.setVisibility(View.INVISIBLE);
       imageLoader.get(imageUrl, ImageLoader
-          .getImageListener(networkImageView, android.R.drawable.ic_menu_gallery,
-              android.R.drawable.ic_menu_gallery));
+          .getImageListener(networkImageView, R.drawable.ic_insert_photo,
+              R.drawable.ic_broken_image));
       networkImageView.setImageUrl(imageUrl, imageLoader);
     } else {
+      networkImageView.setImageUrl(null, null);
+      networkImageView.setVisibility(View.INVISIBLE);
+      imageView.setVisibility(View.VISIBLE);
       try {
-        networkImageView.setVisibility(View.INVISIBLE);
-        imageView.setVisibility(View.VISIBLE);
         final InputStream inputStream = contentResolver.openInputStream(imageUri);
         imageView
             .setImageBitmap((inputStream == null) ? null : BitmapFactory.decodeStream(inputStream));
       } catch (final FileNotFoundException exception) {
-        imageView.setImageBitmap(null);
+        this.imageUrl = null;
+        imageView.setImageResource(R.drawable.ic_broken_image);
         Toast.makeText(context, context.getString(R.string.failure_load_image), Toast.LENGTH_SHORT)
             .show();
       }
@@ -453,7 +458,7 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onNetworkError(VolleyError error) {
-    Toast.makeText(context, context.getString(R.string.failure_network_error), Toast.LENGTH_SHORT)
+    Toast.makeText(context, context.getString(R.string.failure_network_error), Toast.LENGTH_LONG)
         .show();
   }
 
