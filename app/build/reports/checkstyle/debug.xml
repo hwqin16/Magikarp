@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.27">
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/MapsRepository.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\data\MapsRepository.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/model/GetMessagesRequest.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\data\PostRepository.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/model/GetMessagesResponse.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\data\model\DeleteMessageRequest.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/model/Message.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\data\model\DeleteMessageResponse.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/model/NewMessageRequest.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\data\model\GetMessagesRequest.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/data/model/NewMessageResponse.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\data\model\GetMessagesResponse.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/di/ActivityModule.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\data\model\Message.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/di/ApplicationModule.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\data\model\NewMessageRequest.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/di/HiltQualifiers.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\data\model\NewMessageResponse.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/di/ViewModelModule.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\data\model\UpdateMessageResponse.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/network/GsonRequest.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\di\ApplicationModule.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/network/ImageCache.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\di\HiltQualifiers.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/network/LruBitmapCache.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\network\GsonRequest.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/services/LocationService.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\network\ImageCache.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/app/HelpFragment.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\network\LruBitmapCache.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/app/MagikarpApplication.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\services\LocationService.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/app/MainActivity.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\ui\app\GoogleSignInViewModel.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/app/SettingsFragment.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\ui\app\HelpFragment.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/maps/MapsFragment.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\ui\app\MagikarpApplication.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/maps/MapsFragmentWrapper.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\ui\app\MainActivity.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/maps/MapsViewModel.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\ui\app\SettingsFragment.java">
 </file>
-<file name="/Users/csummers/school/COMS-W4156/Magikarp/app/src/main/java/com/magikarp/android/ui/posts/PostFragment.java">
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\ui\maps\MapsFragment.java">
+</file>
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\ui\maps\MapsViewModel.java">
+</file>
+<file name="C:\Users\Nick Clark\Documents\repos\Magikarp\app\src\main\java\com\magikarp\android\ui\posts\PostFragment.java">
 </file>
 </checkstyle>
