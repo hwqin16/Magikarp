@@ -1,20 +1,19 @@
 package com.magikarp.android.ui.posts;
 
+import static android.content.Intent.ACTION_VIEW;
+
+
 import android.Manifest;
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,15 +23,20 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts.GetContent;
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.magikarp.android.R;
 import com.magikarp.android.data.PostRepository;
@@ -41,10 +45,11 @@ import com.magikarp.android.data.model.Message;
 import com.magikarp.android.data.model.NewMessageResponse;
 import com.magikarp.android.data.model.UpdateMessageResponse;
 import com.magikarp.android.databinding.FragmentPostBinding;
-import com.magikarp.android.services.LocationService;
+import com.magikarp.android.location.LocationListener;
 import dagger.hilt.android.AndroidEntryPoint;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Locale;
 import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +60,9 @@ import org.jetbrains.annotations.NotNull;
 public class PostFragment extends Fragment {
 
   @VisibleForTesting
-  static final int RESULT_LOAD_IMG = 1;
+  static final String GEO_URL = "geo:%f,%f";
+  @VisibleForTesting
+  static final String MEDIA_TYPE_IMAGE = "image/*";
   @VisibleForTesting
   static final String SAVESTATE_IMAGE_URL = "imageUrl";
   @VisibleForTesting
@@ -64,25 +71,28 @@ public class PostFragment extends Fragment {
   static final String SAVESTATE_LOCATION = "location";
   @VisibleForTesting
   static final String URI_SCHEME_HTTP = "http";
-
-  private boolean isGpsServiceBound = false;
-
-  private Bundle arguments;
-
-  private Context context;
+  @VisibleForTesting
+  Activity activity;
+  @VisibleForTesting
+  ActivityResultLauncher<String> requestPermissionLauncher;
+  @VisibleForTesting
+  ActivityResultLauncher<String> getContentLauncher;
+  @VisibleForTesting
+  Bundle arguments;
+  @VisibleForTesting
+  Context context;
   @VisibleForTesting
   FragmentPostBinding binding;
   @VisibleForTesting
   LatLng location;
-
-  private LocationService gpsService;
-
-  private ServiceConnection gpsServiceConnection;
+  @VisibleForTesting
+  LocationListener locationListener;
   @VisibleForTesting
   String imageUrl;
-
   @Inject
   ContentResolver contentResolver;
+  @Inject
+  FusedLocationProviderClient fusedLocationClient;
   @Inject
   ImageLoader imageLoader;
   @Inject
@@ -99,31 +109,41 @@ public class PostFragment extends Fragment {
   /**
    * PostFragment constructor for testing.
    *
-   * @param arguments       test variable
-   * @param context         test variable
-   * @param binding         test variable
-   * @param location        test variable
-   * @param gpsService      test variable
-   * @param imageUrl        test variable
-   * @param contentResolver test variable
-   * @param imageLoader     test variable
-   * @param postRepository  test variable
-   * @param requestQueue    test variable
+   * @param activity                  test variable
+   * @param getContentLauncher        test variable
+   * @param requestPermissionLauncher test variable
+   * @param arguments                 test variable
+   * @param context                   test variable
+   * @param binding                   test variable
+   * @param location                  test variable
+   * @param locationListener          test variable
+   * @param imageUrl                  test variable
+   * @param contentResolver           test variable
+   * @param fusedLocationClient       test variable
+   * @param imageLoader               test variable
+   * @param postRepository            test variable
+   * @param requestQueue              test variable
    */
   @VisibleForTesting
   PostFragment(
-      Bundle arguments, Context context, FragmentPostBinding binding, LatLng location,
-      LocationService gpsService, ServiceConnection serviceConnection, String imageUrl,
-      ContentResolver contentResolver, ImageLoader imageLoader, PostRepository postRepository,
-      RequestQueue requestQueue) {
+      Activity activity, ActivityResultLauncher<String> getContentLauncher,
+      ActivityResultLauncher<String> requestPermissionLauncher, Bundle arguments, Context context,
+      FragmentPostBinding binding,
+      LatLng location, LocationListener locationListener, String imageUrl,
+      ContentResolver contentResolver,
+      FusedLocationProviderClient fusedLocationClient, ImageLoader imageLoader,
+      PostRepository postRepository, RequestQueue requestQueue) {
+    this.activity = activity;
+    this.getContentLauncher = getContentLauncher;
+    this.requestPermissionLauncher = requestPermissionLauncher;
     this.arguments = arguments;
     this.context = context;
     this.binding = binding;
     this.location = location;
-    this.gpsService = gpsService;
-    this.gpsServiceConnection = serviceConnection;
+    this.locationListener = locationListener;
     this.imageUrl = imageUrl;
     this.contentResolver = contentResolver;
+    this.fusedLocationClient = fusedLocationClient;
     this.imageLoader = imageLoader;
     this.postRepository = postRepository;
     this.requestQueue = requestQueue;
@@ -134,16 +154,17 @@ public class PostFragment extends Fragment {
     super.onCreate(savedInstanceState);
     arguments = requireArguments();
     context = requireContext();
-    gpsServiceConnection = new GpsServiceConnection();
     performOnCreate();
   }
 
   @VisibleForTesting
   void performOnCreate() {
     setHasOptionsMenu(true);
-    final Intent intent = new Intent(context, LocationService.class);
-    context.bindService(intent, gpsServiceConnection, Context.BIND_AUTO_CREATE);
-    context.startService(intent);
+    // Set up fragment to request permissions (i.e. fine location).
+    requestPermissionLauncher =
+        registerForActivityResult(new RequestPermission(), this::onRequestPermissionResult);
+    // Set up fragment to get content (i.e. images).
+    getContentLauncher = registerForActivityResult(new GetContent(), this::onGetContentResult);
   }
 
   @Override
@@ -165,7 +186,7 @@ public class PostFragment extends Fragment {
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     final int itemId = item.getItemId();
     if (itemId == R.id.menu_get_location) {
-      onGpsButtonClick();
+      onLocationButtonClick();
       return true;
     } else if (itemId == R.id.menu_upload_content) {
       onPostButtonClick();
@@ -173,10 +194,16 @@ public class PostFragment extends Fragment {
     } else if (itemId == R.id.menu_delete) {
       onDeleteButtonClick();
       return true;
-    } else if (itemId == R.id.menu_get_directions) { // TODO
+    } else if (itemId == R.id.menu_get_directions) {
+      // Location should never be null (spotbugs).
+      assert location != null;
+      final Uri uri =
+          Uri.parse(String.format(Locale.US, GEO_URL, location.latitude, location.longitude));
+      activity.startActivity(new Intent(ACTION_VIEW, uri));
       return true;
+    } else {
+      return super.onOptionsItemSelected(item);
     }
-    return super.onOptionsItemSelected(item);
   }
 
   @Override
@@ -220,12 +247,34 @@ public class PostFragment extends Fragment {
       editText.setFocusableInTouchMode(false);
     } else {
       // Enable click listener for selecting an image.
-      binding.imageContainer.setOnClickListener(this::selectImageAction);
+      binding.imageContainer.setOnClickListener(v -> getContentLauncher.launch(MEDIA_TYPE_IMAGE));
     }
 
     // Load image.
     if (url != null) {
       loadImage(url);
+    }
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    // Start location updates.
+    if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ==
+        PackageManager.PERMISSION_GRANTED) {
+      locationListener = new LocationListener();
+      fusedLocationClient.requestLocationUpdates(LocationRequest.create(), locationListener, null);
+    } else {
+      requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    if (locationListener != null) {
+      fusedLocationClient.removeLocationUpdates(locationListener);
+      locationListener = null;
     }
   }
 
@@ -250,35 +299,43 @@ public class PostFragment extends Fragment {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    context.unbindService(gpsServiceConnection);
-    gpsService.dispose();
+    activity = null;
     context = null;
     arguments = null;
   }
 
-  @Override
-  public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    performOnActivityResult(requestCode, resultCode, data);
-  }
-
+  /**
+   * The result of a "request permission" request.
+   *
+   * @param result {@code true} if permission granted, {@code false} otherwise
+   */
   @VisibleForTesting
-  void performOnActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == RESULT_LOAD_IMG && resultCode == Activity.RESULT_OK) {
-      loadImage(data.getData().toString());
+  void onRequestPermissionResult(Boolean result) {
+    if (result) {
+      try {
+        locationListener = new LocationListener();
+        fusedLocationClient
+            .requestLocationUpdates(LocationRequest.create(), locationListener, null);
+        return;
+      } catch (SecurityException unlikely) {
+        fusedLocationClient.removeLocationUpdates(locationListener);
+        locationListener = null;
+      }
+      Toast.makeText(context, context.getString(R.string.failure_fine_location_permission),
+          Toast.LENGTH_LONG).show();
     }
   }
 
   /**
-   * Starts the activity to select an image.
+   * Get the result of a "get content" request.
    *
-   * @param view action source
+   * @param result the result of the request, or {@code null} if there is no result
    */
-  private void selectImageAction(final View view) {
-    Log.d("selectImageAction", "Entered");
-    Intent photoSelectionIntent = new Intent(Intent.ACTION_PICK);
-    photoSelectionIntent.setType("image/*");
-    startActivityForResult(photoSelectionIntent, RESULT_LOAD_IMG);
+  @VisibleForTesting
+  void onGetContentResult(@Nullable Uri result) {
+    if (result != null) {
+      loadImage(result.toString());
+    }
   }
 
   /**
@@ -319,55 +376,22 @@ public class PostFragment extends Fragment {
 
   /**
    * GPS button click callback.
+   * <p>
+   * By the time this button is available, location permissions should have already been granted.
    */
   @VisibleForTesting
-  void onGpsButtonClick() {
-    if (isGpsServiceBound) {
-      if (gpsService.isLocationEnabled()) {
-        final Location position = gpsService.getLocation();
-        location = new LatLng(position.getLatitude(), position.getLongitude());
-        Log.d("onGpsButtonClick",
-            "Found GPS Location: " + position.getLatitude() + ", " + position.getLongitude());
-      } else {
-        if (ActivityCompat
-            .checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED && ActivityCompat
-            .checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
-          ActivityCompat.requestPermissions(requireActivity(),
-              new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        } else {
-          Log.d("onGpsButtonClick", "GPS service not accessible.");
-        }
-      }
-    } else {
-      Log.d("onGpsButtonClick", "GPS service not bound.");
-    }
-  }
-
-  @Override
-  public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions,
-                                         @NotNull int[] grantResults) {
-    performOnRequestPermissionsResult(requireContext(), requestCode, grantResults);
-  }
-
-  @VisibleForTesting
-  void performOnRequestPermissionsResult(
-      Context context,
-      int requestCode,
-      int[] grantResults
-  ) {
-    if (requestCode == 1) {
-      if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-        Toast.makeText(context, "Permission denied to access GPS location",
+  void onLocationButtonClick() {
+    if (locationListener != null) {
+      final Location loc = locationListener.getLocation();
+      if (loc != null) {
+        location = new LatLng(loc.getLatitude(), loc.getLongitude());
+        Toast.makeText(context, context.getString(R.string.success_location_updated),
             Toast.LENGTH_SHORT).show();
-      } else {
-        Toast.makeText(context, "Permission granted to access GPS location",
-            Toast.LENGTH_SHORT).show();
-        Location position = gpsService.getLocation();
-        location = new LatLng(position.getLatitude(), position.getLongitude());
+        return;
       }
     }
+    Toast.makeText(context, context.getString(R.string.failure_location_unavailable),
+        Toast.LENGTH_LONG).show();
   }
 
   /**
@@ -445,12 +469,12 @@ public class PostFragment extends Fragment {
   }
 
   /**
-   * Close the fragment.
+   * Programmatically clean up and close the fragment.
    */
   @VisibleForTesting
   void closeFragment() {
     // TODO close the keyboard if required
-    requireActivity().onBackPressed();
+    activity.onBackPressed();
   }
 
   /**
@@ -460,26 +484,6 @@ public class PostFragment extends Fragment {
   void onNetworkError(VolleyError error) {
     Toast.makeText(context, context.getString(R.string.failure_network_error), Toast.LENGTH_LONG)
         .show();
-  }
-
-  @VisibleForTesting
-  class GpsServiceConnection implements ServiceConnection {
-
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-      final LocationService.LocationServiceBinder binder =
-          (LocationService.LocationServiceBinder) service;
-      gpsService = binder.getService();
-      Log.d("GPS Service Conn", "Connected");
-      isGpsServiceBound = true;
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-      Log.d("GPS Service Conn", "Disconnected");
-      isGpsServiceBound = false;
-    }
-
   }
 
 }
