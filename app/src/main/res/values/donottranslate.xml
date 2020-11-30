@@ -5,13 +5,20 @@
     <string name="server_url">http://35.190.179.162:7000</string>
     <string name="server_get_messages">/messages</string>
     <string name="server_get_user_messages">/messages/%s</string>
+    <string name="server_new_message">/messages/%s/new</string>
+    <string name="server_update_message">/messages/%s/update/%s</string>
+    <string name="server_delete_message">/messages/%s/delete/%s</string>
 
     <!-- Fragment arguments -->
-    <string name="args_is_editable">is_editable</string>
-    <string name="args_image_uri">image_uri</string>
-    <string name="args_latitude">latitude</string>
-    <string name="args_longitude">longitude</string>
-    <string name="args_text">text</string>
+    <string name="args_post_type">args_post_type</string>
+    <string name="arg_post_type_new">post_type_new</string>
+    <string name="arg_post_type_update">post_type_update</string>
+    <string name="arg_post_type_view">post_type_view</string>
+    <string name="args_message">args_message</string>
+    <!--    <string name="args_image_uri">image_uri</string>-->
+    <!--    <string name="args_latitude">latitude</string>-->
+    <!--    <string name="args_longitude">longitude</string>-->
+    <!--    <string name="args_text">text</string>-->
     <string name="args_is_user_data">is_user_data</string>
     <string name="fragment_tag_maps">tag_maps</string>
 
