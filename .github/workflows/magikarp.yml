@@ -45,3 +45,11 @@ jobs:
 
             - name: Run Spotbugs
               run: ./gradlew :app:spotbugs${{ matrix.build }} :server:spotbugsMain
+            
+            - name: Upload Build Reports
+              uses: actions/upload-artifact@v2
+              with:
+                name: android-build-reports
+                path: |
+                  app/build/reports
+                  server/build/reports
