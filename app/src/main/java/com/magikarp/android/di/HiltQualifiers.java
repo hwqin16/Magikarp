@@ -19,4 +19,19 @@ public class HiltQualifiers {
   public @interface UrlGetUserMessages {
   }
 
+  @Qualifier
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface UrlNewMessage {
+  }
+
+  @Qualifier
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface UrlUpdateMessage {
+  }
+
+  @Qualifier
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface UrlDeleteMessage {
+  }
+
 }

@@ -24,10 +24,17 @@
     <string name="title_fragment_view_post">View post</string>
 
     <!-- Post editor UI -->
+    <string name="delete_post">Delete post</string>
     <string name="upload_post">Upload post</string>
     <string name="image_preview">Image preview</string>
     <string name="get_directions">Get directions</string>
     <string name="get_location">Get location</string>
+    <string name="success_delete_post">Post deleted</string>
+    <string name="success_new_post">New post created</string>
+    <string name="success_update_post">Post updated</string>
+    <string name="failure_fields_missing">One or more fields missing</string>
+    <string name="failure_load_image">Unable to load image, please try selecting another image</string>
+    <string name="failure_network_error">A network error occurred, please try again later</string>
 
     <!-- Settings UI -->
     <string name="max_records">Records</string>

@@ -39,6 +39,9 @@ public class TestApplicationModule {
     assertNotNull(ApplicationModule.provideSharedPreferences(context));
     assertNotNull(ApplicationModule.provideGetMessagesUrl(context));
     assertNotNull(ApplicationModule.provideGetUserMessagesUrl(context));
+    assertNotNull(ApplicationModule.provideNewMessageUrl(context));
+    assertNotNull(ApplicationModule.provideUpdateMessageUrl(context));
+    assertNotNull(ApplicationModule.provideDeleteMessageUrl(context));
   }
 
 }
