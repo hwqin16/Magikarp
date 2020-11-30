@@ -133,9 +133,7 @@ public class MapsFragment extends Fragment
     if (itemId == R.id.action_new_post) {
       // Build arguments bundle for creating a new post in the post editor.
       final Bundle args = new Bundle();
-      args.putBoolean(getString(R.string.args_is_editable), true);
-      args.putDouble(getString(R.string.args_latitude), Double.NaN);
-      args.putDouble(getString(R.string.args_longitude), Double.NaN);
+      args.putString(getString(R.string.args_post_type), getString(R.string.arg_post_type_new));
       // Launch post editor.
       NavHostFragment.findNavController(this).navigate(R.id.action_nav_maps_to_post_editor, args);
       return true;
@@ -223,11 +221,9 @@ public class MapsFragment extends Fragment
     assert message != null;
     // Build arguments bundle for editing/viewing an existing post in the post editor.
     final Bundle bundle = new Bundle();
-    bundle.putBoolean(getString(R.string.args_is_editable), isUserData);
-    bundle.putDouble(getString(R.string.args_latitude), message.getLatitude());
-    bundle.putDouble(getString(R.string.args_longitude), message.getLongitude());
-    bundle.putString(getString(R.string.args_text), message.getText());
-    bundle.putString(getString(R.string.args_image_uri), message.getImageUrl());
+    bundle.putString(getString(R.string.args_post_type),
+        getString(isUserData ? R.string.arg_post_type_update : R.string.arg_post_type_view));
+    bundle.putParcelable(getString(R.string.args_message), message);
     // Launch post editor.
     int action =
         isUserData ? R.id.action_nav_maps_to_post_editor : R.id.action_nav_maps_to_post_viewer;
