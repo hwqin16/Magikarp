@@ -1,8 +1,5 @@
 package com.magikarp.android.ui.posts;
 
-import static android.content.Intent.ACTION_VIEW;
-
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -199,7 +196,7 @@ public class PostFragment extends Fragment {
       assert location != null;
       final Uri uri =
           Uri.parse(String.format(Locale.US, GEO_URL, location.latitude, location.longitude));
-      activity.startActivity(new Intent(ACTION_VIEW, uri));
+      activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
       return true;
     } else {
       return super.onOptionsItemSelected(item);
@@ -260,8 +257,8 @@ public class PostFragment extends Fragment {
   public void onStart() {
     super.onStart();
     // Start location updates.
-    if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ==
-        PackageManager.PERMISSION_GRANTED) {
+    if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+        == PackageManager.PERMISSION_GRANTED) {
       locationListener = new LocationListener();
       fusedLocationClient.requestLocationUpdates(LocationRequest.create(), locationListener, null);
     } else {
@@ -375,9 +372,8 @@ public class PostFragment extends Fragment {
   }
 
   /**
-   * GPS button click callback.
-   * <p>
-   * By the time this button is available, location permissions should have already been granted.
+   * GPS button click callback. By the time this button is available, location permissions should
+   * have already been granted.
    */
   @VisibleForTesting
   void onLocationButtonClick() {
