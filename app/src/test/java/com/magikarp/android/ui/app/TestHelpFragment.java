@@ -1,5 +1,7 @@
 package com.magikarp.android.ui.app;
 
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -9,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.ViewGroup;
-import com.magikarp.android.R;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,7 +33,7 @@ public class TestHelpFragment {
 
     fragment.onCreateOptionsMenu(menu, inflater);
 
-    verify(inflater).inflate(R.menu.menu_help, menu);
+    verify(inflater).inflate(anyInt(), eq(menu));
   }
 
   @Test
@@ -43,7 +44,7 @@ public class TestHelpFragment {
 
     fragment.onCreateView(inflater, container, savedInstanceState);
 
-    verify(inflater).inflate(R.layout.fragment_help, container, false);
+    verify(inflater).inflate(anyInt(), eq(container), eq(false));
   }
 
 }
