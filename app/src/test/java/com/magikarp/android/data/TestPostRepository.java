@@ -1,16 +1,26 @@
 package com.magikarp.android.data;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
+import android.net.Uri;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.magikarp.android.data.PostRepository.FileNameGenerator;
+import com.magikarp.android.data.PostRepository.UploadUriListener;
 import com.magikarp.android.data.model.DeleteMessageRequest;
 import com.magikarp.android.data.model.DeleteMessageResponse;
 import com.magikarp.android.data.model.GetMessagesResponse;
@@ -22,6 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 /**
@@ -123,8 +134,22 @@ public class TestPostRepository {
   }
 
   @Test
-  public void testUploadFile() {
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public void testUploadFileTaskSuccessful() {
+    final Uri fileUri = Uri.parse("file://fileUri");
+    final String fileExtension = "jpg";
+    final UploadUriListener listener = mock(UploadUriListener.class);
 
+    final UploadTask uploadTask = mock(UploadTask.class);
+    final Task continuationTask = mock(Task.class);
+    final Task downloadUriTask = mock(Task.class);
+    when(storageReference.child(anyString())).thenReturn(storageReference);
+    when(storageReference.putFile(fileUri)).thenReturn(uploadTask);
+    when(uploadTask.continueWithTask(any(Continuation.class))).thenReturn(continuationTask);
+
+    postRepository.uploadFile(fileUri, fileExtension, listener);
+
+    verify(continuationTask).addOnCompleteListener(any(OnCompleteListener.class));
   }
 
 }

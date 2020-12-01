@@ -122,8 +122,10 @@ public class PostRepository {
   /**
    * Delete an existing message post.
    *
-   * @param userId post user ID
-   * @param postId post ID
+   * @param postId        message  ID
+   * @param userId        message user ID
+   * @param listener      response listener
+   * @param errorListener error listener
    */
   public void deleteMessage(@NonNull String postId, @NonNull String userId,
                             @NonNull Response.Listener<DeleteMessageResponse> listener,
@@ -163,8 +165,8 @@ public class PostRepository {
       if (listener != null) {
         listener.onUriReceived(fileUri, task.isSuccessful() ? task.getResult() : null);
       }
-
     });
+
   }
 
   /**
