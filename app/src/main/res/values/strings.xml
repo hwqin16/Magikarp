@@ -30,10 +30,13 @@
     <string name="get_directions">Get directions</string>
     <string name="get_location">Get location</string>
     <string name="success_delete_post">Post deleted</string>
+    <string name="success_location_updated">Location updated</string>
     <string name="success_new_post">New post created</string>
     <string name="success_update_post">Post updated</string>
     <string name="failure_fields_missing">One or more fields missing</string>
+    <string name="failure_fine_location_permission">Function requires access to location</string>
     <string name="failure_load_image">Unable to load image, please try selecting another image</string>
+    <string name="failure_location_unavailable">Location not available, please try again later</string>
     <string name="failure_network_error">A network error occurred, please try again later</string>
 
     <!-- Settings UI -->

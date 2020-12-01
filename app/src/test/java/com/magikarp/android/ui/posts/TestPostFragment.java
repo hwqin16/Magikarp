@@ -1,45 +1,60 @@
 package com.magikarp.android.ui.posts;
 
 import static android.os.Looper.getMainLooper;
+import static com.google.common.base.Verify.verifyNotNull;
 import static com.magikarp.android.ui.posts.PostFragment.SAVESTATE_IMAGE_URL;
 import static com.magikarp.android.ui.posts.PostFragment.SAVESTATE_LOCATION;
 import static com.magikarp.android.ui.posts.PostFragment.SAVESTATE_TEXT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.notNull;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.annotation.Config.OLDEST_SDK;
 import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.ServiceConnection;
+import android.content.Intent;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.magikarp.android.R;
 import com.magikarp.android.data.PostRepository;
@@ -48,7 +63,7 @@ import com.magikarp.android.data.model.Message;
 import com.magikarp.android.data.model.NewMessageResponse;
 import com.magikarp.android.data.model.UpdateMessageResponse;
 import com.magikarp.android.databinding.FragmentPostBinding;
-import com.magikarp.android.services.LocationService;
+import com.magikarp.android.location.LocationListener;
 import java.io.FileNotFoundException;
 import org.junit.After;
 import org.junit.Before;
@@ -57,8 +72,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 import org.robolectric.annotation.LooperMode;
+import org.robolectric.shadows.ShadowApplication;
 
 /**
  * Class for testing {@code PostFragment}.
@@ -69,17 +86,22 @@ import org.robolectric.annotation.LooperMode;
 public class TestPostFragment {
 
   private final String imageUrl = "imageUrl";
-
+  @Mock
+  Activity activity;
+  @Mock
+  ActivityResultLauncher<String> getContentLauncher;
+  @Mock
+  ActivityResultLauncher<String> requestPermissionLauncher;
   @Mock
   private Bundle arguments;
   @Mock
   private LatLng location;
   @Mock
-  private LocationService locationService;
-  @Mock
-  private ServiceConnection serviceConnection;
+  LocationListener locationListener;
   @Mock
   ContentResolver contentResolver;
+  @Mock
+  FusedLocationProviderClient fusedLocationClient;
   @Mock
   private ImageLoader imageLoader;
   @Mock
@@ -101,8 +123,10 @@ public class TestPostFragment {
     context = ApplicationProvider.getApplicationContext();
     binding = FragmentPostBinding.inflate(LayoutInflater.from(context));
     fragment =
-        new PostFragment(arguments, context, binding, location, locationService, serviceConnection,
-            imageUrl, contentResolver, imageLoader, postRepository, requestQueue);
+        new PostFragment(activity, getContentLauncher, requestPermissionLauncher, arguments,
+            context, binding, location, locationListener, imageUrl, contentResolver,
+            fusedLocationClient,
+            imageLoader, postRepository, requestQueue);
   }
 
   @After
@@ -118,7 +142,6 @@ public class TestPostFragment {
     shadowOf(getMainLooper()).idle();
 
     assertTrue(fragment.hasOptionsMenu());
-    verify(serviceConnection).onServiceConnected(Mockito.any(), Mockito.any());
   }
 
   @Test
@@ -178,7 +201,7 @@ public class TestPostFragment {
     final MenuItem item = mock(MenuItem.class);
     when(item.getItemId()).thenReturn(R.id.menu_get_location);
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).onGpsButtonClick();
+    doNothing().when(spy).onLocationButtonClick();
 
     assertTrue(spy.onOptionsItemSelected(item));
   }
@@ -207,9 +230,11 @@ public class TestPostFragment {
   public void testOnOptionsItemSelectedGetDirections() {
     final MenuItem item = mock(MenuItem.class);
     when(item.getItemId()).thenReturn(R.id.menu_get_directions);
-    final PostFragment spy = spy(fragment);
 
-    assertTrue(spy.onOptionsItemSelected(item));
+    fragment.onOptionsItemSelected(item);
+
+    verify(activity).startActivity(any(Intent.class));
+    assertTrue(fragment.onOptionsItemSelected(item));
   }
 
   @Test
@@ -301,6 +326,51 @@ public class TestPostFragment {
   }
 
   @Test
+  public void testOnStartNoPermission() {
+    final ShadowApplication application = Shadows.shadowOf((Application) context);
+    application.denyPermissions(Manifest.permission.ACCESS_FINE_LOCATION);
+
+    fragment.onStart();
+
+    assertSame(locationListener, fragment.locationListener);
+
+    verify(requestPermissionLauncher).launch(Manifest.permission.ACCESS_FINE_LOCATION);
+    verifyNoInteractions(fusedLocationClient);
+  }
+
+  @Test
+  public void testOnStartWithFineLocationPermission() {
+    final ShadowApplication application = Shadows.shadowOf((Application) context);
+    application.grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION);
+
+    fragment.onStart();
+
+    assert (locationListener != fragment.locationListener);
+    verifyNotNull(fragment.locationListener);
+    verify(fusedLocationClient)
+        .requestLocationUpdates(any(LocationRequest.class), any(LocationCallback.class),
+            nullable(Looper.class));
+    verifyNoInteractions(requestPermissionLauncher);
+  }
+
+  @Test
+  public void testOnPauseLocationListenerNotNull() {
+    fragment.onPause();
+
+    verify(fusedLocationClient).removeLocationUpdates(any(LocationCallback.class));
+    assertNull(fragment.locationListener);
+  }
+
+  @Test
+  public void testOnPauseLocationListenerNull() {
+    fragment.locationListener = null;
+
+    fragment.onPause();
+
+    verifyNoInteractions(fusedLocationClient);
+  }
+
+  @Test
   public void testOnSaveInstanceStatePostTypeNew() {
     final Bundle bundle = mock(Bundle.class);
     when(arguments.getString(context.getString(R.string.args_post_type)))
@@ -308,7 +378,7 @@ public class TestPostFragment {
 
     fragment.onSaveInstanceState(bundle);
 
-    verify(bundle).putParcelable(Mockito.anyString(), Mockito.any());
+    verify(bundle).putParcelable(Mockito.anyString(), any());
   }
 
   @Test
@@ -319,7 +389,7 @@ public class TestPostFragment {
 
     fragment.onSaveInstanceState(bundle);
 
-    verify(bundle).putParcelable(Mockito.anyString(), Mockito.any());
+    verify(bundle).putParcelable(Mockito.anyString(), any());
   }
 
   @Test
@@ -345,24 +415,62 @@ public class TestPostFragment {
     fragment.onDestroy();
     shadowOf(getMainLooper()).idle();
 
-    verify(serviceConnection).onServiceDisconnected(Mockito.any());
-    verify(locationService).dispose();
+    assertNull(fragment.activity);
+    assertNull(fragment.context);
+    assertNull(fragment.arguments);
   }
-//
-//  @Test
-//  public void testPerformOnActivityResult() {
-//    Intent mockData = mock(Intent.class);
-//
-//    PostFragment postFragment = new PostFragment();
-//
-//    postFragment.performOnActivityResult(
-//        PostFragment.RESULT_LOAD_IMG - 1,
-//        Activity.RESULT_CANCELED,
-//        mockData
-//    );
-//
-//    verifyNoInteractions(mockData);
-//  }
+
+  @Test
+  public void testOnRequestPermissionResultTrue() {
+    fragment.onRequestPermissionResult(true);
+
+    assertNotSame(locationListener, fragment.locationListener);
+    verify(fusedLocationClient)
+        .requestLocationUpdates(any(LocationRequest.class), any(LocationListener.class),
+            nullable(Looper.class));
+    verifyNoMoreInteractions(fusedLocationClient);
+  }
+
+  @Test
+  public void testOnRequestPermissionResultFalse() {
+    fragment.onRequestPermissionResult(false);
+
+    assertSame(locationListener, fragment.locationListener);
+    verifyNoInteractions(fusedLocationClient);
+  }
+
+  @Test
+  public void testOnRequestPermissionResultSecurityException() {
+    doThrow(SecurityException.class).when(fusedLocationClient)
+        .requestLocationUpdates(any(LocationRequest.class), any(LocationCallback.class),
+            nullable(Looper.class));
+
+    fragment.onRequestPermissionResult(true);
+
+    assertNull(fragment.locationListener);
+    verify(fusedLocationClient).removeLocationUpdates(any(LocationCallback.class));
+  }
+
+  @Test
+  public void testOnGetContentResultNotNull() {
+    final Uri uri = mock(Uri.class);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).loadImage(nullable(String.class));
+
+    spy.onGetContentResult(uri);
+
+    verify(spy).loadImage(any(String.class));
+  }
+
+  @Test
+  public void testOnGetContentResultNull() {
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).loadImage(nullable(String.class));
+
+    spy.onGetContentResult(null);
+
+    verify(spy, never()).loadImage(nullable(String.class));
+  }
 
   @Test
   public void testLoadImageHttpSchema() {
@@ -372,7 +480,7 @@ public class TestPostFragment {
 
     assertEquals(View.VISIBLE, binding.createPostNetworkImage.getVisibility());
     assertEquals(View.INVISIBLE, binding.createPostLocalImage.getVisibility());
-    verify(imageLoader).get(eq(imageUrl), Mockito.any());
+    verify(imageLoader).get(eq(imageUrl), any(ImageLoader.ImageListener.class));
   }
 
   @Test
@@ -389,34 +497,42 @@ public class TestPostFragment {
   @Test
   public void testLoadImageFileSchemaFileNotFound() throws FileNotFoundException {
     final String imageUrl = "file://example.com/image.png";
-    doThrow(FileNotFoundException.class).when(contentResolver).openInputStream(notNull());
+    doThrow(FileNotFoundException.class).when(contentResolver).openInputStream(any(Uri.class));
 
     fragment.loadImage(imageUrl);
 
     // Confirm method completes.
   }
 
-//  @Test
-//  public void testOnGpsButtonClick() {
-//    MenuItem mockMenuItem = mock(MenuItem.class);
-//
-//    PostFragment postFragment = new PostFragment(null, null, false);
-//
-//    postFragment.onGpsButtonClick(mockMenuItem);
-//
-//    verifyNoInteractions(mockMenuItem);
-//  }
-//
-//  @Test
-//  public void testPerformOnRequestPermissionsResult() {
-//    Context context = mock(Context.class);
-//
-//    PostFragment postFragment = new PostFragment();
-//
-//    postFragment.performOnRequestPermissionsResult(context, 0, new int[] {});
-//
-//    verifyNoInteractions(context);
-//  }
+  @Test
+  public void testOnLocationButtonClickLocationListenerNotNullWithLocation() {
+    final Location location = mock(Location.class);
+    when(location.getLatitude()).thenReturn(1.0d);
+    when(location.getLongitude()).thenReturn(2.0d);
+    when(locationListener.getLocation()).thenReturn(location);
+
+    fragment.onLocationButtonClick();
+
+    assertEquals(new LatLng(1.0d, 2.0d), fragment.location);
+  }
+
+  @Test
+  public void testOnLocationButtonClickLocationListenerNotNullButNoLocation() {
+    when(locationListener.getLocation()).thenReturn(null);
+
+    fragment.onLocationButtonClick();
+
+    assertSame(location, fragment.location);
+  }
+
+  @Test
+  public void testOnLocationButtonClickLocationListenerNull() {
+    fragment.locationListener = null;
+
+    fragment.onLocationButtonClick();
+
+    assertSame(location, fragment.location);
+  }
 
   @Test
   public void testOnPostButtonClickInvalidImageUrl() {
@@ -474,7 +590,7 @@ public class TestPostFragment {
 
     verify(postRepository)
         .newMessage(Mockito.anyString(), eq(location.latitude), eq(location.longitude),
-            Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.any());
+            Mockito.anyString(), Mockito.anyString(), any(), any());
   }
 
   @Test
@@ -489,8 +605,8 @@ public class TestPostFragment {
 
     verify(postRepository)
         .updateMessage(Mockito.anyString(), Mockito.anyString(), eq(location.latitude),
-            eq(location.longitude), Mockito.anyString(), Mockito.anyString(), Mockito.any(),
-            Mockito.any());
+            eq(location.longitude), Mockito.anyString(), Mockito.anyString(), any(),
+            any());
   }
 
   @Test
@@ -512,7 +628,7 @@ public class TestPostFragment {
 
     fragment.onDeleteButtonClick();
 
-    verify(postRepository).deleteMessage(eq("id"), eq("userId"), Mockito.any(), Mockito.any());
+    verify(postRepository).deleteMessage(eq("id"), eq("userId"), any(), any());
   }
 
   @Test
@@ -523,7 +639,7 @@ public class TestPostFragment {
 
     spy.onNewMessageResponse(response);
 
-    // Confirm method completes.
+    verify(spy).closeFragment();
   }
 
   @Test
@@ -534,7 +650,7 @@ public class TestPostFragment {
 
     spy.onUpdateMessageResponse(response);
 
-    // Confirm method completes.
+    verify(spy).closeFragment();
   }
 
   @Test
@@ -545,7 +661,14 @@ public class TestPostFragment {
 
     spy.onDeleteMessageResponse(response);
 
-    // Confirm method completes.
+    verify(spy).closeFragment();
+  }
+
+  @Test
+  public void testCloseFragment() {
+    fragment.closeFragment();
+
+    verify(activity).onBackPressed();
   }
 
   @Test
