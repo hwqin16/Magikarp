@@ -27,9 +27,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".services.LocationService"
-            android:foregroundServiceType="location" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
