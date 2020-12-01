@@ -13,6 +13,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -39,6 +40,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -62,6 +64,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
@@ -89,8 +92,6 @@ public class TestMapsFragment {
   @Mock
   MapsViewModel mapsViewModel;
   @Mock
-  NavController navController;
-  @Mock
   SharedPreferences preferences;
 
   private AutoCloseable closeable;
@@ -105,7 +106,7 @@ public class TestMapsFragment {
     context = ApplicationProvider.getApplicationContext();
     fragment =
         new MapsFragment(requestPermissionLauncher, arguments, context, activity, googleMap,
-            googleSignInAccount, mapsViewModel, navController, preferences);
+            googleSignInAccount, mapsViewModel, preferences);
   }
 
   @After
@@ -192,12 +193,18 @@ public class TestMapsFragment {
 
   @Test
   public void testOnOptionsItemSelectedNewPost() {
-    final MenuItem item = mock(MenuItem.class);
-    when(item.getItemId()).thenReturn(R.id.action_new_post);
+    try (MockedStatic<NavHostFragment> navHostFragment = mockStatic(NavHostFragment.class)) {
+      final MenuItem item = mock(MenuItem.class);
+      when(item.getItemId()).thenReturn(R.id.action_new_post);
+      final NavController navController = mock(NavController.class);
+      // stub the static method that is called by the class under test
+      navHostFragment.when(() -> NavHostFragment.findNavController(fragment))
+          .thenReturn(navController);
 
-    assertTrue(fragment.onOptionsItemSelected(item));
+      assertTrue(fragment.onOptionsItemSelected(item));
 
-    verify(navController).navigate(anyInt(), any(Bundle.class));
+      verify(navController).navigate(eq(R.id.action_nav_maps_to_post_editor), any(Bundle.class));
+    }
   }
 
   @Test
@@ -206,8 +213,6 @@ public class TestMapsFragment {
     when(item.getItemId()).thenReturn(Integer.MAX_VALUE);
 
     assertFalse(fragment.onOptionsItemSelected(item));
-
-    verifyNoInteractions(navController);
   }
 
   @Test
@@ -425,36 +430,48 @@ public class TestMapsFragment {
 
   @Test
   public void testOnMarkerClickIsUserData() {
-    when(arguments.getBoolean(context.getString(R.string.args_is_user_data))).thenReturn(true);
-    final Marker marker = mock(Marker.class);
-    final Message messageIn =
-        new Message("id", "userId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
-    when(marker.getTag()).thenReturn(messageIn);
-    final ArgumentCaptor<Bundle> captor = ArgumentCaptor.forClass(Bundle.class);
+    try (MockedStatic<NavHostFragment> navHostFragment = mockStatic(NavHostFragment.class)) {
+      final NavController navController = mock(NavController.class);
+      navHostFragment.when(() -> NavHostFragment.findNavController(fragment))
+          .thenReturn(navController);
 
-    fragment.onMarkerClick(marker);
+      when(arguments.getBoolean(context.getString(R.string.args_is_user_data))).thenReturn(true);
+      final Marker marker = mock(Marker.class);
+      final Message messageIn =
+          new Message("id", "userId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+      when(marker.getTag()).thenReturn(messageIn);
+      final ArgumentCaptor<Bundle> captor = ArgumentCaptor.forClass(Bundle.class);
 
-    verify(navController).navigate(eq(R.id.action_nav_maps_to_post_editor), captor.capture());
-    final Message messageOut =
-        captor.getValue().getParcelable(context.getString(R.string.args_message));
-    assertEquals(new Gson().toJson(messageIn), new Gson().toJson(messageOut));
+      fragment.onMarkerClick(marker);
+
+      verify(navController).navigate(eq(R.id.action_nav_maps_to_post_editor), captor.capture());
+      final Message messageOut =
+          captor.getValue().getParcelable(context.getString(R.string.args_message));
+      assertEquals(new Gson().toJson(messageIn), new Gson().toJson(messageOut));
+    }
   }
 
   @Test
   public void testOnMarkerClickIsNotUserData() {
-    when(arguments.getBoolean(context.getString(R.string.args_is_user_data))).thenReturn(false);
-    final Marker marker = mock(Marker.class);
-    final Message messageIn =
-        new Message("id", "userId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
-    when(marker.getTag()).thenReturn(messageIn);
-    final ArgumentCaptor<Bundle> captor = ArgumentCaptor.forClass(Bundle.class);
+    try (MockedStatic<NavHostFragment> navHostFragment = mockStatic(NavHostFragment.class)) {
+      final NavController navController = mock(NavController.class);
+      navHostFragment.when(() -> NavHostFragment.findNavController(fragment))
+          .thenReturn(navController);
 
-    fragment.onMarkerClick(marker);
+      when(arguments.getBoolean(context.getString(R.string.args_is_user_data))).thenReturn(false);
+      final Marker marker = mock(Marker.class);
+      final Message messageIn =
+          new Message("id", "userId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+      when(marker.getTag()).thenReturn(messageIn);
+      final ArgumentCaptor<Bundle> captor = ArgumentCaptor.forClass(Bundle.class);
 
-    verify(navController).navigate(eq(R.id.action_nav_maps_to_post_viewer), captor.capture());
-    final Message messageOut =
-        captor.getValue().getParcelable(context.getString(R.string.args_message));
-    assertEquals(new Gson().toJson(messageIn), new Gson().toJson(messageOut));
+      fragment.onMarkerClick(marker);
+
+      verify(navController).navigate(eq(R.id.action_nav_maps_to_post_viewer), captor.capture());
+      final Message messageOut =
+          captor.getValue().getParcelable(context.getString(R.string.args_message));
+      assertEquals(new Gson().toJson(messageIn), new Gson().toJson(messageOut));
+    }
   }
 
   @Test

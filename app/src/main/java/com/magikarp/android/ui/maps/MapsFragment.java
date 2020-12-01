@@ -21,7 +21,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.maps.GoogleMap;
@@ -63,8 +62,6 @@ public class MapsFragment extends Fragment
   int maxRecords;
   @VisibleForTesting
   MapsViewModel mapsViewModel;
-  @VisibleForTesting
-  NavController navController;
   @Inject
   SharedPreferences preferences;
 
@@ -84,7 +81,6 @@ public class MapsFragment extends Fragment
    * @param googleMap                 test variable
    * @param googleSignInAccount       test variable
    * @param mapsViewModel             test variable
-   * @param navController             test variable
    * @param preferences               test variable
    */
   @VisibleForTesting
@@ -96,7 +92,6 @@ public class MapsFragment extends Fragment
       GoogleMap googleMap,
       GoogleSignInAccount googleSignInAccount,
       MapsViewModel mapsViewModel,
-      NavController navController,
       SharedPreferences preferences) {
     this.requestPermissionLauncher = requestPermissionLauncher;
     this.arguments = arguments;
@@ -105,7 +100,6 @@ public class MapsFragment extends Fragment
     this.googleMap = googleMap;
     this.googleSignInAccount = googleSignInAccount;
     this.mapsViewModel = mapsViewModel;
-    this.navController = navController;
     this.preferences = preferences;
   }
 
@@ -119,8 +113,6 @@ public class MapsFragment extends Fragment
     // Set up account listener (used to determine if fragment should quit while in edit mode).
     new ViewModelProvider(requireActivity()).get(GoogleSignInViewModel.class).getSignedInAccount()
         .observe(this, this::onGoogleSignInAccountChanged);
-    // Set up app navigation controller.
-    navController = NavHostFragment.findNavController(this);
     performOnCreate();
   }
 
@@ -173,7 +165,7 @@ public class MapsFragment extends Fragment
       args.putString(context.getString(R.string.args_post_type),
           context.getString(R.string.arg_post_type_new));
       // Launch post editor.
-      navController.navigate(R.id.action_nav_maps_to_post_editor, args);
+      NavHostFragment.findNavController(this).navigate(R.id.action_nav_maps_to_post_editor, args);
       return true;
     } else {
       return super.onOptionsItemSelected(item);
@@ -283,7 +275,7 @@ public class MapsFragment extends Fragment
     // Launch post editor.
     int action =
         isUserData ? R.id.action_nav_maps_to_post_editor : R.id.action_nav_maps_to_post_viewer;
-    navController.navigate(action, bundle);
+    NavHostFragment.findNavController(this).navigate(action, bundle);
     return true;
   }
 
