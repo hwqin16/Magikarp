@@ -1,18 +1,21 @@
 package com.magikarp.android.ui.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -26,7 +29,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.magikarp.android.R;
@@ -34,100 +36,161 @@ import dagger.hilt.android.AndroidEntryPoint;
 import javax.inject.Inject;
 
 @AndroidEntryPoint
-public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuItemClickListener,
-    OnCompleteListener<Void> {
+public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuItemClickListener {
 
   @VisibleForTesting
-  static final int SIGN_IN_RESULT = 9001;
-
-  private AppBarConfiguration appBarConfiguration;
-
-  private DrawerLayout drawerLayout;
-
-  private GoogleSignInViewModel viewModel;
-
-  private NavController navController;
-
-  private NavigationView navigationView;
+  ActivityResultLauncher<Intent> googleSignInLauncher;
+  @VisibleForTesting
+  AppBarConfiguration appBarConfiguration;
+  @VisibleForTesting
+  Context context;
+  @VisibleForTesting
+  DrawerLayout drawerLayout;
+  @VisibleForTesting
+  GoogleSignInViewModel viewModel;
+  @VisibleForTesting
+  NavController navController;
+  @VisibleForTesting
+  NavigationView navigationView;
   @Inject
   GoogleSignInClient googleSignInClient;
   @Inject
   ImageLoader imageLoader;
 
+  /**
+   * Default constructor.
+   */
   public MainActivity() {
   }
 
+  /**
+   * Constructor for testing.
+   *
+   * @param googleSignInLauncher test variable
+   * @param appBarConfiguration  test variable
+   * @param context              test variable
+   * @param drawerLayout         test variable
+   * @param viewModel            test variable
+   * @param navController        test variable
+   * @param navigationView       test variable
+   * @param googleSignInClient   test variable
+   * @param imageLoader          test variable
+   */
   @VisibleForTesting
-  MainActivity(NavigationView navigationView) {
+  MainActivity(
+      ActivityResultLauncher<Intent> googleSignInLauncher,
+      AppBarConfiguration appBarConfiguration,
+      Context context,
+      DrawerLayout drawerLayout,
+      GoogleSignInViewModel viewModel,
+      NavController navController,
+      NavigationView navigationView,
+      GoogleSignInClient googleSignInClient,
+      ImageLoader imageLoader) {
+    this.googleSignInLauncher = googleSignInLauncher;
+    this.appBarConfiguration = appBarConfiguration;
+    this.context = context;
+    this.drawerLayout = drawerLayout;
+    this.viewModel = viewModel;
+    this.navController = navController;
     this.navigationView = navigationView;
+    this.googleSignInClient = googleSignInClient;
+    this.imageLoader = imageLoader;
   }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    // ***** Add setup that cannot be instantiated with a unit test here. ***** //
+
+    viewModel = new ViewModelProvider(this).get(GoogleSignInViewModel.class);
+    // For unit testing.
+    context = this;
+    performOnCreate();
+  }
+
+  @VisibleForTesting
+  void performOnCreate() {
+    // Set up main activity views.
     setContentView(R.layout.activity_main);
+    setSupportActionBar(findViewById(R.id.toolbar));
 
-    Toolbar toolbar = findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
+    // Set up navigation UI.
     drawerLayout = findViewById(R.id.drawer_layout);
     navigationView = findViewById(R.id.nav_view);
     NavHostFragment navHostFragment =
         (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+    // Navigation host fragment should never be null (spotbugs).
     assert navHostFragment != null;
-
     navController = navHostFragment.getNavController();
     appBarConfiguration =
         new AppBarConfiguration.Builder(R.id.nav_maps, R.id.nav_my_posts,
             R.id.nav_settings, R.id.nav_help).setOpenableLayout(drawerLayout).build();
-
     NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
     NavigationUI.setupWithNavController(navigationView, navController);
 
     // Set up sign in buttons.
-    navigationView.getMenu().findItem(R.id.action_login).setOnMenuItemClickListener(this);
-    navigationView.getMenu().findItem(R.id.action_logout).setOnMenuItemClickListener(this);
+    final Menu menu = navigationView.getMenu();
+    menu.findItem(R.id.action_login).setOnMenuItemClickListener(this);
+    menu.findItem(R.id.action_logout).setOnMenuItemClickListener(this);
 
-    View headerView = navigationView.getHeaderView(0);
-    NetworkImageView imageView = headerView.findViewById(R.id.drawer_header_image);
-    imageView.setDefaultImageResId(R.mipmap.ic_myplace_round);
-    imageView.setErrorImageResId(R.mipmap.ic_myplace_round);
-    imageView.setImageUrl(null, null);
+    // Set up header view for displaying user profile when signed in.
+    final View headerView = navigationView.getHeaderView(0);
+    final NetworkImageView imageView = headerView.findViewById(R.id.drawer_header_image);
+    imageView.setDefaultImageResId(R.mipmap.ic_myplace);
+    imageView.setErrorImageResId(R.mipmap.ic_myplace);
+
+    // Set up sign in UI.
+    googleSignInLauncher =
+        registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            this::onGoogleSignInResult);
+    updateSignInUi(GoogleSignIn.getLastSignedInAccount(context));
 
     // Set the default shared preferences for the application on first run.
-    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-    // Set up Google Sign In UI and view model.
-    viewModel = new ViewModelProvider(this).get(GoogleSignInViewModel.class);
-    updateSignInUi(GoogleSignIn.getLastSignedInAccount(this));
+    PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
   }
 
   @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    performOnActivityResult(requestCode, data);
-  }
-
-  @VisibleForTesting
-  void performOnActivityResult(int requestCode, Intent data) {
-    if (requestCode == SIGN_IN_RESULT) {
-      try {
-        GoogleSignInAccount account =
-            GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException.class);
-        updateSignInUi(account);
-      } catch (ApiException e) {
-        // The ApiException status code indicates the detailed failure reason.
-        // Please refer to the GoogleSignInStatusCodes class reference for more information.
-        Log.w("Main Activity", "signInResult:failed code=" + e.getStatusCode());
-        updateSignInUi(null);
-      }
+  public boolean onMenuItemClick(MenuItem item) {
+    final int id = item.getItemId();
+    if (id == R.id.action_login) {
+      googleSignInLauncher.launch(googleSignInClient.getSignInIntent());
+      drawerLayout.closeDrawers();
+      return true;
+    } else if (id == R.id.action_logout) {
+      googleSignInClient.signOut().addOnCompleteListener(this, this::onSignOutComplete);
+      drawerLayout.closeDrawers();
+      return true;
     }
+    return false;
   }
 
   @Override
   public boolean onSupportNavigateUp() {
-    return NavigationUI.navigateUp(navController, appBarConfiguration)
-        || super.onSupportNavigateUp();
+    return NavigationUI.navigateUp(navController, appBarConfiguration);
+  }
+
+  @VisibleForTesting
+  void onGoogleSignInResult(@NonNull ActivityResult result) {
+    try {
+      GoogleSignInAccount account =
+          GoogleSignIn.getSignedInAccountFromIntent(result.getData()).getResult(ApiException.class);
+      updateSignInUi(account);
+    } catch (ApiException e) {
+      Toast.makeText(context, context.getString(R.string.failure_sign_in), Toast.LENGTH_LONG)
+          .show();
+      updateSignInUi(null);
+    }
+  }
+
+  /**
+   * Listener for account logout.
+   *
+   * @param task result of logout task
+   */
+  @VisibleForTesting
+  void onSignOutComplete(@NonNull Task<Void> task) {
+    updateSignInUi(null);
   }
 
   /**
@@ -153,23 +216,25 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
    * @param userEmail   user's email
    * @param imageUri    user's profile image
    */
-  public void setLoggedInUi(final String displayName, final String userEmail, final Uri imageUri) {
-    View headerView = navigationView.getHeaderView(0);
-    TextView name = headerView.findViewById(R.id.drawer_header_name);
-    TextView email = headerView.findViewById(R.id.drawer_header_email);
-    NetworkImageView imageView = headerView.findViewById(R.id.drawer_header_image);
+  @VisibleForTesting
+  void setLoggedInUi(@Nullable String displayName, @Nullable String userEmail,
+                     @Nullable Uri imageUri) {
+    final View headerView = navigationView.getHeaderView(0);
+    final TextView name = headerView.findViewById(R.id.drawer_header_name);
+    final TextView email = headerView.findViewById(R.id.drawer_header_email);
+    final NetworkImageView imageView = headerView.findViewById(R.id.drawer_header_image);
 
     name.setText(displayName);
     email.setText(userEmail);
     // Set the user account profile picture.
     if (imageUri != null) {
-      String urlString = imageUri.toString();
+      final String urlString = imageUri.toString();
       imageLoader.get(urlString, ImageLoader
-          .getImageListener(imageView, R.mipmap.ic_launcher_round, R.mipmap.ic_launcher_round));
+          .getImageListener(imageView, R.mipmap.ic_myplace, R.mipmap.ic_myplace));
       imageView.setImageUrl(urlString, imageLoader);
     }
     // Set the menu choices.
-    Menu menu = navigationView.getMenu();
+    final Menu menu = navigationView.getMenu();
     menu.findItem(R.id.action_login).setVisible(false);
     menu.findItem(R.id.nav_my_posts).setVisible(true);
     menu.setGroupEnabled(R.id.menu_group_logout, true);
@@ -179,46 +244,21 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
   /**
    * Sets the logged out UI.
    */
-  public void setLoggedOutUi() {
-    View headerView = navigationView.getHeaderView(0);
-    TextView name = headerView.findViewById(R.id.drawer_header_name);
-    TextView email = headerView.findViewById(R.id.drawer_header_email);
-    NetworkImageView imageView = headerView.findViewById(R.id.drawer_header_image);
+  @VisibleForTesting
+  void setLoggedOutUi() {
+    final View headerView = navigationView.getHeaderView(0);
+    final TextView name = headerView.findViewById(R.id.drawer_header_name);
+    final TextView email = headerView.findViewById(R.id.drawer_header_email);
+    final NetworkImageView imageView = headerView.findViewById(R.id.drawer_header_image);
 
     name.setText(null);
     email.setText(null);
     imageView.setImageUrl(null, null);
-    Menu menu = navigationView.getMenu();
+    final Menu menu = navigationView.getMenu();
     menu.findItem(R.id.action_login).setVisible(true);
     menu.findItem(R.id.nav_my_posts).setVisible(false);
     menu.setGroupEnabled(R.id.menu_group_logout, false);
     menu.setGroupVisible(R.id.menu_group_logout, false);
-  }
-
-  @VisibleForTesting
-  public void setDrawerItemVisibility(final int id, final boolean visible) {
-    navigationView.getMenu().findItem(id).setVisible(visible);
-  }
-
-  @Override
-  public boolean onMenuItemClick(MenuItem item) {
-    int id = item.getItemId();
-    if (id == R.id.action_login) {
-      Intent signInIntent = googleSignInClient.getSignInIntent();
-      startActivityForResult(signInIntent, SIGN_IN_RESULT);
-      drawerLayout.closeDrawers();
-      return true;
-    } else if (id == R.id.action_logout) {
-      googleSignInClient.signOut().addOnCompleteListener(this, this);
-      drawerLayout.closeDrawers();
-      return true;
-    }
-    return false;
-  }
-
-  @Override
-  public void onComplete(@NonNull Task task) {
-    updateSignInUi(null);
   }
 
 }
