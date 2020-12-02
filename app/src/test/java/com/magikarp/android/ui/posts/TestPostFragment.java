@@ -17,6 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -31,7 +32,6 @@ import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -47,6 +47,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.fragment.app.FragmentActivity;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.android.volley.RequestQueue;
@@ -87,7 +88,7 @@ public class TestPostFragment {
 
   private final String imageUrl = "imageUrl";
   @Mock
-  Activity activity;
+  FragmentActivity activity;
   @Mock
   ActivityResultLauncher<String> getContentLauncher;
   @Mock
@@ -136,12 +137,17 @@ public class TestPostFragment {
 
   @Test
   public void testPerformOnCreate() {
-    assertFalse(fragment.hasOptionsMenu());
+    final PostFragment spy = spy(fragment);
+    doReturn(activity).when(spy).requireActivity();
+    doReturn(arguments).when(spy).requireArguments();
+    doReturn(context).when(spy).requireContext();
 
-    fragment.performOnCreate();
+    assertFalse(spy.hasOptionsMenu());
+
+    spy.performOnCreate();
     shadowOf(getMainLooper()).idle();
 
-    assertTrue(fragment.hasOptionsMenu());
+    assertTrue(spy.hasOptionsMenu());
   }
 
   @Test

@@ -1,7 +1,6 @@
 package com.magikarp.android.ui.posts;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -69,7 +69,7 @@ public class PostFragment extends Fragment {
   @VisibleForTesting
   static final String URI_SCHEME_HTTP = "http";
   @VisibleForTesting
-  Activity activity;
+  FragmentActivity activity;
   @VisibleForTesting
   ActivityResultLauncher<String> requestPermissionLauncher;
   @VisibleForTesting
@@ -123,7 +123,7 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   PostFragment(
-      Activity activity, ActivityResultLauncher<String> getContentLauncher,
+      FragmentActivity activity, ActivityResultLauncher<String> getContentLauncher,
       ActivityResultLauncher<String> requestPermissionLauncher, Bundle arguments, Context context,
       FragmentPostBinding binding,
       LatLng location, LocationListener locationListener, String imageUrl,
@@ -149,13 +149,16 @@ public class PostFragment extends Fragment {
   @Override
   public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    arguments = requireArguments();
-    context = requireContext();
     performOnCreate();
   }
 
   @VisibleForTesting
   void performOnCreate() {
+    // For unit testing.
+    activity = requireActivity();
+    arguments = requireArguments();
+    context = requireContext();
+    // Set up options menu.
     setHasOptionsMenu(true);
     // Set up fragment to request permissions (i.e. fine location).
     requestPermissionLauncher =
