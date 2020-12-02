@@ -1,0 +1,72 @@
+/*
+ * Copyright to Rally Health writer Santosh Astagi
+ *
+ * https://www.rallyhealth.com/coding/code-coverage-for-android-testing
+ */
+
+ext.enableJacoco = { Project project, String variant ->
+    project.plugins.apply('jacoco')
+    final capVariant = variant.capitalize()
+    StringBuilder folderSb = new StringBuilder(variant.length() + 1)
+    for (int i = 0; i < variant.length(); i++) {
+        char c = variant.charAt(i)
+        if (Character.isUpperCase(c)) {
+            folderSb.append('/')
+            folderSb.append(Character.toLowerCase(c))
+        } else {
+            folderSb.append(c)
+        }
+    }
+    final folder = folderSb.toString()
+    project.android.testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+                excludes = ['jdk/internal/*']
+            }
+        }
+    }
+    project.jacoco {
+        toolVersion = '0.8.6'
+    }
+    project.tasks.create(
+            name: 'jacocoTestReport',
+            type: JacocoReport,
+            dependsOn: "test${capVariant}UnitTest"
+    ) {
+        def buildDir = project.buildDir
+        def coverageSourceDirs = [
+            "src/main/java",
+        ]
+        def fileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/*$ViewInjector*.*',
+            '**/*$ViewBinder*.*',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/generated/**',
+            '**/*Hilt*.*',
+            '**_Factory.class',
+            '**/Dagger*.*',
+            '**/*_AssistedFactory*.*',
+            '**/*_MembersInjector*.*',
+            '**/databinding/**'
+        ]
+        def javaClasses = fileTree(
+            dir: "$buildDir/intermediates/javac/$folder/classes/com/magikarp/android",
+            excludes: fileFilter
+        )
+        group = "Reporting"
+        description = "Generate Jacoco coverage reports for the ${project.name} with the " +
+                "$variant variant."
+        classDirectories.from = files([ javaClasses ])
+        additionalSourceDirs.from = files(coverageSourceDirs)
+        sourceDirectories.from = files(coverageSourceDirs)
+        executionData.from = files("${project.buildDir}/jacoco/test${capVariant}UnitTest.exec")
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+    }
+}

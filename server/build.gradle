@@ -2,6 +2,7 @@ plugins {
     id "application"
 }
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 repositories {
     mavenCentral()
@@ -27,8 +28,17 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.enabled true
+        csv.enabled false
+    }
+}
 
 application {
     mainClassName = "server.Server"

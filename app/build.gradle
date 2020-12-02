@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'com.google.gms.google-services'
+apply from: rootProject.file('enable-jacoco.gradle')
 
 android {
 
@@ -56,6 +57,7 @@ android {
         unitTests.includeAndroidResources = true
     }
 
+    enableJacoco(project, 'Debug')
 }
 
 dependencies {

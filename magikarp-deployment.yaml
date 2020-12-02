@@ -40,4 +40,4 @@ spec:
       port: 7000
       targetPort: 7000
   type: LoadBalancer
-  loadBalancerIP: 35.190.179.162
+  loadBalancerIP: 35.224.51.217
