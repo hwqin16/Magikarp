@@ -25,6 +25,10 @@
     <!-- Settings UI -->
     <string name="preference_key_max_records">max_records</string>
 
+    <!-- Help UI -->
+    <string name="uri_call">tel:</string>
+    <string name="uri_email">mailto:</string>
+
     <!-- Maps fragment -->
     <string name="max_records_default">20</string>
 

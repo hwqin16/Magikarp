@@ -37,6 +37,7 @@
     <string name="failure_fine_location_permission">Function requires access to location</string>
     <string name="failure_load_image">Unable to load image, please try selecting another image</string>
     <string name="failure_location_unavailable">Location not available, please try again later</string>
+    <string name="failure_no_available_activity">There are no apps to handle this action</string>
     <string name="failure_network_error">A network error occurred, please try again later</string>
 
     <!-- Settings UI -->
