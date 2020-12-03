@@ -1,7 +1,6 @@
 package com.magikarp.android.ui.posts;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -57,7 +57,7 @@ import org.jetbrains.annotations.NotNull;
 public class PostFragment extends Fragment {
 
   @VisibleForTesting
-  static final String GEO_URL = "geo:%f,%f";
+  static final String GEO_URL = "google.navigation:q=%f,%f";
   @VisibleForTesting
   static final String MEDIA_TYPE_IMAGE = "image/*";
   @VisibleForTesting
@@ -69,7 +69,7 @@ public class PostFragment extends Fragment {
   @VisibleForTesting
   static final String URI_SCHEME_HTTP = "http";
   @VisibleForTesting
-  Activity activity;
+  FragmentActivity activity;
   @VisibleForTesting
   ActivityResultLauncher<String> requestPermissionLauncher;
   @VisibleForTesting
@@ -123,7 +123,7 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   PostFragment(
-      Activity activity, ActivityResultLauncher<String> getContentLauncher,
+      FragmentActivity activity, ActivityResultLauncher<String> getContentLauncher,
       ActivityResultLauncher<String> requestPermissionLauncher, Bundle arguments, Context context,
       FragmentPostBinding binding,
       LatLng location, LocationListener locationListener, String imageUrl,
@@ -149,13 +149,16 @@ public class PostFragment extends Fragment {
   @Override
   public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    arguments = requireArguments();
-    context = requireContext();
     performOnCreate();
   }
 
   @VisibleForTesting
   void performOnCreate() {
+    // For unit testing.
+    activity = requireActivity();
+    arguments = requireArguments();
+    context = requireContext();
+    // Set up options menu.
     setHasOptionsMenu(true);
     // Set up fragment to request permissions (i.e. fine location).
     requestPermissionLauncher =
@@ -196,7 +199,7 @@ public class PostFragment extends Fragment {
       assert location != null;
       final Uri uri =
           Uri.parse(String.format(Locale.US, GEO_URL, location.latitude, location.longitude));
-      activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+      startActivityFromIntent(new Intent(Intent.ACTION_VIEW, uri));
       return true;
     } else {
       return super.onOptionsItemSelected(item);
@@ -299,6 +302,21 @@ public class PostFragment extends Fragment {
     activity = null;
     context = null;
     arguments = null;
+  }
+
+  /**
+   * Start an activity from an intent.
+   *
+   * @param intent the intent used to start an activity
+   */
+  @VisibleForTesting
+  void startActivityFromIntent(@NonNull Intent intent) {
+    if (intent.resolveActivity(context.getPackageManager()) != null) {
+      activity.startActivity(intent);
+    } else {
+      Toast.makeText(context, context.getString(R.string.failure_no_available_activity),
+          Toast.LENGTH_LONG).show();
+    }
   }
 
   /**
