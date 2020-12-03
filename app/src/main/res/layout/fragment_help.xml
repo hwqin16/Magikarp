@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:id="@+id/two_line_item1"
+        android:id="@+id/call_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -61,10 +61,10 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/two_line_item"
+        android:id="@+id/email_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/two_line_item1"
+        android:layout_below="@id/call_container"
         android:background="?selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
