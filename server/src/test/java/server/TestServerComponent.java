@@ -90,6 +90,23 @@ public class TestServerComponent {
 
   @Test
   @Order(3)
+  public void updatePostTestFail() {
+    String recordId = getFirstRecordIdFromHelper();
+
+    // Update test helper to new values
+    helper.randomUpdate();
+
+    HttpResponse<String> response =
+            helper.writeDataToEndpoint(endpoint + 2342 + "/update/" + recordId);
+
+    JSONObject responseJson = new JSONObject(response.getBody());
+
+    System.out.println(responseJson);
+    assertEquals(404, responseJson.get("response_code"));
+  }
+
+  @Test
+  @Order(4)
   public void updatePostTest() {
     String recordId = getFirstRecordIdFromHelper();
 
@@ -106,7 +123,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(4)
+  @Order(5)
   public void getByUserIdTest() {
     HttpResponse<String> response =
         Unirest.post(endpoint + helper.getUserId()).asString();
@@ -121,7 +138,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(5)
+  @Order(6)
   public void deletePostTestFailed() {
     String recordId = getFirstRecordIdFromHelper();
 
@@ -134,7 +151,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(6)
+  @Order(7)
   public void deletePostTest() {
     String recordId = getFirstRecordIdFromHelper();
 
@@ -146,22 +163,6 @@ public class TestServerComponent {
     assertEquals(201, postDeleteBodyJson.get("response_code"));
   }
 
-  @Test
-  @Order(7)
-  public void updatePostTestFail() {
-    String recordId = getFirstRecordIdFromHelper();
-
-    // Update test helper to new values
-    helper.randomUpdate();
-
-    HttpResponse<String> response =
-            helper.writeDataToEndpoint(endpoint + 2342 + "/update/" + recordId);
-
-    JSONObject responseJson = new JSONObject(response.getBody());
-
-    System.out.println(responseJson);
-    assertEquals(404, responseJson.get("response_code"));
-  }
 
   @AfterAll
   public static void stop() {
