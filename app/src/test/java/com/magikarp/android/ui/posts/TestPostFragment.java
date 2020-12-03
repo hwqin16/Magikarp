@@ -33,6 +33,7 @@ import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 import android.Manifest;
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -236,11 +237,12 @@ public class TestPostFragment {
   public void testOnOptionsItemSelectedGetDirections() {
     final MenuItem item = mock(MenuItem.class);
     when(item.getItemId()).thenReturn(R.id.menu_get_directions);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).startActivityFromIntent(any(Intent.class));
 
-    fragment.onOptionsItemSelected(item);
+    assertTrue(spy.onOptionsItemSelected(item));
 
-    verify(activity).startActivity(any(Intent.class));
-    assertTrue(fragment.onOptionsItemSelected(item));
+    verify(spy).startActivityFromIntent(any(Intent.class));
   }
 
   @Test
@@ -424,6 +426,27 @@ public class TestPostFragment {
     assertNull(fragment.activity);
     assertNull(fragment.context);
     assertNull(fragment.arguments);
+  }
+
+  @Test
+  public void testStartActivityFromIntent() {
+    final Intent intent = mock(Intent.class);
+    final ComponentName componentName = mock(ComponentName.class);
+    when(intent.resolveActivity(any())).thenReturn(componentName);
+
+    fragment.startActivityFromIntent(intent);
+
+    verify(activity).startActivity(intent);
+  }
+
+  @Test
+  public void testStartActivityFromIntentNoActivityAvailable() {
+    final Intent intent = mock(Intent.class);
+    when(intent.resolveActivity(any())).thenReturn(null);
+
+    fragment.startActivityFromIntent(intent);
+
+    verify(activity, never()).startActivity(any());
   }
 
   @Test

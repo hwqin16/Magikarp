@@ -57,7 +57,7 @@ import org.jetbrains.annotations.NotNull;
 public class PostFragment extends Fragment {
 
   @VisibleForTesting
-  static final String GEO_URL = "geo:%f,%f";
+  static final String GEO_URL = "google.navigation:q=%f,%f";
   @VisibleForTesting
   static final String MEDIA_TYPE_IMAGE = "image/*";
   @VisibleForTesting
@@ -199,7 +199,7 @@ public class PostFragment extends Fragment {
       assert location != null;
       final Uri uri =
           Uri.parse(String.format(Locale.US, GEO_URL, location.latitude, location.longitude));
-      activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+      startActivityFromIntent(new Intent(Intent.ACTION_VIEW, uri));
       return true;
     } else {
       return super.onOptionsItemSelected(item);
@@ -302,6 +302,21 @@ public class PostFragment extends Fragment {
     activity = null;
     context = null;
     arguments = null;
+  }
+
+  /**
+   * Start an activity from an intent.
+   *
+   * @param intent the intent used to start an activity
+   */
+  @VisibleForTesting
+  void startActivityFromIntent(@NonNull Intent intent) {
+    if (intent.resolveActivity(context.getPackageManager()) != null) {
+      activity.startActivity(intent);
+    } else {
+      Toast.makeText(context, context.getString(R.string.failure_no_available_activity),
+          Toast.LENGTH_LONG).show();
+    }
   }
 
   /**
