@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Server endpoints -->
-    <string name="server_url">http://35.190.179.162:7000</string>
+    <string name="server_url">http://35.224.51.217:7000</string>
     <string name="server_get_messages">/messages</string>
     <string name="server_get_user_messages">/messages/%s</string>
     <string name="server_new_message">/messages/%s/new</string>

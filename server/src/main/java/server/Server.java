@@ -1,9 +1,9 @@
 package server;
 
+import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.GeoPoint;
+import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import message.Message;
 import message.MessageFinder;
@@ -29,12 +30,15 @@ import responses.MessagesResponse;
 import responses.NewPostResponse;
 import responses.UpdatePostResponse;
 
+import javax.swing.text.Document;
+
 public class Server {
   private static final Gson gson = new Gson();
 
   private static Javalin app;
   private static MessageFinder messageFinder;
   private static MessagePoster messagePoster;
+  private static Firestore firestore;
 
   private static ByteArrayInputStream getServiceAccountInputStream() {
     return new ByteArrayInputStream(
@@ -64,7 +68,7 @@ public class Server {
 
     FirebaseApp.initializeApp(firebaseOptions);
 
-    Firestore firestore = FirestoreClient.getFirestore();
+    firestore = FirestoreClient.getFirestore();
 
     app = Javalin.create().start(Constants.PORT);
     messageFinder = new MessageFinderImpl(firestore);
@@ -168,6 +172,14 @@ public class Server {
       String recordID = ctx.pathParam("record_id");
       MessageRequest messageRequest = gson.fromJson(ctx.body(), MessageRequest.class);
 
+      Map<String, Object> values = checkUser(recordID);
+
+      if(!values.get(Message.FS_USER_ID_FIELD_NAME).equals(userID)){
+        UpdatePostResponse response = new UpdatePostResponse(404, "You do not own this post");
+        ctx.result(gson.toJson(response));
+        return;
+      }
+
       System.out.println("Updating message " + recordID + " for user " + userID);
 
       UpdatePostResponse response = messagePoster.updateMessage(
@@ -190,6 +202,14 @@ public class Server {
       String userId = ctx.pathParam("user_id");
       String recordId = ctx.pathParam("record_id");
 
+      Map<String, Object> values = checkUser(recordId);;
+
+      if(!values.get(Message.FS_USER_ID_FIELD_NAME).equals(userId)){
+        DeletePostResponse response = new DeletePostResponse(404, "You do not own this post");
+        ctx.result(gson.toJson(response));
+        return;
+      }
+
       System.out.println("Deleting message " + recordId + " from user " + userId);
 
       DeletePostResponse response = messagePoster.deleteMessage(recordId);
@@ -198,6 +218,16 @@ public class Server {
 
     });
 
+  }
+
+  private static Map<String, Object> checkUser(String recordId) throws InterruptedException, java.util.concurrent.ExecutionException {
+    CollectionReference messagesCollection = firestore.collection(Constants.COLLECTION_PATH);
+    DocumentReference docRef = messagesCollection.document(recordId);
+    ApiFuture<DocumentSnapshot> future = docRef.get();
+    DocumentSnapshot doc = future.get();
+
+    Map<String, Object> values = doc.getData();
+    return values;
   }
 
   public static void stop() {
