@@ -30,7 +30,6 @@ import responses.MessagesResponse;
 import responses.NewPostResponse;
 import responses.UpdatePostResponse;
 
-import javax.swing.text.Document;
 
 public class Server {
   private static final Gson gson = new Gson();
@@ -174,7 +173,7 @@ public class Server {
 
       Map<String, Object> values = checkUser(recordID);
 
-      if(!values.get(Message.FS_USER_ID_FIELD_NAME).equals(userID)){
+      if (!values.get(Message.FS_USER_ID_FIELD_NAME).equals(userID)) {
         UpdatePostResponse response = new UpdatePostResponse(404, "You do not own this post");
         ctx.result(gson.toJson(response));
         return;
@@ -204,7 +203,7 @@ public class Server {
 
       Map<String, Object> values = checkUser(recordId);;
 
-      if(!values.get(Message.FS_USER_ID_FIELD_NAME).equals(userId)){
+      if (!values.get(Message.FS_USER_ID_FIELD_NAME).equals(userId)) {
         DeletePostResponse response = new DeletePostResponse(404, "You do not own this post");
         ctx.result(gson.toJson(response));
         return;
@@ -220,7 +219,8 @@ public class Server {
 
   }
 
-  private static Map<String, Object> checkUser(String recordId) throws InterruptedException, java.util.concurrent.ExecutionException {
+  private static Map<String, Object> checkUser(String recordId) throws
+          InterruptedException, java.util.concurrent.ExecutionException {
     CollectionReference messagesCollection = firestore.collection(Constants.COLLECTION_PATH);
     DocumentReference docRef = messagesCollection.document(recordId);
     ApiFuture<DocumentSnapshot> future = docRef.get();
