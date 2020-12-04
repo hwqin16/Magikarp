@@ -17,6 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -31,8 +32,8 @@ import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -47,6 +48,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.fragment.app.FragmentActivity;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.android.volley.RequestQueue;
@@ -87,7 +89,7 @@ public class TestPostFragment {
 
   private final String imageUrl = "imageUrl";
   @Mock
-  Activity activity;
+  FragmentActivity activity;
   @Mock
   ActivityResultLauncher<String> getContentLauncher;
   @Mock
@@ -136,12 +138,17 @@ public class TestPostFragment {
 
   @Test
   public void testPerformOnCreate() {
-    assertFalse(fragment.hasOptionsMenu());
+    final PostFragment spy = spy(fragment);
+    doReturn(activity).when(spy).requireActivity();
+    doReturn(arguments).when(spy).requireArguments();
+    doReturn(context).when(spy).requireContext();
 
-    fragment.performOnCreate();
+    assertFalse(spy.hasOptionsMenu());
+
+    spy.performOnCreate();
     shadowOf(getMainLooper()).idle();
 
-    assertTrue(fragment.hasOptionsMenu());
+    assertTrue(spy.hasOptionsMenu());
   }
 
   @Test
@@ -230,11 +237,12 @@ public class TestPostFragment {
   public void testOnOptionsItemSelectedGetDirections() {
     final MenuItem item = mock(MenuItem.class);
     when(item.getItemId()).thenReturn(R.id.menu_get_directions);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).startActivityFromIntent(any(Intent.class));
 
-    fragment.onOptionsItemSelected(item);
+    assertTrue(spy.onOptionsItemSelected(item));
 
-    verify(activity).startActivity(any(Intent.class));
-    assertTrue(fragment.onOptionsItemSelected(item));
+    verify(spy).startActivityFromIntent(any(Intent.class));
   }
 
   @Test
@@ -418,6 +426,27 @@ public class TestPostFragment {
     assertNull(fragment.activity);
     assertNull(fragment.context);
     assertNull(fragment.arguments);
+  }
+
+  @Test
+  public void testStartActivityFromIntent() {
+    final Intent intent = mock(Intent.class);
+    final ComponentName componentName = mock(ComponentName.class);
+    when(intent.resolveActivity(any())).thenReturn(componentName);
+
+    fragment.startActivityFromIntent(intent);
+
+    verify(activity).startActivity(intent);
+  }
+
+  @Test
+  public void testStartActivityFromIntentNoActivityAvailable() {
+    final Intent intent = mock(Intent.class);
+    when(intent.resolveActivity(any())).thenReturn(null);
+
+    fragment.startActivityFromIntent(intent);
+
+    verify(activity, never()).startActivity(any());
   }
 
   @Test

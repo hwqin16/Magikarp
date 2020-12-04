@@ -30,7 +30,6 @@ public class MessagePosterImpl implements MessagePoster {
     // TODO security
 
     messagesCollection.document(recordId).delete();
-
     return new DeletePostResponse(201, null);
   }
 
@@ -83,7 +82,6 @@ public class MessagePosterImpl implements MessagePoster {
   ) {
     UpdatePostResponse response;
     try {
-      this.deleteMessage(recordId);
 
       Map<String, Object> update = new HashMap<>();
 
