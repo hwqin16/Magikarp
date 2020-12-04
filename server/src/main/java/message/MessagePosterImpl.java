@@ -25,7 +25,7 @@ public class MessagePosterImpl implements MessagePoster {
   }
 
   @Override
-  public DeletePostResponse deleteMessage(String recordId) throws Exception{
+  public DeletePostResponse deleteMessage(String recordId) {
 
     // TODO security
 
@@ -79,7 +79,7 @@ public class MessagePosterImpl implements MessagePoster {
       double lat,
       double lon,
       Timestamp now
-  ) throws Exception{
+  ) {
     UpdatePostResponse response;
     try {
 
