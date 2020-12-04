@@ -10,12 +10,9 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.robolectric.annotation.Config.OLDEST_SDK;
 
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -27,7 +24,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.annotation.Config;
 
@@ -37,9 +33,6 @@ import org.robolectric.annotation.Config;
 @RunWith(AndroidJUnit4.class)
 @Config(sdk = OLDEST_SDK)
 public class TestBooleanResponseDialogFragment {
-
-  @Mock
-  private Builder builder;
 
   private AutoCloseable closeable;
 
@@ -51,7 +44,7 @@ public class TestBooleanResponseDialogFragment {
   public void setup() {
     closeable = MockitoAnnotations.openMocks(this);
     context = ApplicationProvider.getApplicationContext();
-    fragment = new BooleanResponseDialogFragment(builder, context);
+    fragment = new BooleanResponseDialogFragment(context);
   }
 
   @After
@@ -79,12 +72,8 @@ public class TestBooleanResponseDialogFragment {
   @Test
   public void testOnCreateDialog() {
     final Bundle savedInstanceState = mock(Bundle.class);
-    final AlertDialog dialog = mock(AlertDialog.class);
-    when(builder.create()).thenReturn(dialog);
 
     assertNotNull(fragment.onCreateDialog(savedInstanceState));
-
-    verify(builder).create();
   }
 
   @Test

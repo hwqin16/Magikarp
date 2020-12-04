@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -461,6 +462,7 @@ public class PostFragment extends Fragment {
       return;
     }
 
+    // Upload post to server.
     // Arguments and account should not be null (spotbugs).
     assert arguments != null;
     assert googleSignInAccount != null;
@@ -500,7 +502,7 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onDeleteButtonClick() {
-    final BooleanResponseDialogFragment fragment = new BooleanResponseDialogFragment();
+    final DialogFragment fragment = new BooleanResponseDialogFragment();
     final FragmentManager fragmentManager = getChildFragmentManager();
     fragmentManager.setFragmentResultListener(context.getString(R.string.dialog_result), this,
         this::onBooleanResult);

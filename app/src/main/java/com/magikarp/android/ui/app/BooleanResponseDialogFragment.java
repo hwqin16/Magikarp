@@ -1,6 +1,6 @@
 package com.magikarp.android.ui.app;
 
-import android.app.AlertDialog.Builder;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +10,6 @@ import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.DialogFragment;
 import com.magikarp.android.R;
 import dagger.hilt.android.AndroidEntryPoint;
-import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,8 +18,6 @@ import org.jetbrains.annotations.NotNull;
 @AndroidEntryPoint
 public class BooleanResponseDialogFragment extends DialogFragment {
 
-  @Inject
-  Builder builder;
   @VisibleForTesting
   Context context;
 
@@ -33,12 +30,10 @@ public class BooleanResponseDialogFragment extends DialogFragment {
   /**
    * Constructor for testing.
    *
-   * @param builder test variable
    * @param context test variable
    */
   @VisibleForTesting
-  BooleanResponseDialogFragment(Builder builder, Context context) {
-    this.builder = builder;
+  BooleanResponseDialogFragment(Context context) {
     this.context = context;
   }
 
@@ -57,6 +52,7 @@ public class BooleanResponseDialogFragment extends DialogFragment {
   @NotNull
   @Override
   public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
     builder.setMessage("Delete post?");
     builder.setPositiveButton("Delete", this::onPositiveButtonClick);
     builder.setNegativeButton("Cancel", this::onNegativeButtonClick);
