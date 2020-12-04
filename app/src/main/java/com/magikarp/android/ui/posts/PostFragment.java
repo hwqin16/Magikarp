@@ -517,13 +517,17 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onBooleanResult(@NonNull String requestKey, @NonNull Bundle result) {
+    final String idToken = googleSignInAccount.getIdToken();
+    final String userId = googleSignInAccount.getId();
+    // Account user ID and token should not be null (spotbugs).
+    assert idToken != null;
+    assert userId != null;
     final Message message = arguments.getParcelable(context.getString(R.string.args_message));
     if (result.getBoolean(context.getString(R.string.dialog_result))) {
       // Message should never be null (spotbugs).
       assert message != null;
-      postRepository
-          .deleteMessage("", message.getId(), message.getUserId(), this::onDeleteMessageResponse,
-              this::onNetworkError);
+      postRepository.deleteMessage(idToken, message.getId(), userId, this::onDeleteMessageResponse,
+          this::onNetworkError);
     }
   }
 
