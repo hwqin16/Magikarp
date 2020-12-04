@@ -1,43 +1,28 @@
 package com.magikarp.android.data.model;
 
-import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 public class DeleteMessageRequest {
 
-  @SerializedName("id")
-  private final String postId;
-
-  @SerializedName("user_id")
-  private final String userId;
+  @SerializedName("id_token")
+  private final String idToken;
 
   /**
-   * Create a new message.
+   * Delete a message.
    *
-   * @param userId user ID
-   * @param postId post ID
+   * @param idToken ID token for authentication with the server
    */
-  public DeleteMessageRequest(@NonNull String postId, @NonNull String userId) {
-    this.postId = postId;
-    this.userId = userId;
+  public DeleteMessageRequest(String idToken) {
+    this.idToken = idToken;
   }
 
   /**
-   * Get the post ID.
+   * Get the ID token for authentication with the server.
    *
-   * @return the post ID
+   * @return the ID token
    */
-  public String getPostId() {
-    return postId;
-  }
-
-  /**
-   * Get the post user ID.
-   *
-   * @return the post user ID
-   */
-  public String getUserId() {
-    return userId;
+  public String getIdToken() {
+    return idToken;
   }
 
 }

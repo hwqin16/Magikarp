@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +31,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 /**
@@ -61,14 +59,20 @@ public class TestPostRepository {
     requestQueue = mock(RequestQueue.class);
     storageReference = mock(StorageReference.class);
     postRepository =
-        new PostRepository(requestQueue, storageReference, fileNameGenerator, urlNewMessages,
-            urlUpdateMessages, urlDeleteMessages);
+        new PostRepository(
+            requestQueue,
+            storageReference,
+            fileNameGenerator,
+            urlNewMessages,
+            urlUpdateMessages,
+            urlDeleteMessages);
   }
 
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testNewMessage() {
-    final String userId = "userIdNew";
+    final String idToken = "idToken";
+    final String userId = "userId";
     final double latitude = 1.0d;
     final double longitude = -1.0d;
     final String imageUrl = "imageUrlNew";
@@ -78,12 +82,14 @@ public class TestPostRepository {
 
     final ArgumentCaptor<GsonRequest> captor = ArgumentCaptor.forClass(GsonRequest.class);
 
-    postRepository.newMessage(userId, latitude, longitude, imageUrl, text, listener, errorListener);
+    postRepository
+        .newMessage(idToken, userId, latitude, longitude, imageUrl, text, listener, errorListener);
 
     verify(requestQueue).add(captor.capture());
     final GsonRequest request = captor.getValue();
 
-    final NewMessageRequest body = new NewMessageRequest(imageUrl, text, latitude, longitude);
+    final NewMessageRequest body =
+        new NewMessageRequest(idToken, imageUrl, text, latitude, longitude);
     assertEquals(String.format(urlNewMessages, userId), request.getUrl());
     assertEquals(new String(request.getBody()), new Gson().toJson(body));
   }
@@ -91,6 +97,7 @@ public class TestPostRepository {
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testUpdateMessage() {
+    final String idToken = "idToken";
     final String postId = "postId";
     final String userId = "userIdUpdate";
     final double latitude = 2.0d;
@@ -103,13 +110,14 @@ public class TestPostRepository {
     final ArgumentCaptor<GsonRequest> captor = ArgumentCaptor.forClass(GsonRequest.class);
 
     postRepository
-        .updateMessage(postId, userId, latitude, longitude, imageUrl, text, listener,
+        .updateMessage(idToken, postId, userId, latitude, longitude, imageUrl, text, listener,
             errorListener);
 
     verify(requestQueue).add(captor.capture());
     final GsonRequest request = captor.getValue();
 
-    final NewMessageRequest body = new NewMessageRequest(imageUrl, text, latitude, longitude);
+    final NewMessageRequest body =
+        new NewMessageRequest(idToken, imageUrl, text, latitude, longitude);
     assertEquals(String.format(urlUpdateMessages, userId, postId), request.getUrl());
     assertEquals(new Gson().toJson(body), new String(request.getBody()));
   }
@@ -117,18 +125,19 @@ public class TestPostRepository {
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testDeleteMessage() {
+    final String idToken = "idToken";
     final String postId = "postId";
     final String userId = "userId";
     final Listener<DeleteMessageResponse> listener = mock(Listener.class);
     final ErrorListener errorListener = mock(ErrorListener.class);
     final ArgumentCaptor<GsonRequest> captor = ArgumentCaptor.forClass(GsonRequest.class);
 
-    postRepository.deleteMessage(postId, userId, listener, null);
+    postRepository.deleteMessage(idToken, postId, userId, listener, errorListener);
 
     verify(requestQueue).add(captor.capture());
     final GsonRequest<GetMessagesResponse> request = captor.getValue();
 
-    final DeleteMessageRequest body = new DeleteMessageRequest(postId, userId);
+    final DeleteMessageRequest body = new DeleteMessageRequest(idToken);
     assertEquals(String.format(urlDeleteMessages, userId, postId), request.getUrl());
     assertEquals(new Gson().toJson(body), new String(request.getBody()));
   }

@@ -2,9 +2,9 @@ package com.magikarp.android.ui.posts;
 
 import static android.os.Looper.getMainLooper;
 import static com.google.common.base.Verify.verifyNotNull;
-import static com.magikarp.android.ui.posts.PostFragment.SAVESTATE_IMAGE_URL;
-import static com.magikarp.android.ui.posts.PostFragment.SAVESTATE_LOCATION;
-import static com.magikarp.android.ui.posts.PostFragment.SAVESTATE_TEXT;
+import static com.magikarp.android.ui.posts.PostFragment.SAVE_STATE_IMAGE_URL;
+import static com.magikarp.android.ui.posts.PostFragment.SAVE_STATE_LOCATION;
+import static com.magikarp.android.ui.posts.PostFragment.SAVE_STATE_TEXT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -14,12 +14,14 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -37,6 +39,8 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,17 +53,21 @@ import android.view.MenuItem;
 import android.view.View;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.magikarp.android.R;
 import com.magikarp.android.data.PostRepository;
+import com.magikarp.android.data.PostRepository.UploadUriListener;
 import com.magikarp.android.data.model.DeleteMessageResponse;
 import com.magikarp.android.data.model.Message;
 import com.magikarp.android.data.model.NewMessageResponse;
@@ -67,12 +75,13 @@ import com.magikarp.android.data.model.UpdateMessageResponse;
 import com.magikarp.android.databinding.FragmentPostBinding;
 import com.magikarp.android.location.LocationListener;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
@@ -89,13 +98,15 @@ public class TestPostFragment {
 
   private final String imageUrl = "imageUrl";
   @Mock
-  FragmentActivity activity;
-  @Mock
   ActivityResultLauncher<String> getContentLauncher;
   @Mock
   ActivityResultLauncher<String> requestPermissionLauncher;
   @Mock
   private Bundle arguments;
+  @Mock
+  FragmentActivity activity;
+  @Mock
+  GoogleSignInAccount googleSignInAccount;
   @Mock
   private LatLng location;
   @Mock
@@ -125,15 +136,34 @@ public class TestPostFragment {
     context = ApplicationProvider.getApplicationContext();
     binding = FragmentPostBinding.inflate(LayoutInflater.from(context));
     fragment =
-        new PostFragment(activity, getContentLauncher, requestPermissionLauncher, arguments,
-            context, binding, location, locationListener, imageUrl, contentResolver,
+        new PostFragment(
+            getContentLauncher,
+            requestPermissionLauncher,
+            arguments,
+            context,
+            activity,
+            binding,
+            googleSignInAccount,
+            location,
+            locationListener,
+            imageUrl,
+            contentResolver,
             fusedLocationClient,
-            imageLoader, postRepository, requestQueue);
+            imageLoader,
+            postRepository,
+            requestQueue);
   }
 
   @After
   public void teardown() throws Exception {
     closeable.close();
+  }
+
+  @Test
+  public void testDefaultConstructor() {
+    new PostFragment();
+
+    // Confirm method completes.
   }
 
   @Test
@@ -269,7 +299,7 @@ public class TestPostFragment {
     when(arguments.getString(context.getString(R.string.args_post_type)))
         .thenReturn(context.getString(R.string.arg_post_type_new));
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).loadImage(Mockito.anyString());
+    doNothing().when(spy).loadImage(anyString());
 
     spy.onViewCreated(view, null);
 
@@ -287,7 +317,7 @@ public class TestPostFragment {
         .thenReturn(context.getString(R.string.arg_post_type_update));
     when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).loadImage(Mockito.anyString());
+    doNothing().when(spy).loadImage(anyString());
 
     spy.onViewCreated(view, null);
 
@@ -305,7 +335,7 @@ public class TestPostFragment {
         .thenReturn(context.getString(R.string.arg_post_type_view));
     when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).loadImage(Mockito.anyString());
+    doNothing().when(spy).loadImage(anyString());
 
     spy.onViewCreated(view, null);
 
@@ -320,11 +350,11 @@ public class TestPostFragment {
     final Bundle savedInstanceState = mock(Bundle.class);
     final LatLng latLng = mock(LatLng.class);
     when(arguments.getString(context.getString(R.string.args_post_type))).thenReturn("any");
-    when(savedInstanceState.getParcelable(SAVESTATE_LOCATION)).thenReturn(latLng);
-    when(savedInstanceState.getString(SAVESTATE_IMAGE_URL)).thenReturn("imageUrl");
-    when(savedInstanceState.getString(SAVESTATE_TEXT)).thenReturn("text");
+    when(savedInstanceState.getParcelable(SAVE_STATE_LOCATION)).thenReturn(latLng);
+    when(savedInstanceState.getString(SAVE_STATE_IMAGE_URL)).thenReturn("imageUrl");
+    when(savedInstanceState.getString(SAVE_STATE_TEXT)).thenReturn("text");
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).loadImage(Mockito.anyString());
+    doNothing().when(spy).loadImage(anyString());
 
     spy.onViewCreated(view, savedInstanceState);
 
@@ -386,7 +416,7 @@ public class TestPostFragment {
 
     fragment.onSaveInstanceState(bundle);
 
-    verify(bundle).putParcelable(Mockito.anyString(), any());
+    verify(bundle).putParcelable(anyString(), any());
   }
 
   @Test
@@ -397,7 +427,7 @@ public class TestPostFragment {
 
     fragment.onSaveInstanceState(bundle);
 
-    verify(bundle).putParcelable(Mockito.anyString(), any());
+    verify(bundle).putParcelable(anyString(), any());
   }
 
   @Test
@@ -481,6 +511,15 @@ public class TestPostFragment {
   }
 
   @Test
+  public void testOnGoogleSignInAccountChanged() {
+    final GoogleSignInAccount account = mock(GoogleSignInAccount.class);
+
+    fragment.onGoogleSignInAccountChanged(account);
+
+    assertEquals(account, fragment.googleSignInAccount);
+  }
+
+  @Test
   public void testOnGetContentResultNotNull() {
     final Uri uri = mock(Uri.class);
     final PostFragment spy = spy(fragment);
@@ -513,24 +552,30 @@ public class TestPostFragment {
   }
 
   @Test
-  public void testLoadImageFileSchema() {
-    final String imageUrl = "file://example.com/image.png";
+  public void testLoadImageFileSchema() throws FileNotFoundException {
+    try (MockedStatic<BitmapFactory> bitmapFactory = mockStatic(BitmapFactory.class)) {
+      final String imageUrl = "file:///images/image.png";
+      final InputStream inputStream = mock(InputStream.class);
+      when(contentResolver.openInputStream(any(Uri.class))).thenReturn(inputStream);
+      final Bitmap bitmap = Bitmap.createBitmap(new int[] {0}, 1, 1, Bitmap.Config.ARGB_8888);
+      bitmapFactory.when(() -> BitmapFactory.decodeStream(inputStream)).thenReturn(bitmap);
 
-    fragment.loadImage(imageUrl);
+      fragment.loadImage(imageUrl);
 
-    assertEquals(View.INVISIBLE, binding.createPostNetworkImage.getVisibility());
-    assertEquals(View.VISIBLE, binding.createPostLocalImage.getVisibility());
-    verifyNoInteractions(imageLoader);
+      assertEquals(View.INVISIBLE, binding.createPostNetworkImage.getVisibility());
+      assertEquals(View.VISIBLE, binding.createPostLocalImage.getVisibility());
+      verifyNoInteractions(imageLoader);
+    }
   }
 
   @Test
   public void testLoadImageFileSchemaFileNotFound() throws FileNotFoundException {
-    final String imageUrl = "file://example.com/image.png";
+    final String imageUrl = "file:///images/image.png";
     doThrow(FileNotFoundException.class).when(contentResolver).openInputStream(any(Uri.class));
 
     fragment.loadImage(imageUrl);
 
-    // Confirm method completes.
+    assertNull(fragment.imageUrl);
   }
 
   @Test
@@ -564,14 +609,30 @@ public class TestPostFragment {
   }
 
   @Test
+  public void testOnPostButtonClick() {
+    final String text = "text";
+    assertNotNull(fragment.imageUrl);
+    binding.createPostCaption.setText(text);
+    assertNotNull(fragment.location);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadFile(any());
+
+    spy.onPostButtonClick();
+
+    verify(spy).uploadFile(text);
+  }
+
+  @Test
   public void testOnPostButtonClickInvalidImageUrl() {
     fragment.imageUrl = null;
     binding.createPostCaption.setText("text");
     assertNotNull(fragment.location);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadFile(any());
 
-    fragment.onPostButtonClick();
+    spy.onPostButtonClick();
 
-    verifyNoInteractions(postRepository);
+    verify(spy, never()).uploadFile(any());
   }
 
   @Test
@@ -579,10 +640,12 @@ public class TestPostFragment {
     assertNotNull(fragment.imageUrl);
     binding.createPostCaption.setText(null);
     assertNotNull(fragment.location);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadFile(any());
 
-    fragment.onPostButtonClick();
+    spy.onPostButtonClick();
 
-    verifyNoInteractions(postRepository);
+    verify(spy, never()).uploadFile(any());
   }
 
   @Test
@@ -590,10 +653,12 @@ public class TestPostFragment {
     assertNotNull(fragment.imageUrl);
     binding.createPostCaption.setText("");
     assertNotNull(fragment.location);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadFile(any());
 
-    fragment.onPostButtonClick();
+    spy.onPostButtonClick();
 
-    verifyNoInteractions(postRepository);
+    verify(spy, never()).uploadFile(any());
   }
 
   @Test
@@ -601,63 +666,174 @@ public class TestPostFragment {
     assertNotNull(fragment.imageUrl);
     binding.createPostCaption.setText("text");
     fragment.location = null;
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadFile(any());
 
-    fragment.onPostButtonClick();
+    spy.onPostButtonClick();
 
-    verifyNoInteractions(postRepository);
+    verify(spy, never()).uploadFile(any());
   }
 
   @Test
-  public void testOnPostButtonClickNew() {
-    assertNotNull(fragment.imageUrl);
-    binding.createPostCaption.setText("text");
-    assertNotNull(fragment.location);
+  public void testUploadFileHttpScheme() {
+    final String text = "text";
+    fragment.imageUrl = "http://www.example.com";
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadPost(any());
+
+    spy.uploadFile(text);
+
+    verify(postRepository, never()).uploadFile(any(), any(), any());
+    verify(spy).uploadPost(text);
+  }
+
+  @Test
+  public void testUploadFileFileScheme() {
+    final String fileUrl = "file:///example.jpg";
+    fragment.imageUrl = fileUrl;
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadPost(any());
+
+    spy.uploadFile("text");
+
+    verify(postRepository).uploadFile(eq(Uri.parse(fileUrl)), anyString(),
+        any(UploadUriListener.class));
+    verify(spy, never()).uploadPost(any());
+  }
+
+  @Test
+  public void testOnFileUploaded() {
+    final Uri originalUri = mock(Uri.class);
+    final Uri uploadedUri = Uri.parse("http://www.example.com");
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).onPostButtonClick();
+
+    spy.onFileUploaded(originalUri, uploadedUri);
+
+    verify(spy).onPostButtonClick();
+  }
+
+  @Test
+  public void testOnFileUploadedUriNull() {
+    final Uri originalUri = mock(Uri.class);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).onPostButtonClick();
+
+    spy.onFileUploaded(originalUri, null);
+
+    verify(spy, never()).onPostButtonClick();
+  }
+
+  @Test
+  public void testOnFileUploadedUriWrongScheme() {
+    final Uri originalUri = mock(Uri.class);
+    final Uri uploadedUri = Uri.parse("file:///image.jpg");
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).onPostButtonClick();
+
+    spy.onFileUploaded(originalUri, uploadedUri);
+
+    verify(spy, never()).onPostButtonClick();
+  }
+
+  @Test
+  public void testUploadPostNew() {
+    final String text = "text";
+    final String idToken = context.getString(R.string.dummy_id_token);
+    final String userId = "userId";
+    fragment.location = new LatLng(1.0d, 2.0d);
     when(arguments.getString(context.getString(R.string.args_post_type)))
         .thenReturn(context.getString(R.string.arg_post_type_new));
+    when(googleSignInAccount.getId()).thenReturn(userId);
 
-    fragment.onPostButtonClick();
-
-    verify(postRepository)
-        .newMessage(Mockito.anyString(), eq(location.latitude), eq(location.longitude),
-            Mockito.anyString(), Mockito.anyString(), any(), any());
-  }
-
-  @Test
-  public void testOnPostButtonClickUpdate() {
-    assertNotNull(fragment.imageUrl);
-    binding.createPostCaption.setText("text");
-    assertNotNull(fragment.location);
-    when(arguments.getString(context.getString(R.string.args_post_type)))
-        .thenReturn(context.getString(R.string.arg_post_type_update));
-
-    fragment.onPostButtonClick();
+    fragment.uploadPost(text);
 
     verify(postRepository)
-        .updateMessage(Mockito.anyString(), Mockito.anyString(), eq(location.latitude),
-            eq(location.longitude), Mockito.anyString(), Mockito.anyString(), any(),
+        .newMessage(eq(idToken), eq(userId), eq(1.0d), eq(2.0d), eq(imageUrl), eq(text), any(),
             any());
   }
 
   @Test
-  public void testOnPostButtonClickView() {
-    assertNotNull(fragment.imageUrl);
-    binding.createPostCaption.setText("text");
-    assertNotNull(fragment.location);
+  public void testUploadPostUpdate() {
+    final String text = "text";
+    final String idToken = context.getString(R.string.dummy_id_token);
+    final String userId = "userId";
+    fragment.location = new LatLng(1.0d, 2.0d);
     when(arguments.getString(context.getString(R.string.args_post_type)))
-        .thenReturn(context.getString(R.string.arg_post_type_view));
+        .thenReturn(context.getString(R.string.arg_post_type_update));
+    when(googleSignInAccount.getId()).thenReturn(userId);
+    final Message message =
+        new Message("id", userId, imageUrl, text, location.latitude, location.longitude,
+            "timestamp");
+    when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
 
-    assertThrows(IllegalArgumentException.class, () -> fragment.onPostButtonClick());
+    fragment.uploadPost(text);
+
+    verify(postRepository)
+        .updateMessage(eq(idToken), eq(message.getId()), eq(userId), eq(1.0d), eq(2.0d),
+            eq(imageUrl), eq(text), any(), any());
   }
 
   @Test
+  public void testUploadPostInvalidArgument() {
+    final String text = "text";
+    final String idToken = context.getString(R.string.dummy_id_token);
+    final String userId = "userId";
+    fragment.location = new LatLng(1.0d, 2.0d);
+    when(arguments.getString(context.getString(R.string.args_post_type)))
+        .thenReturn(null);
+    when(googleSignInAccount.getId()).thenReturn(userId);
+
+    assertThrows(IllegalArgumentException.class, () -> fragment.uploadPost(text));
+  }
+
+  @Test
+  @SuppressWarnings("ResultOfMethodCallIgnored")
   public void testOnDeleteButtonClick() {
+    final FragmentManager fragmentManager = mock(FragmentManager.class);
+    final PostFragment spy = spy(fragment);
+    doReturn(fragmentManager).when(spy).getChildFragmentManager();
+    final FragmentTransaction transaction = mock(FragmentTransaction.class);
+    when(fragmentManager.beginTransaction()).thenReturn(transaction);
+
+    spy.onDeleteButtonClick();
+
+    // Confirm method completes.
+  }
+
+  @Test
+  public void testOnBooleanResultTrue() {
+    final String requestKey = "requestKey";
+    final Bundle result = mock(Bundle.class);
+    final String idToken = context.getString(R.string.dummy_id_token);
+    when(result.getBoolean(anyString())).thenReturn(true);
+    final String userId = "userId";
+    when(googleSignInAccount.getId()).thenReturn(userId);
     final Message message =
-        new Message("id", "userId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+        new Message("id", "ignoreUserId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
     when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
 
-    fragment.onDeleteButtonClick();
+    fragment.onBooleanResult(requestKey, result);
 
-    verify(postRepository).deleteMessage(eq("id"), eq("userId"), any(), any());
+    verify(postRepository)
+        .deleteMessage(eq(idToken), eq("id"), eq("userId"), any(),
+            any());
+  }
+
+  @Test
+  public void testOnBooleanResultFalse() {
+    final String requestKey = "requestKey";
+    final Bundle result = mock(Bundle.class);
+    when(result.getBoolean(anyString())).thenReturn(false);
+    final String userId = "userId";
+    when(googleSignInAccount.getId()).thenReturn(userId);
+    final Message message =
+        new Message("id", "ignoreUserId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+    when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
+
+    fragment.onBooleanResult(requestKey, result);
+
+    verify(postRepository, never()).deleteMessage(any(), any(), any(), any(), any());
   }
 
   @Test

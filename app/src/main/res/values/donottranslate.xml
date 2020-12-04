@@ -15,12 +15,14 @@
     <string name="arg_post_type_update">post_type_update</string>
     <string name="arg_post_type_view">post_type_view</string>
     <string name="args_message">args_message</string>
-    <!--    <string name="args_image_uri">image_uri</string>-->
-    <!--    <string name="args_latitude">latitude</string>-->
-    <!--    <string name="args_longitude">longitude</string>-->
-    <!--    <string name="args_text">text</string>-->
     <string name="args_is_user_data">is_user_data</string>
     <string name="fragment_tag_maps">tag_maps</string>
+
+    <!-- Dialog responses -->
+    <string name="dialog_result">dialog_result</string>
+
+    <!-- Post UI -->
+    <string name="dummy_id_token">dummyIdToken</string>
 
     <!-- Settings UI -->
     <string name="preference_key_max_records">max_records</string>

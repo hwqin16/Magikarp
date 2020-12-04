@@ -7,6 +7,7 @@ import static org.robolectric.annotation.Config.OLDEST_SDK;
 import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import com.google.firebase.FirebaseApp;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,12 @@ public class TestApplicationModule {
 
   @Test
   public void testAll() {
+    assertNotNull(ApplicationModule.provideAlertDialogBuilder(context));
+    assertNotNull(ApplicationModule.provideContentResolver(context));
+    assertNotNull(ApplicationModule.provideFileNameGenerator());
+    // Initialize Firebase App for this context.
+    FirebaseApp.initializeApp(context);
+    assertNotNull(ApplicationModule.provideFirebaseStorageReference());
     assertNotNull(ApplicationModule.provideFusedLocationProviderClient(context));
     assertNotNull(ApplicationModule.provideGoogleSignInAccountLiveData());
     assertNotNull(ApplicationModule.provideMessageListLiveData());

@@ -18,7 +18,6 @@ import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import com.magikarp.android.R;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * A fragment for providing help information.
