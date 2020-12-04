@@ -1,7 +1,6 @@
 package com.magikarp.android.data;
 
 import android.net.Uri;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.android.volley.Request;
@@ -94,8 +93,6 @@ public class PostRepository {
         new GsonRequest<>(Request.Method.POST, url, NewMessageResponse.class,
             new Gson().toJson(body), listener, errorListener);
     requestQueue.add(request);
-    Log.i("PostRepository", "New: " + url);
-    Log.i("PostRepository", "JSON: " + new Gson().toJson(body));
   }
 
   /**
@@ -125,8 +122,6 @@ public class PostRepository {
         new GsonRequest<>(Request.Method.POST, url, UpdateMessageResponse.class,
             new Gson().toJson(body), listener, errorListener);
     requestQueue.add(request);
-    Log.i("PostRepository", "Update: " + url);
-    Log.i("PostRepository", "JSON: " + new Gson().toJson(body));
   }
 
   /**
@@ -150,8 +145,6 @@ public class PostRepository {
         new GsonRequest<>(Request.Method.POST, url, DeleteMessageResponse.class,
             new Gson().toJson(body), listener, errorListener);
     requestQueue.add(request);
-    Log.i("PostRepository", "Delete: " + url);
-    Log.i("PostRepository", "JSON: " + new Gson().toJson(body));
   }
 
   /**
