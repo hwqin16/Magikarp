@@ -1,7 +1,6 @@
 package com.magikarp.android.ui.posts;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,10 +27,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.LatLng;
@@ -43,6 +46,8 @@ import com.magikarp.android.data.model.NewMessageResponse;
 import com.magikarp.android.data.model.UpdateMessageResponse;
 import com.magikarp.android.databinding.FragmentPostBinding;
 import com.magikarp.android.location.LocationListener;
+import com.magikarp.android.ui.app.BooleanResponseDialogFragment;
+import com.magikarp.android.ui.app.GoogleSignInViewModel;
 import dagger.hilt.android.AndroidEntryPoint;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -61,15 +66,13 @@ public class PostFragment extends Fragment {
   @VisibleForTesting
   static final String MEDIA_TYPE_IMAGE = "image/*";
   @VisibleForTesting
-  static final String SAVESTATE_IMAGE_URL = "imageUrl";
+  static final String SAVE_STATE_IMAGE_URL = "imageUrl";
   @VisibleForTesting
-  static final String SAVESTATE_TEXT = "text";
+  static final String SAVE_STATE_TEXT = "text";
   @VisibleForTesting
-  static final String SAVESTATE_LOCATION = "location";
+  static final String SAVE_STATE_LOCATION = "location";
   @VisibleForTesting
   static final String URI_SCHEME_HTTP = "http";
-  @VisibleForTesting
-  Activity activity;
   @VisibleForTesting
   ActivityResultLauncher<String> requestPermissionLauncher;
   @VisibleForTesting
@@ -79,7 +82,11 @@ public class PostFragment extends Fragment {
   @VisibleForTesting
   Context context;
   @VisibleForTesting
+  FragmentActivity activity;
+  @VisibleForTesting
   FragmentPostBinding binding;
+  @VisibleForTesting
+  GoogleSignInAccount googleSignInAccount;
   @VisibleForTesting
   LatLng location;
   @VisibleForTesting
@@ -104,14 +111,15 @@ public class PostFragment extends Fragment {
   }
 
   /**
-   * PostFragment constructor for testing.
+   * Constructor for testing.
    *
-   * @param activity                  test variable
    * @param getContentLauncher        test variable
    * @param requestPermissionLauncher test variable
    * @param arguments                 test variable
    * @param context                   test variable
+   * @param activity                  test variable
    * @param binding                   test variable
+   * @param googleSignInAccount       test variable
    * @param location                  test variable
    * @param locationListener          test variable
    * @param imageUrl                  test variable
@@ -123,19 +131,28 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   PostFragment(
-      Activity activity, ActivityResultLauncher<String> getContentLauncher,
-      ActivityResultLauncher<String> requestPermissionLauncher, Bundle arguments, Context context,
+      ActivityResultLauncher<String> getContentLauncher,
+      ActivityResultLauncher<String> requestPermissionLauncher,
+      Bundle arguments,
+      Context context,
+      FragmentActivity activity,
       FragmentPostBinding binding,
-      LatLng location, LocationListener locationListener, String imageUrl,
+      GoogleSignInAccount googleSignInAccount,
+      LatLng location,
+      LocationListener locationListener,
+      String imageUrl,
       ContentResolver contentResolver,
-      FusedLocationProviderClient fusedLocationClient, ImageLoader imageLoader,
-      PostRepository postRepository, RequestQueue requestQueue) {
-    this.activity = activity;
+      FusedLocationProviderClient fusedLocationClient,
+      ImageLoader imageLoader,
+      PostRepository postRepository,
+      RequestQueue requestQueue) {
     this.getContentLauncher = getContentLauncher;
     this.requestPermissionLauncher = requestPermissionLauncher;
     this.arguments = arguments;
     this.context = context;
+    this.activity = activity;
     this.binding = binding;
+    this.googleSignInAccount = googleSignInAccount;
     this.location = location;
     this.locationListener = locationListener;
     this.imageUrl = imageUrl;
@@ -149,13 +166,20 @@ public class PostFragment extends Fragment {
   @Override
   public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    arguments = requireArguments();
-    context = requireContext();
+    // ***** Add setup that cannot be instantiated with a unit test here. ***** //
+
+    // Set up account listener.
+    new ViewModelProvider(requireActivity()).get(GoogleSignInViewModel.class).getSignedInAccount()
+        .observe(this, this::onGoogleSignInAccountChanged);
     performOnCreate();
   }
 
   @VisibleForTesting
   void performOnCreate() {
+    // For unit testing.
+    activity = requireActivity();
+    arguments = requireArguments();
+    context = requireContext();
     setHasOptionsMenu(true);
     // Set up fragment to request permissions (i.e. fine location).
     requestPermissionLauncher =
@@ -220,9 +244,9 @@ public class PostFragment extends Fragment {
     String text = null;
     String url = null;
     if (savedInstanceState != null) {
-      location = savedInstanceState.getParcelable(SAVESTATE_LOCATION);
-      url = savedInstanceState.getString(SAVESTATE_IMAGE_URL);
-      text = savedInstanceState.getString(SAVESTATE_TEXT);
+      location = savedInstanceState.getParcelable(SAVE_STATE_LOCATION);
+      url = savedInstanceState.getString(SAVE_STATE_IMAGE_URL);
+      text = savedInstanceState.getString(SAVE_STATE_TEXT);
     } else if (postType.equals(postTypeUpdate) || postType.equals(postTypeView)) {
       final Message message = arguments.getParcelable(context.getString(R.string.args_message));
       location = new LatLng(message.getLatitude(), message.getLongitude());
@@ -281,9 +305,9 @@ public class PostFragment extends Fragment {
     final String postTypeView = context.getString(R.string.arg_post_type_view);
 
     if (!postType.equals(postTypeView)) {
-      bundle.putParcelable(SAVESTATE_LOCATION, location);
-      bundle.putString(SAVESTATE_IMAGE_URL, imageUrl);
-      bundle.putString(SAVESTATE_TEXT, binding.createPostCaption.getText().toString());
+      bundle.putParcelable(SAVE_STATE_LOCATION, location);
+      bundle.putString(SAVE_STATE_IMAGE_URL, imageUrl);
+      bundle.putString(SAVE_STATE_TEXT, binding.createPostCaption.getText().toString());
     }
   }
 
@@ -297,8 +321,8 @@ public class PostFragment extends Fragment {
   public void onDestroy() {
     super.onDestroy();
     activity = null;
-    context = null;
     arguments = null;
+    context = null;
   }
 
   /**
@@ -321,6 +345,16 @@ public class PostFragment extends Fragment {
       Toast.makeText(context, context.getString(R.string.failure_fine_location_permission),
           Toast.LENGTH_LONG).show();
     }
+  }
+
+  /**
+   * Callback for Google Sign-In account changes.
+   *
+   * @param account the current signed-in account
+   */
+  @VisibleForTesting
+  void onGoogleSignInAccountChanged(@Nullable GoogleSignInAccount account) {
+    googleSignInAccount = account;
   }
 
   /**
@@ -404,12 +438,13 @@ public class PostFragment extends Fragment {
     } else if (arguments.getString(context.getString(R.string.args_post_type))
         .equals(context.getString(R.string.arg_post_type_new))) {
       postRepository
-          .newMessage("", location.latitude, location.longitude, imageUrl, text,
+          .newMessage("", "", location.latitude, location.longitude, imageUrl, text,
               this::onNewMessageResponse, this::onNetworkError);
     } else if (arguments.getString(context.getString(R.string.args_post_type))
         .equals(context.getString(R.string.arg_post_type_update))) {
-      postRepository.updateMessage("", "", location.latitude, location.longitude, imageUrl, text,
-          this::onUpdateMessageResponse, this::onNetworkError);
+      postRepository
+          .updateMessage("", "", "", location.latitude, location.longitude, imageUrl, text,
+              this::onUpdateMessageResponse, this::onNetworkError);
     } else {
       throw new IllegalArgumentException();
     }
@@ -420,12 +455,23 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onDeleteButtonClick() {
+    final BooleanResponseDialogFragment fragment = new BooleanResponseDialogFragment();
+    final FragmentManager fragmentManager = getChildFragmentManager();
+    fragmentManager.setFragmentResultListener(context.getString(R.string.dialog_result), this,
+        this::onBooleanResult);
+    fragment.show(fragmentManager, null);
+  }
+
+  @VisibleForTesting
+  void onBooleanResult(@NonNull String requestKey, @NonNull Bundle result) {
     final Message message = arguments.getParcelable(context.getString(R.string.args_message));
-    // Message should never be null (spotbugs).
-    assert message != null;
-    postRepository
-        .deleteMessage(message.getId(), message.getUserId(), this::onDeleteMessageResponse,
-            this::onNetworkError);
+    if (result.getBoolean(context.getString(R.string.dialog_result))) {
+      // Message should never be null (spotbugs).
+      assert message != null;
+      postRepository
+          .deleteMessage("", message.getId(), message.getUserId(), this::onDeleteMessageResponse,
+              this::onNetworkError);
+    }
   }
 
   /**

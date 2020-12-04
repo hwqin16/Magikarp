@@ -2,9 +2,9 @@ package com.magikarp.android.ui.posts;
 
 import static android.os.Looper.getMainLooper;
 import static com.google.common.base.Verify.verifyNotNull;
-import static com.magikarp.android.ui.posts.PostFragment.SAVESTATE_IMAGE_URL;
-import static com.magikarp.android.ui.posts.PostFragment.SAVESTATE_LOCATION;
-import static com.magikarp.android.ui.posts.PostFragment.SAVESTATE_TEXT;
+import static com.magikarp.android.ui.posts.PostFragment.SAVE_STATE_IMAGE_URL;
+import static com.magikarp.android.ui.posts.PostFragment.SAVE_STATE_LOCATION;
+import static com.magikarp.android.ui.posts.PostFragment.SAVE_STATE_TEXT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -14,11 +14,13 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -31,11 +33,12 @@ import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,11 +50,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.fragment.app.FragmentActivity;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -65,12 +70,13 @@ import com.magikarp.android.data.model.UpdateMessageResponse;
 import com.magikarp.android.databinding.FragmentPostBinding;
 import com.magikarp.android.location.LocationListener;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
@@ -87,13 +93,15 @@ public class TestPostFragment {
 
   private final String imageUrl = "imageUrl";
   @Mock
-  Activity activity;
-  @Mock
   ActivityResultLauncher<String> getContentLauncher;
   @Mock
   ActivityResultLauncher<String> requestPermissionLauncher;
   @Mock
   private Bundle arguments;
+  @Mock
+  FragmentActivity activity;
+  @Mock
+  GoogleSignInAccount googleSignInAccount;
   @Mock
   private LatLng location;
   @Mock
@@ -123,15 +131,34 @@ public class TestPostFragment {
     context = ApplicationProvider.getApplicationContext();
     binding = FragmentPostBinding.inflate(LayoutInflater.from(context));
     fragment =
-        new PostFragment(activity, getContentLauncher, requestPermissionLauncher, arguments,
-            context, binding, location, locationListener, imageUrl, contentResolver,
+        new PostFragment(
+            getContentLauncher,
+            requestPermissionLauncher,
+            arguments,
+            context,
+            activity,
+            binding,
+            googleSignInAccount,
+            location,
+            locationListener,
+            imageUrl,
+            contentResolver,
             fusedLocationClient,
-            imageLoader, postRepository, requestQueue);
+            imageLoader,
+            postRepository,
+            requestQueue);
   }
 
   @After
   public void teardown() throws Exception {
     closeable.close();
+  }
+
+  @Test
+  public void testDefaultConstructor() {
+    new PostFragment();
+
+    // Confirm method completes.
   }
 
   @Test
@@ -261,7 +288,7 @@ public class TestPostFragment {
     when(arguments.getString(context.getString(R.string.args_post_type)))
         .thenReturn(context.getString(R.string.arg_post_type_new));
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).loadImage(Mockito.anyString());
+    doNothing().when(spy).loadImage(anyString());
 
     spy.onViewCreated(view, null);
 
@@ -279,7 +306,7 @@ public class TestPostFragment {
         .thenReturn(context.getString(R.string.arg_post_type_update));
     when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).loadImage(Mockito.anyString());
+    doNothing().when(spy).loadImage(anyString());
 
     spy.onViewCreated(view, null);
 
@@ -297,7 +324,7 @@ public class TestPostFragment {
         .thenReturn(context.getString(R.string.arg_post_type_view));
     when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).loadImage(Mockito.anyString());
+    doNothing().when(spy).loadImage(anyString());
 
     spy.onViewCreated(view, null);
 
@@ -312,11 +339,11 @@ public class TestPostFragment {
     final Bundle savedInstanceState = mock(Bundle.class);
     final LatLng latLng = mock(LatLng.class);
     when(arguments.getString(context.getString(R.string.args_post_type))).thenReturn("any");
-    when(savedInstanceState.getParcelable(SAVESTATE_LOCATION)).thenReturn(latLng);
-    when(savedInstanceState.getString(SAVESTATE_IMAGE_URL)).thenReturn("imageUrl");
-    when(savedInstanceState.getString(SAVESTATE_TEXT)).thenReturn("text");
+    when(savedInstanceState.getParcelable(SAVE_STATE_LOCATION)).thenReturn(latLng);
+    when(savedInstanceState.getString(SAVE_STATE_IMAGE_URL)).thenReturn("imageUrl");
+    when(savedInstanceState.getString(SAVE_STATE_TEXT)).thenReturn("text");
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).loadImage(Mockito.anyString());
+    doNothing().when(spy).loadImage(anyString());
 
     spy.onViewCreated(view, savedInstanceState);
 
@@ -378,7 +405,7 @@ public class TestPostFragment {
 
     fragment.onSaveInstanceState(bundle);
 
-    verify(bundle).putParcelable(Mockito.anyString(), any());
+    verify(bundle).putParcelable(anyString(), any());
   }
 
   @Test
@@ -389,7 +416,7 @@ public class TestPostFragment {
 
     fragment.onSaveInstanceState(bundle);
 
-    verify(bundle).putParcelable(Mockito.anyString(), any());
+    verify(bundle).putParcelable(anyString(), any());
   }
 
   @Test
@@ -484,24 +511,30 @@ public class TestPostFragment {
   }
 
   @Test
-  public void testLoadImageFileSchema() {
-    final String imageUrl = "file://example.com/image.png";
+  public void testLoadImageFileSchema() throws FileNotFoundException {
+    try (MockedStatic<BitmapFactory> bitmapFactory = mockStatic(BitmapFactory.class)) {
+      final String imageUrl = "file:///images/image.png";
+      final InputStream inputStream = mock(InputStream.class);
+      when(contentResolver.openInputStream(any(Uri.class))).thenReturn(inputStream);
+      final Bitmap bitmap = Bitmap.createBitmap(new int[] {0}, 1, 1, Bitmap.Config.ARGB_8888);
+      bitmapFactory.when(() -> BitmapFactory.decodeStream(inputStream)).thenReturn(bitmap);
 
-    fragment.loadImage(imageUrl);
+      fragment.loadImage(imageUrl);
 
-    assertEquals(View.INVISIBLE, binding.createPostNetworkImage.getVisibility());
-    assertEquals(View.VISIBLE, binding.createPostLocalImage.getVisibility());
-    verifyNoInteractions(imageLoader);
+      assertEquals(View.INVISIBLE, binding.createPostNetworkImage.getVisibility());
+      assertEquals(View.VISIBLE, binding.createPostLocalImage.getVisibility());
+      verifyNoInteractions(imageLoader);
+    }
   }
 
   @Test
   public void testLoadImageFileSchemaFileNotFound() throws FileNotFoundException {
-    final String imageUrl = "file://example.com/image.png";
+    final String imageUrl = "file:///images/image.png";
     doThrow(FileNotFoundException.class).when(contentResolver).openInputStream(any(Uri.class));
 
     fragment.loadImage(imageUrl);
 
-    // Confirm method completes.
+    assertNull(fragment.imageUrl);
   }
 
   @Test
@@ -589,8 +622,8 @@ public class TestPostFragment {
     fragment.onPostButtonClick();
 
     verify(postRepository)
-        .newMessage(Mockito.anyString(), eq(location.latitude), eq(location.longitude),
-            Mockito.anyString(), Mockito.anyString(), any(), any());
+        .newMessage(anyString(), anyString(), eq(location.latitude), eq(location.longitude),
+            anyString(), anyString(), any(), any());
   }
 
   @Test
@@ -604,9 +637,8 @@ public class TestPostFragment {
     fragment.onPostButtonClick();
 
     verify(postRepository)
-        .updateMessage(Mockito.anyString(), Mockito.anyString(), eq(location.latitude),
-            eq(location.longitude), Mockito.anyString(), Mockito.anyString(), any(),
-            any());
+        .updateMessage(anyString(), anyString(), anyString(), eq(location.latitude),
+            eq(location.longitude), anyString(), anyString(), any(), any());
   }
 
   @Test
@@ -628,7 +660,7 @@ public class TestPostFragment {
 
     fragment.onDeleteButtonClick();
 
-    verify(postRepository).deleteMessage(eq("id"), eq("userId"), any(), any());
+    verify(postRepository).deleteMessage(eq("idToken"), eq("id"), eq("userId"), any(), any());
   }
 
   @Test

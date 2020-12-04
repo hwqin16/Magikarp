@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class NewMessageRequest {
 
+  @SerializedName("id_token")
+  private final String idToken;
   @SerializedName("image_url")
   private final String imageUrl;
 
@@ -13,23 +15,32 @@ public class NewMessageRequest {
 
   private final double longitude;
 
-
   /**
-   * Create a new message.
+   * Create a new message or update an existing message.
    *
+   * @param idToken   ID token for authentication with server
    * @param imageUrl  image URL
    * @param text      message text
    * @param latitude  message latitude
    * @param longitude message longitude
    */
-  public NewMessageRequest(String imageUrl, String text, double latitude,
+  public NewMessageRequest(String idToken, String imageUrl, String text, double latitude,
                            double longitude) {
+    this.idToken = idToken;
     this.imageUrl = imageUrl;
     this.text = text;
     this.latitude = latitude;
     this.longitude = longitude;
   }
 
+  /**
+   * Get the ID token.
+   *
+   * @return the ID token
+   */
+  public String getIdToken() {
+    return idToken;
+  }
 
   /**
    * Get the message image URL.
@@ -66,6 +77,5 @@ public class NewMessageRequest {
   public double getLongitude() {
     return longitude;
   }
-
 
 }
