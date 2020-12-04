@@ -448,44 +448,35 @@ public class PostFragment extends Fragment {
   void onPostButtonClick() {
     // Check for valid input and update post repository.
     final CharSequence text = binding.createPostCaption.getText();
-    if (imageUrl == null || TextUtils.isEmpty(text) || location == null) {
+    if (imageUrl != null && !TextUtils.isEmpty(text) && location != null) {
+      uploadFile(text.toString());
+    } else {
       Toast
           .makeText(context, context.getString(R.string.failure_fields_missing), Toast.LENGTH_SHORT)
           .show();
-      return;
-    }
-
-    // Check for a image URI on local filesystem and upload to server.
-    final Uri uri = Uri.parse(imageUrl);
-    if (!uri.getScheme().contains(URI_SCHEME_HTTP)) {
-      postRepository.uploadFile(uri, ".jpg", this::onFileUploaded);
-      return;
-    }
-
-    // Upload post to server.
-    // Arguments and account should not be null (spotbugs).
-    assert arguments != null;
-    assert googleSignInAccount != null;
-    final String postType = arguments.getString(context.getString(R.string.args_post_type));
-    final String idToken = context.getString(R.string.dummy_id_token);
-    final String userId = googleSignInAccount.getId();
-    assert userId != null;
-    if (postType.equals(context.getString(R.string.arg_post_type_new))) {
-      postRepository
-          .newMessage(idToken, userId, location.latitude, location.longitude, imageUrl,
-              text.toString(), this::onNewMessageResponse, this::onNetworkError);
-    } else if (postType.equals(context.getString(R.string.arg_post_type_update))) {
-      final Message message = arguments.getParcelable(context.getString(R.string.args_message));
-      // Message should not be null (spotbugs).
-      assert message != null;
-      postRepository
-          .updateMessage(idToken, message.getId(), userId, location.latitude, location.longitude,
-              imageUrl, text.toString(), this::onUpdateMessageResponse, this::onNetworkError);
-    } else {
-      throw new IllegalArgumentException();
     }
   }
 
+  /**
+   * Upload the post image to the server, if required.
+   */
+  @VisibleForTesting
+  void uploadFile(@NonNull String text) {
+    // Check for a image URI on local filesystem and upload to server.
+    final Uri uri = Uri.parse(imageUrl);
+    if (!uri.getScheme().contains(URI_SCHEME_HTTP)) {
+      postRepository.uploadFile(uri, "jpg", this::onFileUploaded);
+    } else {
+      uploadPost(text);
+    }
+  }
+
+  /**
+   * Listener for file upload results from server.
+   *
+   * @param originalUri original URI of uploaded file
+   * @param uploadedUri URI of uploaded file on server
+   */
   @VisibleForTesting
   void onFileUploaded(Uri originalUri, Uri uploadedUri) {
     if ((uploadedUri != null) && uploadedUri.getScheme().contains(URI_SCHEME_HTTP)) {
@@ -496,6 +487,37 @@ public class PostFragment extends Fragment {
           .show();
     }
   }
+
+  /**
+   * Upload post to server.
+   */
+  @VisibleForTesting
+  void uploadPost(@NonNull String text) {
+    // Arguments and account should not be null (spotbugs).
+    assert arguments != null;
+    assert googleSignInAccount != null;
+    final String postType = arguments.getString(context.getString(R.string.args_post_type));
+    final String postTypeNew = context.getString(R.string.arg_post_type_new);
+    final String postTypeUpdate = context.getString(R.string.arg_post_type_update);
+    final String idToken = context.getString(R.string.dummy_id_token);
+    final String userId = googleSignInAccount.getId();
+    assert userId != null;
+    if (postTypeNew.equals(postType)) {
+      postRepository
+          .newMessage(idToken, userId, location.latitude, location.longitude, imageUrl,
+              text, this::onNewMessageResponse, this::onNetworkError);
+    } else if (postTypeUpdate.equals(postType)) {
+      final Message message = arguments.getParcelable(context.getString(R.string.args_message));
+      // Message should not be null (spotbugs).
+      assert message != null;
+      postRepository
+          .updateMessage(idToken, message.getId(), userId, location.latitude, location.longitude,
+              imageUrl, text, this::onUpdateMessageResponse, this::onNetworkError);
+    } else {
+      throw new IllegalArgumentException();
+    }
+  }
+
 
   /**
    * Delete a message post from the post repository.

@@ -53,6 +53,8 @@ import android.view.MenuItem;
 import android.view.View;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.android.volley.RequestQueue;
@@ -65,6 +67,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.magikarp.android.R;
 import com.magikarp.android.data.PostRepository;
+import com.magikarp.android.data.PostRepository.UploadUriListener;
 import com.magikarp.android.data.model.DeleteMessageResponse;
 import com.magikarp.android.data.model.Message;
 import com.magikarp.android.data.model.NewMessageResponse;
@@ -508,6 +511,15 @@ public class TestPostFragment {
   }
 
   @Test
+  public void testOnGoogleSignInAccountChanged() {
+    final GoogleSignInAccount account = mock(GoogleSignInAccount.class);
+
+    fragment.onGoogleSignInAccountChanged(account);
+
+    assertEquals(account, fragment.googleSignInAccount);
+  }
+
+  @Test
   public void testOnGetContentResultNotNull() {
     final Uri uri = mock(Uri.class);
     final PostFragment spy = spy(fragment);
@@ -597,14 +609,30 @@ public class TestPostFragment {
   }
 
   @Test
+  public void testOnPostButtonClick() {
+    final String text = "text";
+    assertNotNull(fragment.imageUrl);
+    binding.createPostCaption.setText(text);
+    assertNotNull(fragment.location);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadFile(any());
+
+    spy.onPostButtonClick();
+
+    verify(spy).uploadFile(text);
+  }
+
+  @Test
   public void testOnPostButtonClickInvalidImageUrl() {
     fragment.imageUrl = null;
     binding.createPostCaption.setText("text");
     assertNotNull(fragment.location);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadFile(any());
 
-    fragment.onPostButtonClick();
+    spy.onPostButtonClick();
 
-    verifyNoInteractions(postRepository);
+    verify(spy, never()).uploadFile(any());
   }
 
   @Test
@@ -612,10 +640,12 @@ public class TestPostFragment {
     assertNotNull(fragment.imageUrl);
     binding.createPostCaption.setText(null);
     assertNotNull(fragment.location);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadFile(any());
 
-    fragment.onPostButtonClick();
+    spy.onPostButtonClick();
 
-    verifyNoInteractions(postRepository);
+    verify(spy, never()).uploadFile(any());
   }
 
   @Test
@@ -623,10 +653,12 @@ public class TestPostFragment {
     assertNotNull(fragment.imageUrl);
     binding.createPostCaption.setText("");
     assertNotNull(fragment.location);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadFile(any());
 
-    fragment.onPostButtonClick();
+    spy.onPostButtonClick();
 
-    verifyNoInteractions(postRepository);
+    verify(spy, never()).uploadFile(any());
   }
 
   @Test
@@ -634,62 +666,174 @@ public class TestPostFragment {
     assertNotNull(fragment.imageUrl);
     binding.createPostCaption.setText("text");
     fragment.location = null;
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadFile(any());
 
-    fragment.onPostButtonClick();
+    spy.onPostButtonClick();
 
-    verifyNoInteractions(postRepository);
+    verify(spy, never()).uploadFile(any());
   }
 
   @Test
-  public void testOnPostButtonClickNew() {
-    assertNotNull(fragment.imageUrl);
-    binding.createPostCaption.setText("text");
-    assertNotNull(fragment.location);
+  public void testUploadFileHttpScheme() {
+    final String text = "text";
+    fragment.imageUrl = "http://www.example.com";
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadPost(any());
+
+    spy.uploadFile(text);
+
+    verify(postRepository, never()).uploadFile(any(), any(), any());
+    verify(spy).uploadPost(text);
+  }
+
+  @Test
+  public void testUploadFileFileScheme() {
+    final String fileUrl = "file:///example.jpg";
+    fragment.imageUrl = fileUrl;
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).uploadPost(any());
+
+    spy.uploadFile("text");
+
+    verify(postRepository).uploadFile(eq(Uri.parse(fileUrl)), anyString(),
+        any(UploadUriListener.class));
+    verify(spy, never()).uploadPost(any());
+  }
+
+  @Test
+  public void testOnFileUploaded() {
+    final Uri originalUri = mock(Uri.class);
+    final Uri uploadedUri = Uri.parse("http://www.example.com");
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).onPostButtonClick();
+
+    spy.onFileUploaded(originalUri, uploadedUri);
+
+    verify(spy).onPostButtonClick();
+  }
+
+  @Test
+  public void testOnFileUploadedUriNull() {
+    final Uri originalUri = mock(Uri.class);
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).onPostButtonClick();
+
+    spy.onFileUploaded(originalUri, null);
+
+    verify(spy, never()).onPostButtonClick();
+  }
+
+  @Test
+  public void testOnFileUploadedUriWrongScheme() {
+    final Uri originalUri = mock(Uri.class);
+    final Uri uploadedUri = Uri.parse("file:///image.jpg");
+    final PostFragment spy = spy(fragment);
+    doNothing().when(spy).onPostButtonClick();
+
+    spy.onFileUploaded(originalUri, uploadedUri);
+
+    verify(spy, never()).onPostButtonClick();
+  }
+
+  @Test
+  public void testUploadPostNew() {
+    final String text = "text";
+    final String idToken = context.getString(R.string.dummy_id_token);
+    final String userId = "userId";
+    fragment.location = new LatLng(1.0d, 2.0d);
     when(arguments.getString(context.getString(R.string.args_post_type)))
         .thenReturn(context.getString(R.string.arg_post_type_new));
+    when(googleSignInAccount.getId()).thenReturn(userId);
 
-    fragment.onPostButtonClick();
+    fragment.uploadPost(text);
 
     verify(postRepository)
-        .newMessage(anyString(), anyString(), eq(location.latitude), eq(location.longitude),
-            anyString(), anyString(), any(), any());
+        .newMessage(eq(idToken), eq(userId), eq(1.0d), eq(2.0d), eq(imageUrl), eq(text), any(),
+            any());
   }
 
   @Test
-  public void testOnPostButtonClickUpdate() {
-    assertNotNull(fragment.imageUrl);
-    binding.createPostCaption.setText("text");
-    assertNotNull(fragment.location);
+  public void testUploadPostUpdate() {
+    final String text = "text";
+    final String idToken = context.getString(R.string.dummy_id_token);
+    final String userId = "userId";
+    fragment.location = new LatLng(1.0d, 2.0d);
     when(arguments.getString(context.getString(R.string.args_post_type)))
         .thenReturn(context.getString(R.string.arg_post_type_update));
-
-    fragment.onPostButtonClick();
-
-    verify(postRepository)
-        .updateMessage(anyString(), anyString(), anyString(), eq(location.latitude),
-            eq(location.longitude), anyString(), anyString(), any(), any());
-  }
-
-  @Test
-  public void testOnPostButtonClickView() {
-    assertNotNull(fragment.imageUrl);
-    binding.createPostCaption.setText("text");
-    assertNotNull(fragment.location);
-    when(arguments.getString(context.getString(R.string.args_post_type)))
-        .thenReturn(context.getString(R.string.arg_post_type_view));
-
-    assertThrows(IllegalArgumentException.class, () -> fragment.onPostButtonClick());
-  }
-
-  @Test
-  public void testOnDeleteButtonClick() {
+    when(googleSignInAccount.getId()).thenReturn(userId);
     final Message message =
-        new Message("id", "userId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+        new Message("id", userId, imageUrl, text, location.latitude, location.longitude,
+            "timestamp");
     when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
 
-    fragment.onDeleteButtonClick();
+    fragment.uploadPost(text);
 
-    verify(postRepository).deleteMessage(eq("idToken"), eq("id"), eq("userId"), any(), any());
+    verify(postRepository)
+        .updateMessage(eq(idToken), eq(message.getId()), eq(userId), eq(1.0d), eq(2.0d),
+            eq(imageUrl), eq(text), any(), any());
+  }
+
+  @Test
+  public void testUploadPostInvalidArgument() {
+    final String text = "text";
+    final String idToken = context.getString(R.string.dummy_id_token);
+    final String userId = "userId";
+    fragment.location = new LatLng(1.0d, 2.0d);
+    when(arguments.getString(context.getString(R.string.args_post_type)))
+        .thenReturn(null);
+    when(googleSignInAccount.getId()).thenReturn(userId);
+
+    assertThrows(IllegalArgumentException.class, () -> fragment.uploadPost(text));
+  }
+
+  @Test
+  @SuppressWarnings("ResultOfMethodCallIgnored")
+  public void testOnDeleteButtonClick() {
+    final FragmentManager fragmentManager = mock(FragmentManager.class);
+    final PostFragment spy = spy(fragment);
+    doReturn(fragmentManager).when(spy).getChildFragmentManager();
+    final FragmentTransaction transaction = mock(FragmentTransaction.class);
+    when(fragmentManager.beginTransaction()).thenReturn(transaction);
+
+    spy.onDeleteButtonClick();
+
+    // Confirm method completes.
+  }
+
+  @Test
+  public void testOnBooleanResultTrue() {
+    final String requestKey = "requestKey";
+    final Bundle result = mock(Bundle.class);
+    final String idToken = context.getString(R.string.dummy_id_token);
+    when(result.getBoolean(anyString())).thenReturn(true);
+    final String userId = "userId";
+    when(googleSignInAccount.getId()).thenReturn(userId);
+    final Message message =
+        new Message("id", "ignoreUserId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+    when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
+
+    fragment.onBooleanResult(requestKey, result);
+
+    verify(postRepository)
+        .deleteMessage(eq(idToken), eq("id"), eq("userId"), any(),
+            any());
+  }
+
+  @Test
+  public void testOnBooleanResultFalse() {
+    final String requestKey = "requestKey";
+    final Bundle result = mock(Bundle.class);
+    when(result.getBoolean(anyString())).thenReturn(false);
+    final String userId = "userId";
+    when(googleSignInAccount.getId()).thenReturn(userId);
+    final Message message =
+        new Message("id", "ignoreUserId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+    when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
+
+    fragment.onBooleanResult(requestKey, result);
+
+    verify(postRepository, never()).deleteMessage(any(), any(), any(), any(), any());
   }
 
   @Test
