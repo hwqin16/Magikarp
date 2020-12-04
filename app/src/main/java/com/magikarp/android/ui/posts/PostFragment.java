@@ -444,25 +444,54 @@ public class PostFragment extends Fragment {
    * Post button click callback.
    */
   @VisibleForTesting
-  void onPostButtonClick() { // TODO get user ID and post ID
+  void onPostButtonClick() {
     // Check for valid input and update post repository.
-    final String text = binding.createPostCaption.getText().toString();
+    final CharSequence text = binding.createPostCaption.getText();
     if (imageUrl == null || TextUtils.isEmpty(text) || location == null) {
       Toast
           .makeText(context, context.getString(R.string.failure_fields_missing), Toast.LENGTH_SHORT)
           .show();
-    } else if (arguments.getString(context.getString(R.string.args_post_type))
-        .equals(context.getString(R.string.arg_post_type_new))) {
+      return;
+    }
+
+    // Check for a image URI on local filesystem and upload to server.
+    final Uri uri = Uri.parse(imageUrl);
+    if (!uri.getScheme().contains(URI_SCHEME_HTTP)) {
+      postRepository.uploadFile(uri, ".jpg", this::onFileUploaded);
+      return;
+    }
+
+    // Arguments and account should not be null (spotbugs).
+    assert arguments != null;
+    assert googleSignInAccount != null;
+    final String postType = arguments.getString(context.getString(R.string.args_post_type));
+    final String idToken = context.getString(R.string.dummy_id_token);
+    final String userId = googleSignInAccount.getId();
+    assert userId != null;
+    if (postType.equals(context.getString(R.string.arg_post_type_new))) {
       postRepository
-          .newMessage("", "", location.latitude, location.longitude, imageUrl, text,
-              this::onNewMessageResponse, this::onNetworkError);
-    } else if (arguments.getString(context.getString(R.string.args_post_type))
-        .equals(context.getString(R.string.arg_post_type_update))) {
+          .newMessage(idToken, userId, location.latitude, location.longitude, imageUrl,
+              text.toString(), this::onNewMessageResponse, this::onNetworkError);
+    } else if (postType.equals(context.getString(R.string.arg_post_type_update))) {
+      final Message message = arguments.getParcelable(context.getString(R.string.args_message));
+      // Message should not be null (spotbugs).
+      assert message != null;
       postRepository
-          .updateMessage("", "", "", location.latitude, location.longitude, imageUrl, text,
-              this::onUpdateMessageResponse, this::onNetworkError);
+          .updateMessage(idToken, message.getId(), userId, location.latitude, location.longitude,
+              imageUrl, text.toString(), this::onUpdateMessageResponse, this::onNetworkError);
     } else {
       throw new IllegalArgumentException();
+    }
+  }
+
+  @VisibleForTesting
+  void onFileUploaded(Uri originalUri, Uri uploadedUri) {
+    if ((uploadedUri != null) && uploadedUri.getScheme().contains(URI_SCHEME_HTTP)) {
+      imageUrl = uploadedUri.toString();
+      onPostButtonClick();
+    } else {
+      Toast.makeText(context, context.getString(R.string.failure_network_error), Toast.LENGTH_LONG)
+          .show();
     }
   }
 
@@ -478,6 +507,12 @@ public class PostFragment extends Fragment {
     fragment.show(fragmentManager, null);
   }
 
+  /**
+   * Listener for boolean dialog result.
+   *
+   * @param requestKey key to define the request that started the dialog
+   * @param result     dialog result
+   */
   @VisibleForTesting
   void onBooleanResult(@NonNull String requestKey, @NonNull Bundle result) {
     final Message message = arguments.getParcelable(context.getString(R.string.args_message));

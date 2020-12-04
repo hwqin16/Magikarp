@@ -21,6 +21,9 @@
     <!-- Dialog responses -->
     <string name="dialog_result">dialog_result</string>
 
+    <!-- Post UI -->
+    <string name="dummy_id_token">dummyIdToken</string>
+
     <!-- Settings UI -->
     <string name="preference_key_max_records">max_records</string>
 
