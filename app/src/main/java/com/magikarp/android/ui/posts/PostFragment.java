@@ -517,11 +517,10 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onBooleanResult(@NonNull String requestKey, @NonNull Bundle result) {
-    final String idToken = googleSignInAccount.getIdToken();
     final String userId = googleSignInAccount.getId();
-    // Account user ID and token should not be null (spotbugs).
-    assert idToken != null;
+    // Account user ID should not be null (spotbugs).
     assert userId != null;
+    final String idToken = context.getString(R.string.dummy_id_token);
     final Message message = arguments.getParcelable(context.getString(R.string.args_message));
     if (result.getBoolean(context.getString(R.string.dialog_result))) {
       // Message should never be null (spotbugs).
