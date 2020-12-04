@@ -10,6 +10,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -229,13 +230,15 @@ public class TestMapsFragment {
   public void testOnMapReadyNoPermission() {
     final ShadowApplication application = Shadows.shadowOf((Application) context);
     application.denyPermissions(Manifest.permission.ACCESS_FINE_LOCATION);
+    final MapsFragment spy = spy(fragment);
+    doNothing().when(spy).onCameraIdle();
     when(mapsViewModel.getMessages()).thenReturn(new MutableLiveData<>());
 
-    fragment.onMapReady(googleMap);
+    spy.onMapReady(googleMap);
 
     verify(requestPermissionLauncher).launch(Manifest.permission.ACCESS_FINE_LOCATION);
-    verify(googleMap).setOnCameraIdleListener(fragment);
-    verify(googleMap).setOnMarkerClickListener(fragment);
+    verify(googleMap).setOnCameraIdleListener(spy);
+    verify(googleMap).setOnMarkerClickListener(spy);
     verify(mapsViewModel).getMessages();
     verifyNoMoreInteractions(googleMap);
   }
@@ -244,13 +247,15 @@ public class TestMapsFragment {
   public void testOnMapReadyFineLocationPermission() {
     final ShadowApplication application = Shadows.shadowOf((Application) context);
     application.grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION);
+    final MapsFragment spy = spy(fragment);
+    doNothing().when(spy).onCameraIdle();
     when(mapsViewModel.getMessages()).thenReturn(new MutableLiveData<>());
 
-    fragment.onMapReady(googleMap);
+    spy.onMapReady(googleMap);
 
     verify(googleMap).setMyLocationEnabled(true);
-    verify(googleMap).setOnCameraIdleListener(fragment);
-    verify(googleMap).setOnMarkerClickListener(fragment);
+    verify(googleMap).setOnCameraIdleListener(spy);
+    verify(googleMap).setOnMarkerClickListener(spy);
     verify(mapsViewModel).getMessages();
     verifyNoInteractions(requestPermissionLauncher);
   }

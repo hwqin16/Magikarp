@@ -16,8 +16,6 @@ spec:
     spec:
       containers:
         - name: magikarp
-          command: ["sleep"]
-          args: ["infinity"]
           image: gcr.io/magikarp-295201/magikarp-server:latest
           ports:
             - containerPort: 7000
@@ -40,4 +38,3 @@ spec:
       port: 7000
       targetPort: 7000
   type: LoadBalancer
-  loadBalancerIP: 35.224.51.217

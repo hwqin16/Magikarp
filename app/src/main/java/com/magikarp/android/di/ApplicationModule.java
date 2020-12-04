@@ -1,5 +1,6 @@
 package com.magikarp.android.di;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -44,6 +45,17 @@ import javax.inject.Singleton;
 @Module
 @InstallIn(ApplicationComponent.class)
 public class ApplicationModule {
+
+  /**
+   * Injector for creating an alert dialog builder.
+   *
+   * @return a content resolver
+   */
+  @Provides
+  public static AlertDialog.Builder provideAlertDialogBuilder(
+      @ApplicationContext Context applicationContext) {
+    return new AlertDialog.Builder(applicationContext);
+  }
 
   /**
    * Injector for creating a content resolver.

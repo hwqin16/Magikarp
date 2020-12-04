@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/nav_terms_of_service"
+        android:id="@+id/menu_terms_of_service"
         android:orderInCategory="100"
         android:title="@string/menu_terms_of_service"
         app:showAsAction="never" />
     <item
-        android:id="@+id/nav_privacy_policy"
+        android:id="@+id/menu_privacy_policy"
         android:orderInCategory="101"
         android:title="@string/menu_privacy_policy"
         app:showAsAction="never" />

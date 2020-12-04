@@ -71,6 +71,7 @@ public class PostRepository {
   /**
    * Upload a new message post.
    *
+   * @param idToken       ID token for authenticating with the server
    * @param userId        message user ID
    * @param latitude      message latitude
    * @param longitude     message longitude
@@ -79,12 +80,13 @@ public class PostRepository {
    * @param listener      response listener
    * @param errorListener error listener
    */
-  public void newMessage(@NonNull String userId, double latitude, double longitude,
-                         @NonNull String imageUrl, @NonNull String text,
+  public void newMessage(@NonNull String idToken, @NonNull String userId, double latitude,
+                         double longitude, @NonNull String imageUrl, @NonNull String text,
                          @NonNull Response.Listener<NewMessageResponse> listener,
                          @Nullable ErrorListener errorListener) {
     // Create message body.
-    final NewMessageRequest body = new NewMessageRequest(imageUrl, text, latitude, longitude);
+    final NewMessageRequest body =
+        new NewMessageRequest(idToken, imageUrl, text, latitude, longitude);
     // Create a new GSON request.
     final String url = String.format(urlNewMessage, userId);
     final GsonRequest<NewMessageResponse> request =
@@ -96,7 +98,8 @@ public class PostRepository {
   /**
    * Update an existing message post.
    *
-   * @param postId        message ID
+   * @param idToken       ID token for authenticating with the server
+   * @param messageId     message ID
    * @param userId        message user ID
    * @param latitude      message latitude
    * @param longitude     message longitude
@@ -105,14 +108,16 @@ public class PostRepository {
    * @param listener      response listener
    * @param errorListener error listener
    */
-  public void updateMessage(@NonNull String postId, @NonNull String userId, double latitude,
-                            double longitude, @NonNull String imageUrl, @NonNull String text,
+  public void updateMessage(@NonNull String idToken, @NonNull String messageId,
+                            @NonNull String userId, double latitude, double longitude,
+                            @NonNull String imageUrl, @NonNull String text,
                             @NonNull Response.Listener<UpdateMessageResponse> listener,
                             @Nullable ErrorListener errorListener) {
     // Create message body.
-    final NewMessageRequest body = new NewMessageRequest(imageUrl, text, latitude, longitude);
+    final NewMessageRequest body =
+        new NewMessageRequest(idToken, imageUrl, text, latitude, longitude);
     // Create a new GSON request.
-    final String url = String.format(urlUpdateMessage, userId, postId);
+    final String url = String.format(urlUpdateMessage, userId, messageId);
     final GsonRequest<UpdateMessageResponse> request =
         new GsonRequest<>(Request.Method.POST, url, UpdateMessageResponse.class,
             new Gson().toJson(body), listener, errorListener);
@@ -122,18 +127,20 @@ public class PostRepository {
   /**
    * Delete an existing message post.
    *
-   * @param postId        message  ID
+   * @param idToken       ID token for authenticating with the server
+   * @param messageId     message  ID
    * @param userId        message user ID
    * @param listener      response listener
    * @param errorListener error listener
    */
-  public void deleteMessage(@NonNull String postId, @NonNull String userId,
+  public void deleteMessage(@NonNull String idToken, @NonNull String messageId,
+                            @NonNull String userId,
                             @NonNull Response.Listener<DeleteMessageResponse> listener,
                             @Nullable ErrorListener errorListener) {
     // Create message body.
-    final DeleteMessageRequest body = new DeleteMessageRequest(postId, userId);
-    // Create a new GSON request.
-    final String url = String.format(urlDeleteMessage, userId, postId);
+    final DeleteMessageRequest body = new DeleteMessageRequest(idToken);
+    // Create a new Gson request.
+    final String url = String.format(urlDeleteMessage, userId, messageId);
     final GsonRequest<DeleteMessageResponse> request =
         new GsonRequest<>(Request.Method.POST, url, DeleteMessageResponse.class,
             new Gson().toJson(body), listener, errorListener);

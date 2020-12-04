@@ -118,6 +118,7 @@ public class MapsFragment extends Fragment
 
   @VisibleForTesting
   void performOnCreate() {
+    // For unit testing.
     activity = requireActivity();
     arguments = requireArguments();
     context = requireContext();
@@ -194,6 +195,8 @@ public class MapsFragment extends Fragment
     googleMap.setOnCameraIdleListener(this);
     googleMap.setOnMarkerClickListener(this);
     mapsViewModel.getMessages().observe(this, this::onMessagesChanged);
+    // Load initial messages now.
+    onCameraIdle();
   }
 
   /**
