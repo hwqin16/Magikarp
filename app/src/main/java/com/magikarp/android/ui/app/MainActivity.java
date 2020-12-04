@@ -199,8 +199,7 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
    *
    * @param account account to retrieve login information
    */
-  @VisibleForTesting
-  void updateSignInUi(@Nullable GoogleSignInAccount account) {
+  public void updateSignInUi(@Nullable GoogleSignInAccount account) {
     viewModel.setAccount(account);
     if (account != null) {
       // Set the user account text.

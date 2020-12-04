@@ -35,7 +35,7 @@ public class MainActivityTest {
    */
   @Test
   public void testDefaultViewMap() {
-    onView(ViewMatchers.withId(R.id.map_container)).check(matches(isDisplayed()));
+    onView(withId(R.id.map_container)).check(matches(isDisplayed()));
     onView(withContentDescription(R.string.nav_app_bar_open_drawer_description))
         .check(matches(isDisplayed()));
   }

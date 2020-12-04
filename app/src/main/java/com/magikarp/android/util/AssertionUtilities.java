@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class AssertionUtilities {
 
+  private AssertionUtilities() {
+  }
+
   /**
    * Requires a value to not be null.
    *

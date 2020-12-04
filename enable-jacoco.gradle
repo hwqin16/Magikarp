@@ -47,11 +47,12 @@ ext.enableJacoco = { Project project, String variant ->
             '**/Manifest*.*',
             '**/generated/**',
             '**/*Hilt*.*',
-            '**_Factory.class',
+            '**/*_Factory*.*',
             '**/Dagger*.*',
             '**/*_AssistedFactory*.*',
             '**/*_MembersInjector*.*',
-            '**/databinding/**'
+            '**/databinding/**',
+            '**/ApplicationModule_*.*'
         ]
         def javaClasses = fileTree(
             dir: "$buildDir/intermediates/javac/$folder/classes/com/magikarp/android",
