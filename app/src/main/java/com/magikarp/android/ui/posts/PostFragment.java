@@ -39,6 +39,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.snackbar.Snackbar;
 import com.magikarp.android.R;
 import com.magikarp.android.data.PostRepository;
 import com.magikarp.android.data.model.DeleteMessageResponse;
@@ -258,7 +259,7 @@ public class PostFragment extends Fragment {
 
     // Set up the image and text views.
     final NetworkImageView imageView = binding.createPostNetworkImage;
-    imageView.setDefaultImageResId(R.drawable.ic_insert_photo);
+    imageView.setDefaultImageResId(R.drawable.background);
     imageView.setErrorImageResId(R.drawable.ic_broken_image);
     final EditText editText = binding.createPostCaption;
     editText.setText(text);
@@ -402,7 +403,7 @@ public class PostFragment extends Fragment {
       networkImageView.setVisibility(View.VISIBLE);
       imageView.setVisibility(View.INVISIBLE);
       imageLoader.get(imageUrl, ImageLoader
-          .getImageListener(networkImageView, R.drawable.ic_insert_photo,
+          .getImageListener(networkImageView, R.drawable.background,
               R.drawable.ic_broken_image));
       networkImageView.setImageUrl(imageUrl, imageLoader);
     } else {
@@ -559,8 +560,8 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onNewMessageResponse(NewMessageResponse response) {
-    Toast.makeText(context, context.getString(R.string.success_new_post), Toast.LENGTH_SHORT)
-        .show();
+    Snackbar.make(activity.findViewById(android.R.id.content),
+        context.getString(R.string.success_new_post), Snackbar.LENGTH_SHORT).show();
     closeFragment();
   }
 
@@ -571,8 +572,8 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onUpdateMessageResponse(UpdateMessageResponse response) {
-    Toast.makeText(context, context.getString(R.string.success_update_post), Toast.LENGTH_SHORT)
-        .show();
+    Snackbar.make(activity.findViewById(android.R.id.content),
+        context.getString(R.string.success_update_post), Snackbar.LENGTH_SHORT).show();
     closeFragment();
   }
 
@@ -583,8 +584,8 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onDeleteMessageResponse(DeleteMessageResponse response) {
-    Toast.makeText(context, context.getString(R.string.success_delete_post), Toast.LENGTH_SHORT)
-        .show();
+    Snackbar.make(activity.findViewById(android.R.id.content),
+        context.getString(R.string.success_delete_post), Snackbar.LENGTH_SHORT).show();
     closeFragment();
   }
 
