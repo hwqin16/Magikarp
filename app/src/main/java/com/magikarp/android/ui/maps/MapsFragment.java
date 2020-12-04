@@ -1,5 +1,7 @@
 package com.magikarp.android.ui.maps;
 
+import static com.magikarp.android.util.AssertionUtilities.require;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -146,9 +148,7 @@ public class MapsFragment extends Fragment
     super.onViewCreated(view, savedInstanceState);
     final SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
         .findFragmentByTag(context.getString(R.string.fragment_tag_maps));
-    // Map fragment should never be null (spotbugs).
-    assert mapFragment != null;
-    mapFragment.getMapAsync(this);
+    require(mapFragment).getMapAsync(this);
   }
 
   @Override
@@ -232,14 +232,14 @@ public class MapsFragment extends Fragment
   void onGoogleSignInAccountChanged(@Nullable GoogleSignInAccount account) {
     String userId = null;
     if (googleSignInAccount != null) {
-      userId = googleSignInAccount.getId();
-      // Google sign in account ID should never be null (spotbugs).
-      assert userId != null;
+      userId = require(googleSignInAccount.getId());
     }
     // Quit fragment if user logs out while in edit mode.
     // Note: it should not be possible for user to change accounts without explicitly logging out.
     final boolean isUserData = arguments.getBoolean(context.getString(R.string.args_is_user_data));
-    if (isUserData && (userId != null) && ((account == null) || !userId.equals(account.getId()))) {
+    final boolean shouldLogOut =
+        isUserData && (userId != null) && ((account == null) || !userId.equals(account.getId()));
+    if (shouldLogOut) {
       activity.onBackPressed();
     } else {
       googleSignInAccount = account;
@@ -267,9 +267,7 @@ public class MapsFragment extends Fragment
   @Override
   public boolean onMarkerClick(Marker marker) {
     final boolean isUserData = arguments.getBoolean(context.getString(R.string.args_is_user_data));
-    final Message message = (Message) marker.getTag();
-    // Message should never be null (spotbugs).
-    assert message != null;
+    final Message message = require((Message) marker.getTag());
     // Build arguments bundle for editing/viewing an existing post in the post editor.
     final Bundle bundle = new Bundle();
     bundle.putString(context.getString(R.string.args_post_type), context

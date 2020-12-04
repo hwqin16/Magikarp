@@ -1,5 +1,7 @@
 package com.magikarp.android.ui.app;
 
+import static com.magikarp.android.util.AssertionUtilities.require;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -119,9 +121,8 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
     drawerLayout = findViewById(R.id.drawer_layout);
     navigationView = findViewById(R.id.nav_view);
     NavHostFragment navHostFragment =
-        (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-    // Navigation host fragment should never be null (spotbugs).
-    assert navHostFragment != null;
+        (NavHostFragment) require(
+            getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment));
     navController = navHostFragment.getNavController();
     appBarConfiguration =
         new AppBarConfiguration.Builder(R.id.nav_maps, R.id.nav_my_posts,

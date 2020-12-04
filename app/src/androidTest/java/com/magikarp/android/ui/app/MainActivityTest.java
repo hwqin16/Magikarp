@@ -1,4 +1,4 @@
-package com.magikarp.android;
+package com.magikarp.android.ui.app;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -7,11 +7,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
-import com.magikarp.android.ui.app.MainActivity;
+import com.magikarp.android.R;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +35,7 @@ public class MainActivityTest {
    */
   @Test
   public void testDefaultViewMap() {
-    onView(withId(R.id.map_container)).check(matches(isDisplayed()));
+    onView(ViewMatchers.withId(R.id.map_container)).check(matches(isDisplayed()));
     onView(withContentDescription(R.string.nav_app_bar_open_drawer_description))
         .check(matches(isDisplayed()));
   }
@@ -43,35 +43,35 @@ public class MainActivityTest {
   /**
    * Tests the contents of the drawer when not logged in.
    */
-//  @Test
-//  public void testOpenDefaultDrawerNotLoggedIn() {
-//    onView(withId(R.id.map_container)).check(matches(isDisplayed()));
-//    onView(withContentDescription(R.string.nav_app_bar_open_drawer_description))
-//        .check(matches(isDisplayed()));
-//    onView(withContentDescription(R.string.nav_app_bar_open_drawer_description)).perform(click());
-//    onView(withId(R.id.action_login)).check(matches(isDisplayed()));
-//    onView(withId(R.id.nav_maps)).check(matches(isDisplayed()));
-//    onView(withId(R.id.nav_settings)).check(matches(isDisplayed()));
-//    onView(withId(R.id.nav_help)).check(matches(isDisplayed()));
-//  }
+  @Test
+  public void testOpenDefaultDrawerNotLoggedIn() {
+    onView(withId(R.id.map_container)).check(matches(isDisplayed()));
+    onView(withContentDescription(R.string.nav_app_bar_open_drawer_description))
+        .check(matches(isDisplayed()));
+    onView(withContentDescription(R.string.nav_app_bar_open_drawer_description)).perform(click());
+    onView(withId(R.id.action_login)).check(matches(isDisplayed()));
+    onView(withId(R.id.nav_maps)).check(matches(isDisplayed()));
+    onView(withId(R.id.nav_settings)).check(matches(isDisplayed()));
+    onView(withId(R.id.nav_help)).check(matches(isDisplayed()));
+  }
 
   /**
    * Tests the contents of the drawer when logged in.
    */
-//  @Test
-//  public void testOpenDefaultDrawerLoggedIn() {
-//    intentsRule.getScenario().onActivity(activity -> activity.setLoggedInUi("user", "email", null));
-//    onView(withId(R.id.map_container)).check(matches(isDisplayed()));
-//    onView(withContentDescription(R.string.nav_app_bar_open_drawer_description))
-//        .check(matches(isDisplayed()));
-//    onView(withContentDescription(R.string.nav_app_bar_open_drawer_description)).perform(click());
-//    onView(withId(R.id.nav_my_posts)).check(matches(isDisplayed()));
-//    onView(withId(R.id.nav_maps)).check(matches(isDisplayed()));
-//    onView(withId(R.id.nav_settings)).check(matches(isDisplayed()));
-//    onView(withId(R.id.nav_help)).check(matches(isDisplayed()));
-//    onView(withId(R.id.action_logout)).check(matches(isDisplayed()));
-//    onView(withId(R.id.card_view)).check(matches(isDisplayed()));
-//  }
+  @Test
+  public void testOpenDefaultDrawerLoggedIn() {
+    intentsRule.getScenario().onActivity(activity -> activity.setLoggedInUi("user", "email", null));
+    onView(withId(R.id.map_container)).check(matches(isDisplayed()));
+    onView(withContentDescription(R.string.nav_app_bar_open_drawer_description))
+        .check(matches(isDisplayed()));
+    onView(withContentDescription(R.string.nav_app_bar_open_drawer_description)).perform(click());
+    onView(withId(R.id.nav_my_posts)).check(matches(isDisplayed()));
+    onView(withId(R.id.nav_maps)).check(matches(isDisplayed()));
+    onView(withId(R.id.nav_settings)).check(matches(isDisplayed()));
+    onView(withId(R.id.nav_help)).check(matches(isDisplayed()));
+    onView(withId(R.id.action_logout)).check(matches(isDisplayed()));
+    onView(withId(R.id.card_view)).check(matches(isDisplayed()));
+  }
 
   /**
    * Tests the contents of the drawer when logged in.
@@ -79,7 +79,7 @@ public class MainActivityTest {
   @Test
   public void testOpenDefaultDrawerAfterLogOut() {
     intentsRule.getScenario().onActivity(activity -> activity.setLoggedInUi("user", "email", null));
-    intentsRule.getScenario().onActivity(activity -> activity.setLoggedOutUi());
+    intentsRule.getScenario().onActivity(MainActivity::setLoggedOutUi);
     onView(withId(R.id.map_container)).check(matches(isDisplayed()));
     onView(withContentDescription(R.string.nav_app_bar_open_drawer_description))
         .check(matches(isDisplayed()));

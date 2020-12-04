@@ -520,6 +520,15 @@ public class TestPostFragment {
   }
 
   @Test
+  public void testOnGoogleSignInAccountChangedLogOut() {
+    final GoogleSignInAccount account = fragment.googleSignInAccount;
+
+    fragment.onGoogleSignInAccountChanged(account);
+
+    assertEquals(account, fragment.googleSignInAccount);
+  }
+
+  @Test
   public void testOnGetContentResultNotNull() {
     final Uri uri = mock(Uri.class);
     final PostFragment spy = spy(fragment);
@@ -836,6 +845,38 @@ public class TestPostFragment {
     verify(postRepository, never()).deleteMessage(any(), any(), any(), any(), any());
   }
 
+  @Test(expected = AssertionError.class)
+  public void testOnBooleanResultMessageNotPresent() {
+    final String requestKey = "requestKey";
+    final Bundle result = mock(Bundle.class);
+    when(result.getBoolean(anyString())).thenReturn(true);
+    final String userId = "userId";
+    when(googleSignInAccount.getId()).thenReturn(userId);
+    final Message message =
+            new Message("id", "ignoreUserId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+    when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(null);
+
+    fragment.onBooleanResult(requestKey, result);
+
+    verify(postRepository, never()).deleteMessage(any(), any(), any(), any(), any());
+  }
+
+  @Test(expected = AssertionError.class)
+  public void testOnBooleanResultUserIdNull() {
+    final String requestKey = "requestKey";
+    final Bundle result = mock(Bundle.class);
+    when(result.getBoolean(anyString())).thenReturn(true);
+    final String userId = "userId";
+    when(googleSignInAccount.getId()).thenReturn(null);
+    final Message message =
+            new Message("id", "ignoreUserId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+    when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(null);
+
+    fragment.onBooleanResult(requestKey, result);
+
+    verify(postRepository, never()).deleteMessage(any(), any(), any(), any(), any());
+  }
+
   @Test
   public void testOnNewMessageResponse() {
     NewMessageResponse response = mock(NewMessageResponse.class);
@@ -883,6 +924,11 @@ public class TestPostFragment {
     fragment.onNetworkError(error);
 
     // Confirm method completes.
+  }
+
+  @Test
+  public void testLoadImageFromNull() {
+    assertNull(fragment.loadImageBitmap(null));
   }
 
 }

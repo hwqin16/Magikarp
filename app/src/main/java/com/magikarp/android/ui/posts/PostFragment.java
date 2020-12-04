@@ -1,10 +1,13 @@
 package com.magikarp.android.ui.posts;
 
+import static com.magikarp.android.util.AssertionUtilities.require;
+
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
@@ -134,12 +137,12 @@ public class PostFragment extends Fragment {
   PostFragment(
       ActivityResultLauncher<String> getContentLauncher,
       ActivityResultLauncher<String> requestPermissionLauncher,
-      Bundle arguments,
+      @NotNull Bundle arguments,
       Context context,
       FragmentActivity activity,
       FragmentPostBinding binding,
-      GoogleSignInAccount googleSignInAccount,
-      LatLng location,
+      @NotNull GoogleSignInAccount googleSignInAccount,
+      @NotNull LatLng location,
       LocationListener locationListener,
       String imageUrl,
       ContentResolver contentResolver,
@@ -218,8 +221,6 @@ public class PostFragment extends Fragment {
       onDeleteButtonClick();
       return true;
     } else if (itemId == R.id.menu_get_directions) {
-      // Location should never be null (spotbugs).
-      assert location != null;
       final Uri uri =
           Uri.parse(String.format(Locale.US, GEO_URL, location.latitude, location.longitude));
       startActivityFromIntent(new Intent(Intent.ACTION_VIEW, uri));
@@ -412,7 +413,7 @@ public class PostFragment extends Fragment {
       try {
         final InputStream inputStream = contentResolver.openInputStream(imageUri);
         imageView
-            .setImageBitmap((inputStream == null) ? null : BitmapFactory.decodeStream(inputStream));
+            .setImageBitmap(loadImageBitmap(inputStream));
       } catch (final FileNotFoundException exception) {
         this.imageUrl = null;
         imageView.setImageResource(R.drawable.ic_broken_image);
@@ -493,23 +494,18 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void uploadPost(@NonNull String text) {
-    // Arguments and account should not be null (spotbugs).
-    assert arguments != null;
-    assert googleSignInAccount != null;
     final String postType = arguments.getString(context.getString(R.string.args_post_type));
     final String postTypeNew = context.getString(R.string.arg_post_type_new);
     final String postTypeUpdate = context.getString(R.string.arg_post_type_update);
     final String idToken = context.getString(R.string.dummy_id_token);
-    final String userId = googleSignInAccount.getId();
-    assert userId != null;
+    final String userId = require(googleSignInAccount.getId());
     if (postTypeNew.equals(postType)) {
       postRepository
           .newMessage(idToken, userId, location.latitude, location.longitude, imageUrl,
               text, this::onNewMessageResponse, this::onNetworkError);
     } else if (postTypeUpdate.equals(postType)) {
-      final Message message = arguments.getParcelable(context.getString(R.string.args_message));
-      // Message should not be null (spotbugs).
-      assert message != null;
+      final Message message =
+          require(arguments.getParcelable(context.getString(R.string.args_message)));
       postRepository
           .updateMessage(idToken, message.getId(), userId, location.latitude, location.longitude,
               imageUrl, text, this::onUpdateMessageResponse, this::onNetworkError);
@@ -539,14 +535,11 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onBooleanResult(@NonNull String requestKey, @NonNull Bundle result) {
-    final String userId = googleSignInAccount.getId();
-    // Account user ID should not be null (spotbugs).
-    assert userId != null;
+    final String userId = require(googleSignInAccount.getId());
     final String idToken = context.getString(R.string.dummy_id_token);
-    final Message message = arguments.getParcelable(context.getString(R.string.args_message));
     if (result.getBoolean(context.getString(R.string.dialog_result))) {
-      // Message should never be null (spotbugs).
-      assert message != null;
+      final Message message =
+          require(arguments.getParcelable(context.getString(R.string.args_message)));
       postRepository.deleteMessage(idToken, message.getId(), userId, this::onDeleteMessageResponse,
           this::onNetworkError);
     }
@@ -604,6 +597,20 @@ public class PostFragment extends Fragment {
   void onNetworkError(VolleyError error) {
     Toast.makeText(context, context.getString(R.string.failure_network_error), Toast.LENGTH_LONG)
         .show();
+  }
+
+  /**
+   * Loads a bitmap from an input stream.
+   *
+   * @param stream stream to load from
+   * @return bitmap of the stream
+   */
+  @VisibleForTesting
+  Bitmap loadImageBitmap(final InputStream stream) {
+    if (stream == null) {
+      return null;
+    }
+    return BitmapFactory.decodeStream(stream);
   }
 
 }
