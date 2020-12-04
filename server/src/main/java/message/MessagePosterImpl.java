@@ -25,12 +25,11 @@ public class MessagePosterImpl implements MessagePoster {
   }
 
   @Override
-  public DeletePostResponse deleteMessage(String recordId) {
+  public DeletePostResponse deleteMessage(String recordId) throws Exception{
 
     // TODO security
 
     messagesCollection.document(recordId).delete();
-
     return new DeletePostResponse(201, null);
   }
 
@@ -80,10 +79,9 @@ public class MessagePosterImpl implements MessagePoster {
       double lat,
       double lon,
       Timestamp now
-  ) {
+  ) throws Exception{
     UpdatePostResponse response;
     try {
-      this.deleteMessage(recordId);
 
       Map<String, Object> update = new HashMap<>();
 

@@ -48,7 +48,7 @@ public interface MessagePoster {
       double lat,
       double lon,
       Timestamp now
-  );
+  ) throws Exception;
 
   /**
    * Delete Message by record ID.
@@ -56,5 +56,5 @@ public interface MessagePoster {
    * @param recordId String record ID of the Message to be deleted
    * @return DeletePostResponse to be returned to client
    */
-  DeletePostResponse deleteMessage(String recordId);
+  DeletePostResponse deleteMessage(String recordId) throws Exception;
 }

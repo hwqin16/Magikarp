@@ -36,7 +36,7 @@ public class TestMessagePosterImpl {
    * Test that a message is parsed from a document data map in the expected way.
    */
   @Test
-  public void testDeleteMessage() throws ExecutionException, InterruptedException {
+  public void testDeleteMessage() throws Exception {
     List<Map<String, Object>> documentDataList = Collections.singletonList(
         getRandomDocumentData()
     );
@@ -84,7 +84,7 @@ public class TestMessagePosterImpl {
    * Test that a message is parsed from a document data map in the expected way.
    */
   @Test
-  public void testPostMessage() throws ExecutionException, InterruptedException {
+  public void testPostMessage() throws Exception {
     Map<String, Object> documentData = getRandomDocumentData();
 
     List<QueryDocumentSnapshot> mockQueryDocumentSnapshots =
@@ -153,7 +153,7 @@ public class TestMessagePosterImpl {
    * Test that a message can be updated on the server.
    */
   @Test
-  public void testUpdateMessage() throws ExecutionException, InterruptedException {
+  public void testUpdateMessage() throws Exception {
     Map<String, Object> documentData = getRandomDocumentData();
 
     List<QueryDocumentSnapshot> mockQueryDocumentSnapshots =
