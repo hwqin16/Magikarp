@@ -352,7 +352,8 @@ public class TestServerComponent {
         )
     ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-    for (Map.Entry<FindMessagesByBoundingBoxRequest, String> entry : testInputToOutputMap.entrySet()) {
+    for (Map.Entry<FindMessagesByBoundingBoxRequest, String> entry :
+        testInputToOutputMap.entrySet()) {
       HttpResponse<String> response = Unirest.post(endpoint)
           .body(gson.toJson(entry.getKey()))
           .asString();
