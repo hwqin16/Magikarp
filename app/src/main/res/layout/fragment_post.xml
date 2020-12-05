@@ -35,8 +35,8 @@
                     android:id="@+id/create_post_local_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="8dp"
                     android:contentDescription="@string/image_preview"
+                    android:paddingTop="8dp"
                     android:scaleType="centerCrop" />
 
             </FrameLayout>
@@ -51,6 +51,7 @@
                 android:autofillHints="post_text"
                 android:hint="@string/edit_text_hint"
                 android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
+                android:maxLength="@integer/maximum_post_length"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/image_container" />
