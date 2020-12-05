@@ -11,7 +11,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -221,7 +220,7 @@ public class TestPostFragment {
     verify(inflater).inflate(R.menu.menu_post_view, menu);
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testOnCreateOptionsMenuIllegalPostType() {
     final String argsPostType = context.getString(R.string.args_post_type);
     final String argPostTypeIllegal = "illegalArgument";
@@ -229,8 +228,7 @@ public class TestPostFragment {
     final MenuInflater inflater = mock(MenuInflater.class);
     when(arguments.getString(argsPostType)).thenReturn(argPostTypeIllegal);
 
-    assertThrows(IllegalArgumentException.class,
-        () -> fragment.onCreateOptionsMenu(menu, inflater));
+    fragment.onCreateOptionsMenu(menu, inflater);
   }
 
   @Test
@@ -520,6 +518,15 @@ public class TestPostFragment {
   }
 
   @Test
+  public void testOnGoogleSignInAccountChangedLogOut() {
+    final GoogleSignInAccount account = fragment.googleSignInAccount;
+
+    fragment.onGoogleSignInAccountChanged(account);
+
+    assertEquals(account, fragment.googleSignInAccount);
+  }
+
+  @Test
   public void testOnGetContentResultNotNull() {
     final Uri uri = mock(Uri.class);
     final PostFragment spy = spy(fragment);
@@ -774,7 +781,7 @@ public class TestPostFragment {
             eq(imageUrl), eq(text), any(), any());
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testUploadPostInvalidArgument() {
     final String text = "text";
     final String idToken = context.getString(R.string.dummy_id_token);
@@ -784,7 +791,7 @@ public class TestPostFragment {
         .thenReturn(null);
     when(googleSignInAccount.getId()).thenReturn(userId);
 
-    assertThrows(IllegalArgumentException.class, () -> fragment.uploadPost(text));
+    fragment.uploadPost(text);
   }
 
   @Test
@@ -830,6 +837,38 @@ public class TestPostFragment {
     final Message message =
         new Message("id", "ignoreUserId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
     when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
+
+    fragment.onBooleanResult(requestKey, result);
+
+    verify(postRepository, never()).deleteMessage(any(), any(), any(), any(), any());
+  }
+
+  @Test(expected = AssertionError.class)
+  public void testOnBooleanResultMessageNotPresent() {
+    final String requestKey = "requestKey";
+    final Bundle result = mock(Bundle.class);
+    when(result.getBoolean(anyString())).thenReturn(true);
+    final String userId = "userId";
+    when(googleSignInAccount.getId()).thenReturn(userId);
+    final Message message =
+            new Message("id", "ignoreUserId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+    when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(null);
+
+    fragment.onBooleanResult(requestKey, result);
+
+    verify(postRepository, never()).deleteMessage(any(), any(), any(), any(), any());
+  }
+
+  @Test(expected = AssertionError.class)
+  public void testOnBooleanResultUserIdNull() {
+    final String requestKey = "requestKey";
+    final Bundle result = mock(Bundle.class);
+    when(result.getBoolean(anyString())).thenReturn(true);
+    final String userId = "userId";
+    when(googleSignInAccount.getId()).thenReturn(null);
+    final Message message =
+            new Message("id", "ignoreUserId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+    when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(null);
 
     fragment.onBooleanResult(requestKey, result);
 

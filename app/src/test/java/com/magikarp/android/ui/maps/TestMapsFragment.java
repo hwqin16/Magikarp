@@ -2,6 +2,7 @@ package com.magikarp.android.ui.maps;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -375,6 +376,17 @@ public class TestMapsFragment {
     fragment.onGoogleSignInAccountChanged(null);
 
     verifyNoInteractions(activity);
+  }
+
+  @Test
+  public void testOnGoogleSignInAccountChangedGoogleSignInSameAccount() {
+    when(arguments.getBoolean(context.getString(R.string.args_is_user_data))).thenReturn(true);
+    when(googleSignInAccount.getId()).thenReturn("userId");
+
+    fragment.onGoogleSignInAccountChanged(fragment.googleSignInAccount);
+
+    verifyNoInteractions(activity);
+    assertNotNull(fragment.googleSignInAccount);
   }
 
   @Test

@@ -1,12 +1,16 @@
 package com.magikarp.android.data;
 
+import static com.magikarp.android.util.AssertionUtilities.require;
+
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
@@ -159,21 +163,27 @@ public class PostRepository {
     final StorageReference reference = storageReference
         .child(IMAGES_DIRECTORY + fileNameGenerator.getFileName(fileUri, fileExtension));
     final UploadTask uploadTask = reference.putFile(fileUri);
-    uploadTask.continueWithTask(task -> {
+    uploadTask.continueWithTask(task -> getDownloadUrl(reference, task))
+        .addOnCompleteListener(task -> onUriReceived(fileUri, task, listener));
+  }
 
-      if (task.isSuccessful()) {
-        return reference.getDownloadUrl();
-      } else {
-        throw Objects.requireNonNull(task.getException());
-      }
+  @VisibleForTesting
+  Task<Uri> getDownloadUrl(final StorageReference reference,
+                           final Task<UploadTask.TaskSnapshot> task) throws Exception {
+    if (task.isSuccessful()) {
+      return reference.getDownloadUrl();
+    }
 
-    }).addOnCompleteListener(task -> {
+    final Exception exception = task.getException();
+    throw require(exception);
+  }
 
-      if (listener != null) {
-        listener.onUriReceived(fileUri, task.isSuccessful() ? task.getResult() : null);
-      }
-    });
-
+  @VisibleForTesting
+  void onUriReceived(@NonNull Uri fileUri, final Task<Uri> task,
+                     @Nullable UploadUriListener listener) {
+    if (listener != null) {
+      listener.onUriReceived(fileUri, task.isSuccessful() ? task.getResult() : null);
+    }
   }
 
   /**
