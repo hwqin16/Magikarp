@@ -265,7 +265,7 @@ public class PostFragment extends Fragment {
     // Set up the image and text views.
     final NetworkImageView imageView = binding.createPostNetworkImage;
     imageView.setDefaultImageResId(R.drawable.background);
-    imageView.setErrorImageResId(R.drawable.ic_broken_image);
+    imageView.setErrorImageResId(R.drawable.background_broken_image);
     final EditText editText = binding.createPostCaption;
     editText.setText(text);
 
@@ -404,7 +404,7 @@ public class PostFragment extends Fragment {
       imageView.setVisibility(View.INVISIBLE);
       imageLoader.get(imageUrl, ImageLoader
           .getImageListener(networkImageView, R.drawable.background,
-              R.drawable.ic_broken_image));
+              R.drawable.background_broken_image));
       networkImageView.setImageUrl(imageUrl, imageLoader);
     } else {
       networkImageView.setImageUrl(null, null);
@@ -415,7 +415,7 @@ public class PostFragment extends Fragment {
         imageView.setImageBitmap(BitmapFactory.decodeStream(inputStream));
       } catch (final FileNotFoundException exception) {
         this.imageUrl = null;
-        imageView.setImageResource(R.drawable.ic_broken_image);
+        imageView.setImageResource(R.drawable.background_broken_image);
         Toast.makeText(context, context.getString(R.string.failure_load_image), Toast.LENGTH_SHORT)
             .show();
       }
