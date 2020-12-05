@@ -1,5 +1,7 @@
 package com.magikarp.android.data;
 
+import static com.magikarp.android.util.AssertionUtilities.require;
+
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -173,7 +175,7 @@ public class PostRepository {
     }
 
     final Exception exception = task.getException();
-    throw Objects.requireNonNull(exception);
+    throw require(exception);
   }
 
   @VisibleForTesting

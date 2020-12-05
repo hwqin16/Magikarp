@@ -412,7 +412,7 @@ public class PostFragment extends Fragment {
       imageView.setVisibility(View.VISIBLE);
       try {
         final InputStream inputStream = contentResolver.openInputStream(imageUri);
-        imageView .setImageBitmap(BitmapFactory.decodeStream(inputStream));
+        imageView.setImageBitmap(BitmapFactory.decodeStream(inputStream));
       } catch (final FileNotFoundException exception) {
         this.imageUrl = null;
         imageView.setImageResource(R.drawable.ic_broken_image);

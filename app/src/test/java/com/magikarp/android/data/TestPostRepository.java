@@ -180,7 +180,7 @@ public class TestPostRepository {
 
   @Test
   public void testGetDownloadUrlNotSuccessful() throws Exception {
-    thrownOnDownloadTaskFail.expect(NullPointerException.class);
+    thrownOnDownloadTaskFail.expect(AssertionError.class);
 
     final Task<UploadTask.TaskSnapshot> task = mock(Task.class);
 
