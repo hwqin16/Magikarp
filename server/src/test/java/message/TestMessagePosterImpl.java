@@ -3,6 +3,8 @@ package message;
 import static helper.TestHelper.getMockQueryDocumentSnapshotsFromDocumentDataList;
 import static helper.TestHelper.getRandomDocumentData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -77,6 +79,7 @@ public class TestMessagePosterImpl {
         messagePoster.deleteMessage((String) documentDataList.get(0).get(Message.FS_ID_FIELD_NAME));
 
     assertEquals(test.getResponseCode(), 201);
+    assertNull(test.getError());
 
   }
 
@@ -146,7 +149,73 @@ public class TestMessagePosterImpl {
             imageUrl, text, lat, lon, now);
 
     assertEquals(test.getResponseCode(), 201);
+    assertNull(test.getError());
+    assertNotNull(test.getRecordId());
+  }
 
+  @Test
+  public void testPostMessageError() throws Exception {
+    Map<String, Object> documentData = getRandomDocumentData();
+
+    List<QueryDocumentSnapshot> mockQueryDocumentSnapshots =
+        getMockQueryDocumentSnapshotsFromDocumentDataList(Collections.singletonList(documentData));
+    QuerySnapshot mockQuerySnapshot = mock(QuerySnapshot.class);
+    when(mockQuerySnapshot.getDocuments()).thenReturn(mockQueryDocumentSnapshots);
+    SettableApiFuture<QuerySnapshot> futureMockQuerySnapshot = SettableApiFuture.create();
+    futureMockQuerySnapshot.set(mockQuerySnapshot);
+    Query mockQuery = mock(Query.class);
+    when(mockQuery.get()).thenReturn(futureMockQuerySnapshot);
+    CollectionReference mockMessageCollection = mock(CollectionReference.class);
+    Firestore mockFirestore = mock(Firestore.class);
+
+    when(mockFirestore.collection((Constants.COLLECTION_PATH))).thenReturn(mockMessageCollection);
+
+    DocumentReference ref = mock(DocumentReference.class);
+    when(mockFirestore.collection(Constants.COLLECTION_PATH)
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME))).thenReturn(ref);
+
+    DocumentSnapshot doc = mock(DocumentSnapshot.class);
+    when(doc.getString(Message.FS_IMAGE_URL_FIELD_NAME)).thenReturn("test.com/test.png");
+    ApiFuture<WriteResult> write = mock(ApiFuture.class);
+
+    when(write.get()).thenThrow(InterruptedException.class);
+
+    String userID = "Test";
+    double lon = 90.0;
+    double lat = 90.0;
+    String text = "test";
+    String imageUrl = "https://www.example.com/testimage.png";
+
+    Map<String, Object> newPost = new HashMap<>();
+
+    GeoPoint point = new GeoPoint(lat, lon);
+
+    Timestamp now = Timestamp.now();
+
+    newPost.put(Message.FS_USER_ID_FIELD_NAME, userID);
+    newPost.put(Message.FS_TEXT_FIELD_NAME, text);
+    newPost.put(Message.FS_GEOTAG_FIELD_NAME, point);
+    newPost.put(Message.FS_ID_FIELD_NAME, documentData.get(Message.FS_ID_FIELD_NAME));
+    newPost.put(Message.FS_IMAGE_URL_FIELD_NAME, imageUrl);
+    newPost.put(Message.FS_TIMESTAMP_FIELD_NAME, now);
+
+
+    ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
+    when(mockFirestore.collection(Constants.COLLECTION_PATH)
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME)).get())
+        .thenReturn(future);
+    when(mockFirestore.collection(Constants.COLLECTION_PATH)
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME))
+        .set(newPost, SetOptions.merge())).thenReturn(write);
+
+    MessagePosterImpl messagePoster = new MessagePosterImpl(mockFirestore);
+
+    NewPostResponse test = messagePoster
+        .postNewMessage((String) documentData.get(Message.FS_ID_FIELD_NAME), userID,
+            imageUrl, text, lat, lon, now);
+
+    assertEquals(test.getResponseCode(), 401);
+    assertNull(test.getRecordId());
   }
 
   /**
@@ -216,6 +285,73 @@ public class TestMessagePosterImpl {
             imageUrl, text, lat, lon, now);
 
     assertEquals(test.getResponseCode(), 201);
+    assertNull(test.getError());
+
+  }
+
+  @Test
+  public void testUpdateMessageError() throws Exception {
+    Map<String, Object> documentData = getRandomDocumentData();
+
+    List<QueryDocumentSnapshot> mockQueryDocumentSnapshots =
+        getMockQueryDocumentSnapshotsFromDocumentDataList(Collections.singletonList(documentData));
+    QuerySnapshot mockQuerySnapshot = mock(QuerySnapshot.class);
+    when(mockQuerySnapshot.getDocuments()).thenReturn(mockQueryDocumentSnapshots);
+    SettableApiFuture<QuerySnapshot> futureMockQuerySnapshot = SettableApiFuture.create();
+    futureMockQuerySnapshot.set(mockQuerySnapshot);
+    Query mockQuery = mock(Query.class);
+    when(mockQuery.get()).thenReturn(futureMockQuerySnapshot);
+    CollectionReference mockMessageCollection = mock(CollectionReference.class);
+    Firestore mockFirestore = mock(Firestore.class);
+
+    when(mockFirestore.collection((Constants.COLLECTION_PATH))).thenReturn(mockMessageCollection);
+
+    DocumentReference ref = mock(DocumentReference.class);
+    when(mockFirestore.collection(Constants.COLLECTION_PATH)
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME))).thenReturn(ref);
+
+    DocumentSnapshot doc = mock(DocumentSnapshot.class);
+    when(doc.getString(Message.FS_IMAGE_URL_FIELD_NAME)).thenReturn("test.com/test.png");
+    ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
+    ApiFuture<WriteResult> write = mock(ApiFuture.class);
+
+    when(future.get()).thenReturn(doc);
+    when(write.get()).thenThrow(ExecutionException.class);
+
+    String userID = "Test";
+    double lon = 90.0;
+    double lat = 90.0;
+    String text = "test";
+    String imageUrl = "https://www.example.com/testimage.png";
+
+
+    Map<String, Object> newPost = new HashMap<>();
+
+    GeoPoint point = new GeoPoint(lat, lon);
+
+    Timestamp now = Timestamp.now();
+
+    newPost.put(Message.FS_USER_ID_FIELD_NAME, userID);
+    newPost.put(Message.FS_TEXT_FIELD_NAME, text);
+    newPost.put(Message.FS_GEOTAG_FIELD_NAME, point);
+    newPost.put(Message.FS_ID_FIELD_NAME, documentData.get(Message.FS_ID_FIELD_NAME));
+    newPost.put(Message.FS_IMAGE_URL_FIELD_NAME, imageUrl);
+    newPost.put(Message.FS_TIMESTAMP_FIELD_NAME, now);
+
+    when(mockFirestore.collection(Constants.COLLECTION_PATH)
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME)).get())
+        .thenReturn(future);
+    when(mockFirestore.collection(Constants.COLLECTION_PATH)
+        .document((String) documentData.get(Message.FS_ID_FIELD_NAME))
+        .set(newPost, SetOptions.merge())).thenReturn(write);
+
+    MessagePosterImpl messagePoster = new MessagePosterImpl(mockFirestore);
+
+    UpdatePostResponse test = messagePoster
+        .updateMessage((String) documentData.get(Message.FS_ID_FIELD_NAME), userID,
+            imageUrl, text, lat, lon, now);
+
+    assertEquals(test.getResponseCode(), 401);
 
   }
 }

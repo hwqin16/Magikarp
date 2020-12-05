@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import requests.FindMessagesByBoundingBoxRequest;
 import requests.MessageRequest;
+import responses.MessagesResponse;
 
 /**
  * Right now this runs against our production database on real data. So the tests will start failing
@@ -68,9 +69,10 @@ public class TestServerComponent {
         .body(gson.toJson(request))
         .asString();
 
-    JSONObject responseJson = new JSONObject(response.getBody());
+    MessagesResponse messages = gson.fromJson(response.getBody(), MessagesResponse.class);
 
-    assertEquals(0, responseJson.getInt("record_count"));
+    assertEquals(0, messages.getMessages().size());
+    assertEquals(0, messages.getRecordCount());
   }
 
   @Test
@@ -87,9 +89,10 @@ public class TestServerComponent {
         .body(gson.toJson(request))
         .asString();
 
-    JSONObject responseJson = new JSONObject(response.getBody());
+    MessagesResponse messages = gson.fromJson(response.getBody(), MessagesResponse.class);
 
-    assertEquals(0, responseJson.getInt("record_count"));
+    assertEquals(0, messages.getMessages().size());
+    assertEquals(0, messages.getRecordCount());
   }
 
   @Test
@@ -106,9 +109,10 @@ public class TestServerComponent {
         .body(gson.toJson(request))
         .asString();
 
-    JSONObject responseJson = new JSONObject(response.getBody());
+    MessagesResponse messages = gson.fromJson(response.getBody(), MessagesResponse.class);
 
-    assertEquals(0, responseJson.getInt("record_count"));
+    assertEquals(0, messages.getMessages().size());
+    assertEquals(0, messages.getRecordCount());
   }
 
   @Test
