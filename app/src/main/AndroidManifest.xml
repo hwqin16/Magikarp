@@ -32,7 +32,7 @@
         <activity
             android:name=".ui.app.MainActivity"
             android:theme="@style/Theme.Magikarp.NoActionBar"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

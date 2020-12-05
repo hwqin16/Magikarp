@@ -1,6 +1,7 @@
 package com.magikarp.android.ui.posts;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +11,14 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -189,6 +192,8 @@ public class PostFragment extends Fragment {
         registerForActivityResult(new RequestPermission(), this::onRequestPermissionResult);
     // Set up fragment to get content (i.e. images).
     getContentLauncher = registerForActivityResult(new GetContent(), this::onGetContentResult);
+    // Get a handle to back button presses (used to close the keyboard).
+//    activity.getOnBackPressedDispatcher().addCallback(this, new KeyboardCloser(true));
   }
 
   @Override
@@ -257,6 +262,8 @@ public class PostFragment extends Fragment {
       text = message.getText();
     }
 
+    Log.i("PostFragment", "OnViewCreated URL : " + url);
+
     // Set up the image and text views.
     final NetworkImageView imageView = binding.createPostNetworkImage;
     imageView.setDefaultImageResId(R.drawable.background);
@@ -304,14 +311,9 @@ public class PostFragment extends Fragment {
 
   @Override
   public void onSaveInstanceState(@NotNull Bundle bundle) {
-    final String postType = arguments.getString(context.getString(R.string.args_post_type));
-    final String postTypeView = context.getString(R.string.arg_post_type_view);
-
-    if (!postType.equals(postTypeView)) {
-      bundle.putParcelable(SAVE_STATE_LOCATION, location);
-      bundle.putString(SAVE_STATE_IMAGE_URL, imageUrl);
-      bundle.putString(SAVE_STATE_TEXT, binding.createPostCaption.getText().toString());
-    }
+    bundle.putParcelable(SAVE_STATE_LOCATION, location);
+    bundle.putString(SAVE_STATE_IMAGE_URL, imageUrl);
+    bundle.putString(SAVE_STATE_TEXT, binding.createPostCaption.getText().toString());
   }
 
   @Override
@@ -590,21 +592,24 @@ public class PostFragment extends Fragment {
   }
 
   /**
-   * Programmatically clean up and close the fragment.
-   */
-  @VisibleForTesting
-  void closeFragment() {
-    // TODO close the keyboard if required
-    activity.onBackPressed();
-  }
-
-  /**
    * Callback for a network error.
    */
   @VisibleForTesting
   void onNetworkError(VolleyError error) {
     Toast.makeText(context, context.getString(R.string.failure_network_error), Toast.LENGTH_LONG)
         .show();
+  }
+
+
+  /**
+   * Programmatically clean up and close the fragment.
+   */
+  @VisibleForTesting
+  void closeFragment() {
+    final InputMethodManager imm =
+        (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(getView().getRootView().getWindowToken(), 0);
+    activity.onBackPressed();
   }
 
 }
