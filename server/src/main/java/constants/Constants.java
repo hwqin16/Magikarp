@@ -1,6 +1,10 @@
 package constants;
 
 public class Constants {
+
+  private Constants() {
+  }
+
   // TODO use this to build GoogleIdTokenVerifier
   // public static final String OAUTH_CLIENT_ID =
   //    "222054183884-l3lcjqflihkqibfu4s3cu1lk1vhblv5l.apps.googleusercontent.com";

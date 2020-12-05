@@ -1,15 +1,16 @@
 package server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.google.gson.Gson;
 import helper.TestHelper;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
-import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import requests.FindMessagesByBoundingBoxRequest;
 import requests.MessageRequest;
+import responses.MessagesResponse;
 
 /**
  * Right now this runs against our production database on real data. So the tests will start failing
@@ -35,7 +37,7 @@ public class TestServerComponent {
 
   @BeforeAll
   public static void setup() throws IOException {
-    Server.start();
+    Server.main(new String[]{});
   }
 
   @Test
@@ -55,41 +57,66 @@ public class TestServerComponent {
 
   @Test
   @Order(2)
-  public void getByBoundingBoxTest() {
+  public void getByBoundingBoxInBoxTest() {
     FindMessagesByBoundingBoxRequest request = new FindMessagesByBoundingBoxRequest(
         helper.getLatitude() - 0.5,
         helper.getLatitude() + 0.5,
         helper.getLongitude() - 0.5,
         helper.getLongitude() + 0.5,
-        50
+        0
     );
     HttpResponse<String> response = Unirest.post(endpoint)
         .body(gson.toJson(request))
         .asString();
 
-    JSONObject responseJson = new JSONObject(response.getBody());
+    MessagesResponse messages = gson.fromJson(response.getBody(), MessagesResponse.class);
 
-    assertEquals(1, responseJson.getInt("record_count"));
-
-    JSONArray recordsJson = responseJson.getJSONArray("records");
-
-    JSONObject recordJson = null;
-
-    for (Iterator<Object> it = recordsJson.iterator(); it.hasNext(); ) {
-      JSONObject jsonObject = (JSONObject) it.next();
-
-      if (jsonObject.getString("user_id").equals(helper.getUserId())) {
-        recordJson = jsonObject;
-      }
-    }
-
-    assertNotNull(recordJson);
-
-    helper.assertResponseIsEquivalent(recordJson);
+    assertEquals(0, messages.getMessages().size());
+    assertEquals(0, messages.getRecordCount());
   }
 
   @Test
   @Order(3)
+  public void getByBoundingBoxLatitudeFlippedTest() {
+    FindMessagesByBoundingBoxRequest request = new FindMessagesByBoundingBoxRequest(
+        helper.getLatitude() + 0.5,
+        helper.getLatitude() - 0.5,
+        helper.getLongitude() - 0.5,
+        helper.getLongitude() + 0.5,
+        0
+    );
+    HttpResponse<String> response = Unirest.post(endpoint)
+        .body(gson.toJson(request))
+        .asString();
+
+    MessagesResponse messages = gson.fromJson(response.getBody(), MessagesResponse.class);
+
+    assertEquals(0, messages.getMessages().size());
+    assertEquals(0, messages.getRecordCount());
+  }
+
+  @Test
+  @Order(4)
+  public void getByBoundingBoxLongitudeFlippedTest() {
+    FindMessagesByBoundingBoxRequest request = new FindMessagesByBoundingBoxRequest(
+        helper.getLatitude() - 0.5,
+        helper.getLatitude() + 0.5,
+        helper.getLongitude() + 0.5,
+        helper.getLongitude() - 0.5,
+        0
+    );
+    HttpResponse<String> response = Unirest.post(endpoint)
+        .body(gson.toJson(request))
+        .asString();
+
+    MessagesResponse messages = gson.fromJson(response.getBody(), MessagesResponse.class);
+
+    assertEquals(0, messages.getMessages().size());
+    assertEquals(0, messages.getRecordCount());
+  }
+
+  @Test
+  @Order(5)
   public void updatePostTestFail() {
     String recordId = getFirstRecordIdFromHelper();
 
@@ -106,7 +133,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(4)
+  @Order(6)
   public void updatePostTest() {
     String recordId = getFirstRecordIdFromHelper();
 
@@ -123,7 +150,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(5)
+  @Order(7)
   public void getByUserIdTest() {
     HttpResponse<String> response =
         Unirest.post(endpoint + helper.getUserId()).asString();
@@ -138,7 +165,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(6)
+  @Order(8)
   public void deletePostTestFailed() {
     String recordId = getFirstRecordIdFromHelper();
 
@@ -151,7 +178,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(7)
+  @Order(9)
   public void deletePostTest() {
     String recordId = getFirstRecordIdFromHelper();
 
@@ -163,6 +190,177 @@ public class TestServerComponent {
     assertEquals(201, postDeleteBodyJson.get("response_code"));
   }
 
+  @Test
+  @Order(10)
+  public void getByBoundingBoxInvalidInputsTest() {
+    String invalidLatitudeBottom = "Invalid latitude_bottom";
+    String invalidLatitudeTop = "Invalid latitude_top";
+    String invalidLatitudeLeft = "Invalid longitude_left";
+    String invalidLatitudeRight = "Invalid longitude_right";
+    String invalidMaxRecords = "Invalid max_records";
+
+    Map<FindMessagesByBoundingBoxRequest, String> testInputToOutputMap = Stream.of(
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                null,
+                0.0,
+                0.0,
+                0.0,
+                1
+            ),
+            invalidLatitudeBottom
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                -91.0,
+                0.0,
+                0.0,
+                0.0,
+                1
+            ),
+            invalidLatitudeBottom
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                91.0,
+                0.0,
+                0.0,
+                0.0,
+                1
+            ),
+            invalidLatitudeBottom
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                null,
+                0.0,
+                0.0,
+                1
+            ),
+            invalidLatitudeTop
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                -91.0,
+                0.0,
+                0.0,
+                1
+            ),
+            invalidLatitudeTop
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                91.0,
+                0.0,
+                0.0,
+                1
+            ),
+            invalidLatitudeTop
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                0.0,
+                null,
+                0.0,
+                1
+            ),
+            invalidLatitudeLeft
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                0.0,
+                -181.0,
+                0.0,
+                1
+            ),
+            invalidLatitudeLeft
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                0.0,
+                181.0,
+                0.0,
+                1
+            ),
+            invalidLatitudeLeft
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                0.0,
+                0.0,
+                null,
+                1
+            ),
+            invalidLatitudeRight
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                0.0,
+                0.0,
+                -181.0,
+                1
+            ),
+            invalidLatitudeRight
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                0.0,
+                0.0,
+                181.0,
+                1
+            ),
+            invalidLatitudeRight
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                null
+            ),
+            invalidMaxRecords
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                -1
+            ),
+            invalidMaxRecords
+        ),
+        new AbstractMap.SimpleEntry<>(
+            new FindMessagesByBoundingBoxRequest(
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                -10
+            ),
+            invalidMaxRecords
+        )
+    ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+    for (Map.Entry<FindMessagesByBoundingBoxRequest, String> entry :
+        testInputToOutputMap.entrySet()) {
+      HttpResponse<String> response = Unirest.post(endpoint)
+          .body(gson.toJson(entry.getKey()))
+          .asString();
+
+      assertEquals(entry.getValue(), response.getBody());
+    }
+  }
 
   @AfterAll
   public static void stop() {

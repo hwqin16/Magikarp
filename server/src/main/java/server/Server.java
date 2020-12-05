@@ -8,6 +8,7 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.GeoPoint;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -42,6 +43,9 @@ public class Server {
   private static MessageFinder messageFinder;
   private static MessagePoster messagePoster;
   private static Firestore firestore;
+  
+  private Server() {
+  }
 
   private static ByteArrayInputStream getServiceAccountInputStream() {
     return new ByteArrayInputStream(
@@ -59,12 +63,6 @@ public class Server {
           .setDatabaseUrl(Constants.FIRESTORE_URL)
           .build();
       serviceAccount.close();
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      throw new RuntimeException("Failed to find ServiceAccount file");
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw new RuntimeException("Failed to initialize Firestore");
     } finally {
       serviceAccount.close();
     }
@@ -81,9 +79,7 @@ public class Server {
   /**
    * Start the server.
    */
-  public static void start() throws IOException {
-    setup();
-
+  public static void start() {
     app.post("/messages", ctx -> {
       FindMessagesByBoundingBoxRequest request = gson.fromJson(
           ctx.body(),
@@ -238,7 +234,14 @@ public class Server {
     app.stop();
   }
 
+  /**
+   * Main method for backend.
+   *
+   * @param args String arguments - unused
+   * @throws IOException If there are IO Exceptions during setup
+   */
   public static void main(String[] args) throws IOException {
+    setup();
     start();
   }
 }
