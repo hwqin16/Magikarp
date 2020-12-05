@@ -95,8 +95,8 @@ public class HelpFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    view.findViewById(R.id.call_container).setOnClickListener(this::onCallButtonClicked);
-    view.findViewById(R.id.email_container).setOnClickListener(this::onEmailButtonClicked);
+    binding.callContainer.setOnClickListener(this::onCallButtonClicked);
+    binding.emailContainer.setOnClickListener(this::onEmailButtonClicked);
   }
 
   @Override

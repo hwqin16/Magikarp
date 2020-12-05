@@ -11,7 +11,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.robolectric.annotation.Config.OLDEST_SDK;
@@ -148,11 +147,11 @@ public class TestHelpFragment {
   public void testOnViewCreated() {
     final View view = mock(View.class);
     final Bundle savedInstanceState = mock(Bundle.class);
-    when(view.findViewById(anyInt())).thenReturn(view);
 
     fragment.onViewCreated(view, savedInstanceState);
 
-    verify(view, times(2)).findViewById(anyInt());
+    assertTrue(binding.callContainer.hasOnClickListeners());
+    assertTrue(binding.emailContainer.hasOnClickListeners());
   }
 
   @Test
