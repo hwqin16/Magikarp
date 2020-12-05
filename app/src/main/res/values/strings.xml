@@ -57,7 +57,7 @@
     <string name="dialog_button_delete">Delete</string>
 
     <!-- Editable text hints -->
-    <string name="edit_text_hint">Enter text here</string>
+    <string name="edit_text_hint">Description</string>
 
     <!-- Navigation drawer -->
     <string name="nav_header_desc">Navigation header</string>

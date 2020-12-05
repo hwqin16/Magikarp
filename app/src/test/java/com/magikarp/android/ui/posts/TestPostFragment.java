@@ -78,8 +78,10 @@ import com.magikarp.android.data.model.NewMessageResponse;
 import com.magikarp.android.data.model.UpdateMessageResponse;
 import com.magikarp.android.databinding.FragmentPostBinding;
 import com.magikarp.android.location.LocationListener;
+import com.magikarp.android.util.AssertionUtilities;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Objects;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -291,13 +293,28 @@ public class TestPostFragment {
   }
 
   @Test
-  public void testOnCreateView() {
+  public void testOnCreateViewReadOnly() {
     final LayoutInflater inflater = LayoutInflater.from(context);
     final Bundle savedInstanceState = mock(Bundle.class);
+    final String postTypeView = context.getString(R.string.arg_post_type_view);
+    when(arguments.getString(context.getString(R.string.args_post_type))).thenReturn(postTypeView);
 
     fragment.onCreateView(inflater, null, savedInstanceState);
 
     assert (fragment.binding != binding);
+    assertFalse(fragment.binding.createPostCaption.isEnabled());
+  }
+
+  @Test
+  public void testOnCreateViewEditable() {
+    final LayoutInflater inflater = LayoutInflater.from(context);
+    final Bundle savedInstanceState = mock(Bundle.class);
+    when(arguments.getString(context.getString(R.string.args_post_type))).thenReturn("editable");
+
+    fragment.onCreateView(inflater, null, savedInstanceState);
+
+    assert (fragment.binding != binding);
+    assertTrue(fragment.binding.createPostCaption.isEnabled());
   }
 
   @Test
@@ -312,14 +329,16 @@ public class TestPostFragment {
 
     assertSame(location, spy.location);
     assertSame(imageUrl, spy.imageUrl);
-    assertTrue(TextUtils.isEmpty(spy.binding.createPostCaption.getText().toString()));
+    assertTrue(TextUtils.isEmpty(spy.binding.editText.getText()));
   }
 
   @Test
   public void testOnViewCreatedNoSavedInstanceStatePostTypeUpdate() {
+    final String imageUrl = "imageUrl";
+    final String text = "text";
     final View view = mock(View.class);
     final Message message =
-        new Message("id", "userId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+        new Message("id", "userId", imageUrl, text, 1.0d, 2.0d, "timestamp");
     when(arguments.getString(context.getString(R.string.args_post_type)))
         .thenReturn(context.getString(R.string.arg_post_type_update));
     when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
@@ -329,15 +348,16 @@ public class TestPostFragment {
     spy.onViewCreated(view, null);
 
     assertEquals(new LatLng(message.getLatitude(), message.getLongitude()), spy.location);
-    assertSame("imageUrl", spy.imageUrl);
-    assertEquals("text", spy.binding.createPostCaption.getText().toString());
+    assertSame(imageUrl, spy.imageUrl);
+    assertEquals(text, AssertionUtilities.require(binding.editText.getText()).toString());
   }
 
   @Test
   public void testOnViewCreatedNoSavedInstanceStatePostTypeView() {
+    final String text = "text";
     final View view = mock(View.class);
     final Message message =
-        new Message("id", "userId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+        new Message("id", "userId", "imageUrl", text, 1.0d, 2.0d, "timestamp");
     when(arguments.getString(context.getString(R.string.args_post_type)))
         .thenReturn(context.getString(R.string.arg_post_type_view));
     when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(message);
@@ -345,21 +365,23 @@ public class TestPostFragment {
     doNothing().when(spy).loadImage(anyString());
 
     spy.onViewCreated(view, null);
+    shadowOf(getMainLooper()).idle();
 
     assertEquals(new LatLng(message.getLatitude(), message.getLongitude()), spy.location);
     assertSame("imageUrl", spy.imageUrl);
-    assertEquals("text", spy.binding.createPostCaption.getText().toString());
+    assertEquals(text, AssertionUtilities.require(spy.binding.editText.getText()).toString());
   }
 
   @Test
   public void testOnViewCreatedWithSavedInstanceState() {
+    final String text = "text";
     final View view = mock(View.class);
     final Bundle savedInstanceState = mock(Bundle.class);
     final LatLng latLng = mock(LatLng.class);
     when(arguments.getString(context.getString(R.string.args_post_type))).thenReturn("any");
     when(savedInstanceState.getParcelable(SAVE_STATE_LOCATION)).thenReturn(latLng);
     when(savedInstanceState.getString(SAVE_STATE_IMAGE_URL)).thenReturn("imageUrl");
-    when(savedInstanceState.getString(SAVE_STATE_TEXT)).thenReturn("text");
+    when(savedInstanceState.getString(SAVE_STATE_TEXT)).thenReturn(text);
     final PostFragment spy = spy(fragment);
     doNothing().when(spy).loadImage(anyString());
 
@@ -367,7 +389,7 @@ public class TestPostFragment {
 
     assertSame(latLng, spy.location);
     assertSame("imageUrl", spy.imageUrl);
-    assertEquals("text", spy.binding.createPostCaption.getText().toString());
+    assertEquals(text, AssertionUtilities.require(spy.binding.editText.getText()).toString());
   }
 
   @Test
@@ -416,14 +438,15 @@ public class TestPostFragment {
   }
 
   @Test
-  public void testOnSaveInstanceState() {
+  public void testOnSaveInstanceStateTextNull() {
     final Bundle bundle = mock(Bundle.class);
 
     fragment.onSaveInstanceState(bundle);
 
     verify(bundle).putParcelable(anyString(), eq(location));
     verify(bundle).putString(anyString(), eq(imageUrl));
-    verify(bundle).putString(anyString(), eq(binding.createPostCaption.getText().toString()));
+    verify(bundle)
+        .putString(anyString(), eq(Objects.requireNonNull(binding.editText.getText()).toString()));
   }
 
   @Test
@@ -606,7 +629,7 @@ public class TestPostFragment {
   public void testOnPostButtonClick() {
     final String text = "text";
     assertNotNull(fragment.imageUrl);
-    binding.createPostCaption.setText(text);
+    binding.editText.setText(text);
     assertNotNull(fragment.location);
     final PostFragment spy = spy(fragment);
     doNothing().when(spy).uploadFile(any());
@@ -619,7 +642,7 @@ public class TestPostFragment {
   @Test
   public void testOnPostButtonClickInvalidImageUrl() {
     fragment.imageUrl = null;
-    binding.createPostCaption.setText("text");
+    binding.editText.setText("text");
     assertNotNull(fragment.location);
     final PostFragment spy = spy(fragment);
     doNothing().when(spy).uploadFile(any());
@@ -632,7 +655,7 @@ public class TestPostFragment {
   @Test
   public void testOnPostButtonClickInvalidTextNull() {
     assertNotNull(fragment.imageUrl);
-    binding.createPostCaption.setText(null);
+    binding.editText.setText(null);
     assertNotNull(fragment.location);
     final PostFragment spy = spy(fragment);
     doNothing().when(spy).uploadFile(any());
@@ -645,7 +668,7 @@ public class TestPostFragment {
   @Test
   public void testOnPostButtonClickInvalidTextEmptyString() {
     assertNotNull(fragment.imageUrl);
-    binding.createPostCaption.setText("");
+    binding.editText.setText("");
     assertNotNull(fragment.location);
     final PostFragment spy = spy(fragment);
     doNothing().when(spy).uploadFile(any());
@@ -658,7 +681,7 @@ public class TestPostFragment {
   @Test
   public void testOnPostButtonClickInvalidLocation() {
     assertNotNull(fragment.imageUrl);
-    binding.createPostCaption.setText("text");
+    binding.editText.setText("text");
     fragment.location = null;
     final PostFragment spy = spy(fragment);
     doNothing().when(spy).uploadFile(any());
