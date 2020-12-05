@@ -3,10 +3,12 @@ package com.magikarp.android.data;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 import android.net.Uri;
 import com.android.volley.RequestQueue;
@@ -28,7 +30,9 @@ import com.magikarp.android.data.model.NewMessageResponse;
 import com.magikarp.android.data.model.UpdateMessageResponse;
 import com.magikarp.android.network.GsonRequest;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -151,7 +155,7 @@ public class TestPostRepository {
 
     final UploadTask uploadTask = mock(UploadTask.class);
     final Task continuationTask = mock(Task.class);
-    final Task downloadUriTask = mock(Task.class);
+
     when(storageReference.child(anyString())).thenReturn(storageReference);
     when(storageReference.putFile(fileUri)).thenReturn(uploadTask);
     when(uploadTask.continueWithTask(any(Continuation.class))).thenReturn(continuationTask);
@@ -159,6 +163,66 @@ public class TestPostRepository {
     postRepository.uploadFile(fileUri, fileExtension, listener);
 
     verify(continuationTask).addOnCompleteListener(any(OnCompleteListener.class));
+  }
+
+  @Test
+  public void testGetDownloadUrlSuccessful() throws Exception {
+    final Task<Uri> downloadUriTask = mock(Task.class);
+    final Task<UploadTask.TaskSnapshot> task = mock(Task.class);
+    when(task.isSuccessful()).thenReturn(true);
+
+    when(storageReference.getDownloadUrl()).thenReturn(downloadUriTask);
+    assertEquals(downloadUriTask, postRepository.getDownloadUrl(storageReference, task));
+  }
+
+  @Rule
+  public ExpectedException thrownOnDownloadTaskFail = ExpectedException.none();
+
+  @Test
+  public void testGetDownloadUrlNotSuccessful() throws Exception {
+    thrownOnDownloadTaskFail.expect(NullPointerException.class);
+
+    final Task<UploadTask.TaskSnapshot> task = mock(Task.class);
+
+    when(task.isSuccessful()).thenReturn(false);
+    postRepository.getDownloadUrl(storageReference, task);
+  }
+
+  @Test
+  public void testGetDownloadUrlNonNullListener() throws Exception {
+    final Uri fileUri = mock(Uri.class);
+    final Task<Uri> uriTask = mock(Task.class);
+    final UploadUriListener listener = mock(UploadUriListener.class);
+
+    when(uriTask.isSuccessful()).thenReturn(true);
+    when(uriTask.getResult()).thenReturn(mock(Uri.class));
+
+    postRepository.onUriReceived(fileUri, uriTask, listener);
+
+    verify(listener).onUriReceived(any(Uri.class), any(Uri.class));
+  }
+
+  @Test
+  public void testGetDownloadUrlNullListener() throws Exception {
+    final Uri fileUri = mock(Uri.class);
+    final Task<Uri> uriTask = mock(Task.class);
+    final UploadUriListener listener = null;
+
+    postRepository.onUriReceived(fileUri, uriTask, listener);
+    verify(uriTask, never()).isSuccessful();
+  }
+
+  @Test
+  public void testGetDownloadUrlUriTaskNotSuccessful() throws Exception {
+    final Uri fileUri = mock(Uri.class);
+    final Task<Uri> uriTask = mock(Task.class);
+    final UploadUriListener listener = mock(UploadUriListener.class);
+
+    when(uriTask.isSuccessful()).thenReturn(false);
+
+    postRepository.onUriReceived(fileUri, uriTask, listener);
+    verify(uriTask).isSuccessful();
+    verify(listener).onUriReceived(any(Uri.class), isNull());
   }
 
 }

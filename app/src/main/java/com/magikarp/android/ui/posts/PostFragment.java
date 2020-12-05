@@ -412,8 +412,7 @@ public class PostFragment extends Fragment {
       imageView.setVisibility(View.VISIBLE);
       try {
         final InputStream inputStream = contentResolver.openInputStream(imageUri);
-        imageView
-            .setImageBitmap(loadImageBitmap(inputStream));
+        imageView .setImageBitmap(BitmapFactory.decodeStream(inputStream));
       } catch (final FileNotFoundException exception) {
         this.imageUrl = null;
         imageView.setImageResource(R.drawable.ic_broken_image);
@@ -598,19 +597,4 @@ public class PostFragment extends Fragment {
     Toast.makeText(context, context.getString(R.string.failure_network_error), Toast.LENGTH_LONG)
         .show();
   }
-
-  /**
-   * Loads a bitmap from an input stream.
-   *
-   * @param stream stream to load from
-   * @return bitmap of the stream
-   */
-  @VisibleForTesting
-  Bitmap loadImageBitmap(final InputStream stream) {
-    if (stream == null) {
-      return null;
-    }
-    return BitmapFactory.decodeStream(stream);
-  }
-
 }

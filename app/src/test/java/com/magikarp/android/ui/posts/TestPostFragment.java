@@ -926,9 +926,4 @@ public class TestPostFragment {
     // Confirm method completes.
   }
 
-  @Test
-  public void testLoadImageFromNull() {
-    assertNull(fragment.loadImageBitmap(null));
-  }
-
 }

@@ -45,8 +45,4 @@ subprojects {
                 addCheckStyleTaskForAndroidVariants(project)
             }
     }
-
-    tasks.withType(Test) {
-        enableAssertions = true
-    }
 }
