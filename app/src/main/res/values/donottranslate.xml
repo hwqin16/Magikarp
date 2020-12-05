@@ -8,6 +8,8 @@
     <string name="server_new_message">/messages/%s/new</string>
     <string name="server_update_message">/messages/%s/update/%s</string>
     <string name="server_delete_message">/messages/%s/delete/%s</string>
+    <string name="server_privacy_policy">https://storage.googleapis.com/magikarp-privacy/privacy.htm</string>
+    <string name="server_terms_of_service">https://storage.googleapis.com/magikarp-privacy/terms.htm</string>
 
     <!-- Fragment arguments -->
     <string name="args_post_type">args_post_type</string>
