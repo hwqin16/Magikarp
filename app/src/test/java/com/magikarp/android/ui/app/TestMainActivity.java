@@ -1,6 +1,5 @@
 package com.magikarp.android.ui.app;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
@@ -32,12 +31,13 @@ import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -91,12 +91,15 @@ public class TestMainActivity {
 
   private AutoCloseable closeable;
 
+  private Context context;
+
   private MainActivity activity;
 
   @Before
   public void setup() {
     closeable = MockitoAnnotations.openMocks(this);
-    final Context context = ApplicationProvider.getApplicationContext();
+    context = ApplicationProvider.getApplicationContext();
+    context.setTheme(R.style.Theme_Magikarp);
     activity = new MainActivity(
         googleSignInLauncher,
         appBarConfiguration,
@@ -192,21 +195,39 @@ public class TestMainActivity {
   @Test
   public void testOnSupportNavigateUpReturnsTrue() {
     try (MockedStatic<NavigationUI> navigationUi = mockStatic(NavigationUI.class)) {
+      final MainActivity spy = spy(activity);
+      doNothing().when(spy).closeSoftKeyboard();
       navigationUi.when(() -> NavigationUI.navigateUp(navController, appBarConfiguration))
           .thenReturn(true);
 
-      assertTrue(activity.onSupportNavigateUp());
+      assertTrue(spy.onSupportNavigateUp());
     }
   }
 
   @Test
   public void testOnSupportNavigateUpReturnsFalse() {
     try (MockedStatic<NavigationUI> navigationUi = mockStatic(NavigationUI.class)) {
+      final MainActivity spy = spy(activity);
+      doNothing().when(spy).closeSoftKeyboard();
       navigationUi.when(() -> NavigationUI.navigateUp(navController, appBarConfiguration))
           .thenReturn(false);
 
-      assertFalse(activity.onSupportNavigateUp());
+      assertFalse(spy.onSupportNavigateUp());
     }
+  }
+
+  @Test
+  public void testCloseSoftKeyboard() {
+    final MainActivity spy = spy(activity);
+    final InputMethodManager manager = mock(InputMethodManager.class);
+    doReturn(manager).when(spy).getSystemService(Context.INPUT_METHOD_SERVICE);
+    final View view = mock(View.class);
+    doReturn(view).when(spy).findViewById(anyInt());
+
+    spy.closeSoftKeyboard();
+
+    verify(manager).hideSoftInputFromWindow(any(), anyInt());
+    verify(view).getWindowToken();
   }
 
   @Test
@@ -244,6 +265,7 @@ public class TestMainActivity {
           .thenReturn(task);
       final MainActivity spy = spy(activity);
       doNothing().when(spy).updateSignInUi(any());
+      doReturn(new CoordinatorLayout(context)).when(spy).findViewById(anyInt());
 
       spy.onGoogleSignInResult(result);
 

@@ -9,8 +9,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -33,6 +33,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.magikarp.android.R;
 import dagger.hilt.android.AndroidEntryPoint;
 import javax.inject.Inject;
@@ -168,7 +169,16 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
 
   @Override
   public boolean onSupportNavigateUp() {
+    // Close the damn soft keyboard if it is open (nuclear option).
+    closeSoftKeyboard();
     return NavigationUI.navigateUp(navController, appBarConfiguration);
+  }
+
+  @VisibleForTesting
+  void closeSoftKeyboard() {
+    final InputMethodManager imm =
+        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(findViewById(android.R.id.content).getWindowToken(), 0);
   }
 
   @VisibleForTesting
@@ -178,7 +188,8 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
           GoogleSignIn.getSignedInAccountFromIntent(result.getData()).getResult(ApiException.class);
       updateSignInUi(account);
     } catch (ApiException e) {
-      Toast.makeText(context, context.getString(R.string.failure_sign_in), Toast.LENGTH_LONG)
+      Snackbar
+          .make(findViewById(android.R.id.content), R.string.failure_sign_in, Snackbar.LENGTH_LONG)
           .show();
       updateSignInUi(null);
     }

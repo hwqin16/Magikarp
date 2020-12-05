@@ -11,13 +11,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import com.google.android.material.snackbar.Snackbar;
 import com.magikarp.android.R;
+import com.magikarp.android.databinding.FragmentHelpBinding;
 
 /**
  * A fragment for providing help information.
@@ -25,9 +26,11 @@ import com.magikarp.android.R;
 public class HelpFragment extends Fragment {
 
   @VisibleForTesting
+  Context context;
+  @VisibleForTesting
   FragmentActivity activity;
   @VisibleForTesting
-  Context context;
+  FragmentHelpBinding binding;
 
   /**
    * Default constructor.
@@ -40,11 +43,13 @@ public class HelpFragment extends Fragment {
    *
    * @param activity test variable
    * @param context  test variable
+   * @param binding  test variable
    */
   @VisibleForTesting
-  HelpFragment(FragmentActivity activity, Context context) {
+  HelpFragment(FragmentActivity activity, Context context, FragmentHelpBinding binding) {
     this.activity = activity;
     this.context = context;
+    this.binding = binding;
   }
 
   @Override
@@ -83,14 +88,28 @@ public class HelpFragment extends Fragment {
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.fragment_help, container, false);
+    binding = FragmentHelpBinding.inflate(inflater, container, false);
+    return binding.getRoot();
   }
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    view.findViewById(R.id.call_container).setOnClickListener(this::onCallButtonClicked);
-    view.findViewById(R.id.email_container).setOnClickListener(this::onEmailButtonClicked);
+    binding.callContainer.setOnClickListener(this::onCallButtonClicked);
+    binding.emailContainer.setOnClickListener(this::onEmailButtonClicked);
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    activity = null;
+    context = null;
   }
 
   @VisibleForTesting
@@ -114,8 +133,8 @@ public class HelpFragment extends Fragment {
     if (intent.resolveActivity(context.getPackageManager()) != null) {
       activity.startActivity(intent);
     } else {
-      Toast.makeText(context, context.getString(R.string.failure_no_available_activity),
-          Toast.LENGTH_LONG).show();
+      Snackbar.make(binding.getRoot(), context.getString(R.string.failure_no_available_activity),
+          Snackbar.LENGTH_LONG).show();
     }
   }
 

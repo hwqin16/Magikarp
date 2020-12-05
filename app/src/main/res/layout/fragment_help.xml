@@ -1,119 +1,125 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/settings_view"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/call_container"
+        android:id="@+id/settings_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:minHeight="72dp"
-        android:paddingStart="?listPreferredItemPaddingLeft"
-        android:paddingLeft="?listPreferredItemPaddingLeft"
-        android:paddingEnd="?listPreferredItemPaddingRight"
-        android:paddingRight="?listPreferredItemPaddingRight">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/primary_action1"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="16dp"
-            android:contentDescription="@string/text_call"
-            android:scaleType="centerInside"
-            app:srcCompat="@drawable/ic_call" />
-
-        <LinearLayout
-            android:id="@+id/lines_container1"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/call_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_toEndOf="@+id/primary_action1"
-            android:layout_toRightOf="@+id/primary_action1"
-            android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp">
+            android:layout_alignParentTop="true"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="72dp"
+            android:paddingStart="?listPreferredItemPaddingLeft"
+            android:paddingLeft="?listPreferredItemPaddingLeft"
+            android:paddingEnd="?listPreferredItemPaddingRight"
+            android:paddingRight="?listPreferredItemPaddingRight">
 
-            <TextView
-                android:id="@+id/first_text_view1"
-                style="@style/TextAppearance.AppCompat.Body2"
+            <ImageView
+                android:id="@+id/primary_action1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/text_call"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_call" />
+
+            <LinearLayout
+                android:id="@+id/lines_container1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="@string/text_call" />
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toEndOf="@+id/primary_action1"
+                android:layout_toRightOf="@+id/primary_action1"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
 
-            <TextView
-                android:id="@+id/second_text_view1"
-                style="@style/TextAppearance.AppCompat.Body1"
+                <TextView
+                    android:id="@+id/first_text_view1"
+                    style="@style/TextAppearance.AppCompat.Body2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@string/text_call" />
+
+                <TextView
+                    android:id="@+id/second_text_view1"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@string/text_phone_number" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/email_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/call_container"
+            android:background="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="72dp"
+            android:paddingStart="?listPreferredItemPaddingLeft"
+            android:paddingLeft="?listPreferredItemPaddingLeft"
+            android:paddingEnd="?listPreferredItemPaddingRight"
+            android:paddingRight="?listPreferredItemPaddingRight">
+
+            <ImageView
+                android:id="@+id/primary_action"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/text_email"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_email" />
+
+            <LinearLayout
+                android:id="@+id/lines_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="@string/text_phone_number" />
-        </LinearLayout>
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toEndOf="@+id/primary_action"
+                android:layout_toRightOf="@+id/primary_action"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:id="@+id/first_text_view"
+                    style="@style/TextAppearance.AppCompat.Body2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@string/text_email" />
+
+                <TextView
+                    android:id="@+id/second_text_view"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@string/text_email_address" />
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/email_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/call_container"
-        android:background="?selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:minHeight="72dp"
-        android:paddingStart="?listPreferredItemPaddingLeft"
-        android:paddingLeft="?listPreferredItemPaddingLeft"
-        android:paddingEnd="?listPreferredItemPaddingRight"
-        android:paddingRight="?listPreferredItemPaddingRight">
-
-        <ImageView
-            android:id="@+id/primary_action"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="16dp"
-            android:contentDescription="@string/text_email"
-            android:scaleType="centerInside"
-            app:srcCompat="@drawable/ic_email" />
-
-        <LinearLayout
-            android:id="@+id/lines_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_toEndOf="@+id/primary_action"
-            android:layout_toRightOf="@+id/primary_action"
-            android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp">
-
-            <TextView
-                android:id="@+id/first_text_view"
-                style="@style/TextAppearance.AppCompat.Body2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="@string/text_email" />
-
-            <TextView
-                android:id="@+id/second_text_view"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="@string/text_email_address" />
-        </LinearLayout>
-
-    </RelativeLayout>
-
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -7,7 +7,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
@@ -19,9 +18,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts.GetContent;
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission;
@@ -42,6 +43,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.snackbar.Snackbar;
 import com.magikarp.android.R;
 import com.magikarp.android.data.PostRepository;
 import com.magikarp.android.data.model.DeleteMessageResponse;
@@ -191,6 +193,9 @@ public class PostFragment extends Fragment {
         registerForActivityResult(new RequestPermission(), this::onRequestPermissionResult);
     // Set up fragment to get content (i.e. images).
     getContentLauncher = registerForActivityResult(new GetContent(), this::onGetContentResult);
+    // Intercept back button presses to close the soft keyboard.
+    activity.getOnBackPressedDispatcher()
+        .addCallback(this, new OnBackPressedKeyboardCloser(activity, true));
   }
 
   @Override
@@ -259,8 +264,8 @@ public class PostFragment extends Fragment {
 
     // Set up the image and text views.
     final NetworkImageView imageView = binding.createPostNetworkImage;
-    imageView.setDefaultImageResId(R.drawable.ic_insert_photo);
-    imageView.setErrorImageResId(R.drawable.ic_broken_image);
+    imageView.setDefaultImageResId(R.drawable.background);
+    imageView.setErrorImageResId(R.drawable.background_broken_image);
     final EditText editText = binding.createPostCaption;
     editText.setText(text);
 
@@ -304,14 +309,9 @@ public class PostFragment extends Fragment {
 
   @Override
   public void onSaveInstanceState(@NotNull Bundle bundle) {
-    final String postType = arguments.getString(context.getString(R.string.args_post_type));
-    final String postTypeView = context.getString(R.string.arg_post_type_view);
-
-    if (!postType.equals(postTypeView)) {
-      bundle.putParcelable(SAVE_STATE_LOCATION, location);
-      bundle.putString(SAVE_STATE_IMAGE_URL, imageUrl);
-      bundle.putString(SAVE_STATE_TEXT, binding.createPostCaption.getText().toString());
-    }
+    bundle.putParcelable(SAVE_STATE_LOCATION, location);
+    bundle.putString(SAVE_STATE_IMAGE_URL, imageUrl);
+    bundle.putString(SAVE_STATE_TEXT, binding.createPostCaption.getText().toString());
   }
 
   @Override
@@ -403,8 +403,8 @@ public class PostFragment extends Fragment {
       networkImageView.setVisibility(View.VISIBLE);
       imageView.setVisibility(View.INVISIBLE);
       imageLoader.get(imageUrl, ImageLoader
-          .getImageListener(networkImageView, R.drawable.ic_insert_photo,
-              R.drawable.ic_broken_image));
+          .getImageListener(networkImageView, R.drawable.background,
+              R.drawable.background_broken_image));
       networkImageView.setImageUrl(imageUrl, imageLoader);
     } else {
       networkImageView.setImageUrl(null, null);
@@ -415,7 +415,7 @@ public class PostFragment extends Fragment {
         imageView.setImageBitmap(BitmapFactory.decodeStream(inputStream));
       } catch (final FileNotFoundException exception) {
         this.imageUrl = null;
-        imageView.setImageResource(R.drawable.ic_broken_image);
+        imageView.setImageResource(R.drawable.background_broken_image);
         Toast.makeText(context, context.getString(R.string.failure_load_image), Toast.LENGTH_SHORT)
             .show();
       }
@@ -513,7 +513,6 @@ public class PostFragment extends Fragment {
     }
   }
 
-
   /**
    * Delete a message post from the post repository.
    */
@@ -551,9 +550,9 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onNewMessageResponse(NewMessageResponse response) {
-    Toast.makeText(context, context.getString(R.string.success_new_post), Toast.LENGTH_SHORT)
-        .show();
-    closeFragment();
+    Snackbar.make(activity.findViewById(android.R.id.content), R.string.success_new_post,
+        Snackbar.LENGTH_SHORT).show();
+    activity.onBackPressed();
   }
 
   /**
@@ -563,9 +562,9 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onUpdateMessageResponse(UpdateMessageResponse response) {
-    Toast.makeText(context, context.getString(R.string.success_update_post), Toast.LENGTH_SHORT)
-        .show();
-    closeFragment();
+    Snackbar.make(activity.findViewById(android.R.id.content), R.string.success_update_post,
+        Snackbar.LENGTH_SHORT).show();
+    activity.onBackPressed();
   }
 
   /**
@@ -575,17 +574,8 @@ public class PostFragment extends Fragment {
    */
   @VisibleForTesting
   void onDeleteMessageResponse(DeleteMessageResponse response) {
-    Toast.makeText(context, context.getString(R.string.success_delete_post), Toast.LENGTH_SHORT)
-        .show();
-    closeFragment();
-  }
-
-  /**
-   * Programmatically clean up and close the fragment.
-   */
-  @VisibleForTesting
-  void closeFragment() {
-    // TODO close the keyboard if required
+    Snackbar.make(activity.findViewById(android.R.id.content), R.string.success_delete_post,
+        Snackbar.LENGTH_SHORT).show();
     activity.onBackPressed();
   }
 
@@ -597,4 +587,31 @@ public class PostFragment extends Fragment {
     Toast.makeText(context, context.getString(R.string.failure_network_error), Toast.LENGTH_LONG)
         .show();
   }
+
+  @VisibleForTesting
+  static class OnBackPressedKeyboardCloser extends OnBackPressedCallback {
+
+    private final FragmentActivity activity;
+
+    /**
+     * Create a new keyboard closer.
+     */
+    public OnBackPressedKeyboardCloser(@NonNull FragmentActivity activity, boolean isEnabled) {
+      super(isEnabled);
+      this.activity = activity;
+    }
+
+    @Override
+    public void handleOnBackPressed() {
+      // Close the soft keyboard.
+      final InputMethodManager imm =
+          (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+      imm.hideSoftInputFromWindow(activity.findViewById(android.R.id.content).getWindowToken(), 0);
+      // Reissue back button press to close the fragment.
+      setEnabled(false);
+      activity.onBackPressed();
+    }
+
+  }
+
 }

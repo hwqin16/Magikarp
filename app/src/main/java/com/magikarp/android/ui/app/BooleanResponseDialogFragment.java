@@ -53,9 +53,9 @@ public class BooleanResponseDialogFragment extends DialogFragment {
   @Override
   public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
     final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-    builder.setMessage("Delete post?");
-    builder.setPositiveButton("Delete", this::onPositiveButtonClick);
-    builder.setNegativeButton("Cancel", this::onNegativeButtonClick);
+    builder.setMessage(R.string.dialog_title_delete_post);
+    builder.setPositiveButton(R.string.dialog_button_delete, this::onPositiveButtonClick);
+    builder.setNegativeButton(R.string.dialog_button_cancel, this::onNegativeButtonClick);
     return builder.create();
   }
 

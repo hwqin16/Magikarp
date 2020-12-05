@@ -13,6 +13,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
@@ -50,7 +51,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -133,6 +138,7 @@ public class TestPostFragment {
   public void setup() {
     closeable = MockitoAnnotations.openMocks(this);
     context = ApplicationProvider.getApplicationContext();
+    context.setTheme(R.style.Theme_Magikarp);
     binding = FragmentPostBinding.inflate(LayoutInflater.from(context));
     fragment =
         new PostFragment(
@@ -171,6 +177,8 @@ public class TestPostFragment {
     doReturn(activity).when(spy).requireActivity();
     doReturn(arguments).when(spy).requireArguments();
     doReturn(context).when(spy).requireContext();
+    final OnBackPressedDispatcher dispatcher = mock(OnBackPressedDispatcher.class);
+    when(activity.getOnBackPressedDispatcher()).thenReturn(dispatcher);
 
     assertFalse(spy.hasOptionsMenu());
 
@@ -178,6 +186,7 @@ public class TestPostFragment {
     shadowOf(getMainLooper()).idle();
 
     assertTrue(spy.hasOptionsMenu());
+    verify(dispatcher).addCallback(eq(spy), any(OnBackPressedCallback.class));
   }
 
   @Test
@@ -407,36 +416,14 @@ public class TestPostFragment {
   }
 
   @Test
-  public void testOnSaveInstanceStatePostTypeNew() {
+  public void testOnSaveInstanceState() {
     final Bundle bundle = mock(Bundle.class);
-    when(arguments.getString(context.getString(R.string.args_post_type)))
-        .thenReturn(context.getString(R.string.arg_post_type_new));
 
     fragment.onSaveInstanceState(bundle);
 
-    verify(bundle).putParcelable(anyString(), any());
-  }
-
-  @Test
-  public void testOnSaveInstanceStatePostTypeUpdate() {
-    final Bundle bundle = mock(Bundle.class);
-    when(arguments.getString(context.getString(R.string.args_post_type)))
-        .thenReturn(context.getString(R.string.arg_post_type_update));
-
-    fragment.onSaveInstanceState(bundle);
-
-    verify(bundle).putParcelable(anyString(), any());
-  }
-
-  @Test
-  public void testOnSaveInstanceStatePostTypeView() {
-    final Bundle bundle = mock(Bundle.class);
-    when(arguments.getString(context.getString(R.string.args_post_type)))
-        .thenReturn(context.getString(R.string.arg_post_type_view));
-
-    fragment.onSaveInstanceState(bundle);
-
-    verifyNoInteractions(bundle);
+    verify(bundle).putParcelable(anyString(), eq(location));
+    verify(bundle).putString(anyString(), eq(imageUrl));
+    verify(bundle).putString(anyString(), eq(binding.createPostCaption.getText().toString()));
   }
 
   @Test
@@ -784,7 +771,6 @@ public class TestPostFragment {
   @Test(expected = IllegalArgumentException.class)
   public void testUploadPostInvalidArgument() {
     final String text = "text";
-    final String idToken = context.getString(R.string.dummy_id_token);
     final String userId = "userId";
     fragment.location = new LatLng(1.0d, 2.0d);
     when(arguments.getString(context.getString(R.string.args_post_type)))
@@ -850,8 +836,6 @@ public class TestPostFragment {
     when(result.getBoolean(anyString())).thenReturn(true);
     final String userId = "userId";
     when(googleSignInAccount.getId()).thenReturn(userId);
-    final Message message =
-            new Message("id", "ignoreUserId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
     when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(null);
 
     fragment.onBooleanResult(requestKey, result);
@@ -864,10 +848,7 @@ public class TestPostFragment {
     final String requestKey = "requestKey";
     final Bundle result = mock(Bundle.class);
     when(result.getBoolean(anyString())).thenReturn(true);
-    final String userId = "userId";
     when(googleSignInAccount.getId()).thenReturn(null);
-    final Message message =
-            new Message("id", "ignoreUserId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
     when(arguments.getParcelable(context.getString(R.string.args_message))).thenReturn(null);
 
     fragment.onBooleanResult(requestKey, result);
@@ -878,39 +859,35 @@ public class TestPostFragment {
   @Test
   public void testOnNewMessageResponse() {
     NewMessageResponse response = mock(NewMessageResponse.class);
+    when(activity.findViewById(android.R.id.content)).thenReturn(new CoordinatorLayout(context));
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).closeFragment();
+    doNothing().when(activity).onBackPressed();
 
     spy.onNewMessageResponse(response);
 
-    verify(spy).closeFragment();
+    verify(activity).onBackPressed();
   }
 
   @Test
   public void testOnUpdateMessageResponse() {
     UpdateMessageResponse response = mock(UpdateMessageResponse.class);
+    when(activity.findViewById(android.R.id.content)).thenReturn(new CoordinatorLayout(context));
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).closeFragment();
+    doNothing().when(activity).onBackPressed();
 
     spy.onUpdateMessageResponse(response);
 
-    verify(spy).closeFragment();
+    verify(activity).onBackPressed();
   }
 
   @Test
   public void testOnDeleteMessageResponse() {
     DeleteMessageResponse response = mock(DeleteMessageResponse.class);
+    when(activity.findViewById(android.R.id.content)).thenReturn(new CoordinatorLayout(context));
     final PostFragment spy = spy(fragment);
-    doNothing().when(spy).closeFragment();
+    doNothing().when(activity).onBackPressed();
 
     spy.onDeleteMessageResponse(response);
-
-    verify(spy).closeFragment();
-  }
-
-  @Test
-  public void testCloseFragment() {
-    fragment.closeFragment();
 
     verify(activity).onBackPressed();
   }
@@ -922,6 +899,24 @@ public class TestPostFragment {
     fragment.onNetworkError(error);
 
     // Confirm method completes.
+  }
+
+  @Test
+  public void testHandleOnBackPressed() {
+    final PostFragment.OnBackPressedKeyboardCloser callback =
+        new PostFragment.OnBackPressedKeyboardCloser(activity, true);
+    final InputMethodManager manager = mock(InputMethodManager.class);
+    when(activity.getSystemService(Context.INPUT_METHOD_SERVICE)).thenReturn(manager);
+    final View view = mock(View.class);
+    when(activity.findViewById(anyInt())).thenReturn(view);
+    doNothing().when(activity).onBackPressed();
+
+    callback.handleOnBackPressed();
+
+    verify(manager).hideSoftInputFromWindow(any(), anyInt());
+    verify(view).getWindowToken();
+    verify(activity).onBackPressed();
+
   }
 
 }

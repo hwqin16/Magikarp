@@ -2,5 +2,6 @@
 <resources>
 
     <integer name="bitmap_cache_size">4194304</integer>
+    <integer name="maximum_post_length">280</integer>
 
 </resources>

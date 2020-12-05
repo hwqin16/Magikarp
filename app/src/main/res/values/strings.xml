@@ -51,14 +51,15 @@
     <string name="text_email">Email</string>
     <string name="text_email_address">help@example.com</string>
 
+    <!-- Dialog UI -->
+    <string name="dialog_title_delete_post">Delete post?</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_button_delete">Delete</string>
+
     <!-- Editable text hints -->
     <string name="edit_text_hint">Enter text here</string>
 
-
-    <!-- TODO: Everything below here was created by auto-generated templates -->
-
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <!-- Navigation drawer -->
     <string name="nav_header_desc">Navigation header</string>
 
     <!-- Preference Titles -->

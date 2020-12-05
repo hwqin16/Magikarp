@@ -15,9 +15,15 @@
         android:title="@string/upload_post"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/menu_get_directions"
+        android:icon="@drawable/ic_directions"
+        android:orderInCategory="102"
+        android:title="@string/get_directions"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/menu_delete"
         android:icon="@drawable/ic_delete"
-        android:orderInCategory="102"
+        android:orderInCategory="103"
         android:title="@string/delete_post"
         app:showAsAction="never" />
 
