@@ -1,6 +1,7 @@
 package com.magikarp.android.ui.app;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -12,7 +13,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.robolectric.annotation.Config.OLDEST_SDK;
 import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
@@ -27,11 +27,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import androidx.fragment.app.FragmentActivity;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.magikarp.android.R;
+import com.magikarp.android.databinding.FragmentHelpBinding;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,13 +56,17 @@ public class TestHelpFragment {
 
   private Context context;
 
+  private FragmentHelpBinding binding;
+
   private HelpFragment fragment;
 
   @Before
   public void setup() {
     closeable = MockitoAnnotations.openMocks(this);
     context = ApplicationProvider.getApplicationContext();
-    fragment = new HelpFragment(activity, context);
+    context.setTheme(R.style.Theme_Magikarp);
+    binding = FragmentHelpBinding.inflate(LayoutInflater.from(context));
+    fragment = new HelpFragment(activity, context, binding);
   }
 
   @After
@@ -132,13 +136,12 @@ public class TestHelpFragment {
 
   @Test
   public void testOnCreateView() {
-    final LayoutInflater inflater = mock(LayoutInflater.class);
-    final ViewGroup container = mock(ViewGroup.class);
+    final LayoutInflater inflater = LayoutInflater.from(context);
     final Bundle savedInstanceState = mock(Bundle.class);
 
-    fragment.onCreateView(inflater, container, savedInstanceState);
+    fragment.onCreateView(inflater, null, savedInstanceState);
 
-    verify(inflater).inflate(anyInt(), eq(container), eq(false));
+    assert (fragment.binding != binding);
   }
 
   @Test
@@ -150,6 +153,21 @@ public class TestHelpFragment {
     fragment.onViewCreated(view, savedInstanceState);
 
     verify(view, times(2)).findViewById(anyInt());
+  }
+
+  @Test
+  public void testOnDestroyView() {
+    fragment.onDestroyView();
+
+    assertNull(fragment.binding);
+  }
+
+  @Test
+  public void testOnDestroy() {
+    fragment.onDestroy();
+
+    assertNull(fragment.activity);
+    assertNull(fragment.context);
   }
 
   @Test
