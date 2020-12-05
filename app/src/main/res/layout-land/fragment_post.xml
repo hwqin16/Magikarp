@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.posts.PostFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,7 +17,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="3:4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/background">
 
             <com.android.volley.toolbox.NetworkImageView
                 android:id="@+id/create_post_network_image"
@@ -37,26 +39,30 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/post_container"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/image_container"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context=".ui.posts.PostFragment">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/create_post_caption"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:autofillHints="post_text"
                 android:hint="@string/edit_text_hint"
-                android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
-                android:maxLength="@integer/maximum_post_length"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/image_container" />
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/maximum_post_length">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="@integer/maximum_post_length" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.core.widget.NestedScrollView>
 

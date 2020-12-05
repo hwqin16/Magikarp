@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
@@ -44,6 +43,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.magikarp.android.R;
 import com.magikarp.android.data.PostRepository;
 import com.magikarp.android.data.model.DeleteMessageResponse;
@@ -239,6 +239,24 @@ public class PostFragment extends Fragment {
   public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState) {
     binding = FragmentPostBinding.inflate(inflater, container, false);
+
+    // Disable editing if UI is read only.
+    final String postType = arguments.getString(context.getString(R.string.args_post_type));
+    final String postTypeView = context.getString(R.string.arg_post_type_view);
+    if (postType.equals(postTypeView)) {
+      final TextInputLayout textInputLayout = binding.createPostCaption;
+      textInputLayout.setEnabled(false);
+      textInputLayout.setFocusable(false);
+      textInputLayout.setFocusableInTouchMode(false);
+      textInputLayout.setCounterEnabled(false);
+      textInputLayout.setHintAnimationEnabled(false);
+      // Correct light gray color of default disabled text.
+      binding.editText.setTextColor(context.getResources().getColor(android.R.color.black));
+    } else {
+      // Enable click listener for selecting an image.
+      binding.imageContainer.setOnClickListener(v -> getContentLauncher.launch(MEDIA_TYPE_IMAGE));
+    }
+
     return binding.getRoot();
   }
 
@@ -266,18 +284,7 @@ public class PostFragment extends Fragment {
     final NetworkImageView imageView = binding.createPostNetworkImage;
     imageView.setDefaultImageResId(R.drawable.background);
     imageView.setErrorImageResId(R.drawable.background_broken_image);
-    final EditText editText = binding.createPostCaption;
-    editText.setText(text);
-
-    // Disable editing if UI is read only.
-    if (postType.equals(postTypeView)) {
-      editText.setEnabled(false);
-      editText.setFocusable(false);
-      editText.setFocusableInTouchMode(false);
-    } else {
-      // Enable click listener for selecting an image.
-      binding.imageContainer.setOnClickListener(v -> getContentLauncher.launch(MEDIA_TYPE_IMAGE));
-    }
+    binding.editText.setText(text);
 
     // Load image.
     if (url != null) {
@@ -311,7 +318,7 @@ public class PostFragment extends Fragment {
   public void onSaveInstanceState(@NotNull Bundle bundle) {
     bundle.putParcelable(SAVE_STATE_LOCATION, location);
     bundle.putString(SAVE_STATE_IMAGE_URL, imageUrl);
-    bundle.putString(SAVE_STATE_TEXT, binding.createPostCaption.getText().toString());
+    bundle.putString(SAVE_STATE_TEXT, require(binding.editText.getText()).toString());
   }
 
   @Override
@@ -447,9 +454,9 @@ public class PostFragment extends Fragment {
   @VisibleForTesting
   void onPostButtonClick() {
     // Check for valid input and update post repository.
-    final CharSequence text = binding.createPostCaption.getText();
+    final CharSequence text = binding.editText.getText();
     if (imageUrl != null && !TextUtils.isEmpty(text) && location != null) {
-      uploadFile(text.toString());
+      uploadFile(require(text).toString());
     } else {
       Toast
           .makeText(context, context.getString(R.string.failure_fields_missing), Toast.LENGTH_SHORT)
