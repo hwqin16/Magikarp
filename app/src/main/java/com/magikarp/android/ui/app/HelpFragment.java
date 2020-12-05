@@ -77,8 +77,12 @@ public class HelpFragment extends Fragment {
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     final int itemId = item.getItemId();
     if (itemId == R.id.menu_terms_of_service) {
+      final Uri uri = Uri.parse(context.getString(R.string.server_terms_of_service));
+      startActivityFromIntent(new Intent(Intent.ACTION_VIEW, uri));
       return true;
     } else if (itemId == R.id.menu_privacy_policy) {
+      final Uri uri = Uri.parse(context.getString(R.string.server_privacy_policy));
+      startActivityFromIntent(new Intent(Intent.ACTION_VIEW, uri));
       return true;
     } else {
       return super.onOptionsItemSelected(item);

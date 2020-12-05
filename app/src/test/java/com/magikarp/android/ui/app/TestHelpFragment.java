@@ -108,9 +108,9 @@ public class TestHelpFragment {
     final HelpFragment spy = spy(fragment);
     doNothing().when(spy).startActivityFromIntent(any(Intent.class));
 
-    spy.onOptionsItemSelected(item);
-
     assertTrue(spy.onOptionsItemSelected(item));
+
+    verify(spy).startActivityFromIntent(any(Intent.class));
   }
 
   @Test
@@ -120,9 +120,9 @@ public class TestHelpFragment {
     final HelpFragment spy = spy(fragment);
     doNothing().when(spy).startActivityFromIntent(any(Intent.class));
 
-    spy.onOptionsItemSelected(item);
-
     assertTrue(spy.onOptionsItemSelected(item));
+
+    verify(spy).startActivityFromIntent(any(Intent.class));
   }
 
   @Test
