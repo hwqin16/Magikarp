@@ -1,11 +1,16 @@
 package com.magikarp.android.ui.maps;
 
+import static com.magikarp.android.ui.maps.MapsViewModel.KEY_MESSAGES;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
+import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -47,7 +52,7 @@ public class TestMapsViewModel {
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testGetMessages() {
     final MutableLiveData messages = new MutableLiveData();
-    when(savedStateHandle.getLiveData(MapsViewModel.KEY_MESSAGES, Collections.emptyList()))
+    when(savedStateHandle.getLiveData(KEY_MESSAGES, Collections.emptyList()))
         .thenReturn(messages);
 
     assert (viewModel.getMessages() == messages);
@@ -55,13 +60,14 @@ public class TestMapsViewModel {
 
   @Test
   public void testSetMapsQuery() {
-    String userId = "testUserId";
+    final String userId = "testUserId";
     LatLngBounds bounds = new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(1.0, 1.0));
     int maxRecords = 5;
+    final ErrorListener errorListener = mock(ErrorListener.class);
 
-    viewModel.setMapsQuery(userId, bounds, maxRecords);
+    viewModel.setMapsQuery(userId, bounds, maxRecords, errorListener);
 
-    verify(mapsRepository).getMessages(userId, bounds, maxRecords, viewModel, viewModel);
+    verify(mapsRepository).getMessages(userId, bounds, maxRecords, viewModel, errorListener);
   }
 
   @Test
@@ -70,24 +76,32 @@ public class TestMapsViewModel {
 
     viewModel.onResponse(getMessagesResponse);
 
-    verify(savedStateHandle).set("messages", Collections.emptyList());
+    verify(savedStateHandle, never()).set(any(), any());
   }
 
   @Test
-  public void testOnResponseMessagesNotNull() {
+  public void testOnResponseMessagesEmpty() {
     final List<Message> messages = new ArrayList<>();
     when(getMessagesResponse.getMessages()).thenReturn(messages);
 
     viewModel.onResponse(getMessagesResponse);
 
-    verify(savedStateHandle).set("messages", messages);
+    verify(savedStateHandle, never()).set(any(), any());
   }
 
   @Test
-  public void testOnErrorResponse() {
-    viewModel.onErrorResponse(volleyError);
+  public void testOnResponseMessagesWithItems() {
+    final Message message =
+        new Message("id", "userId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
+    final List<Message> messages = new ArrayList<>(3);
+    messages.add(message);
+    messages.add(message);
+    messages.add(message);
+    when(getMessagesResponse.getMessages()).thenReturn(messages);
 
-    verify(savedStateHandle).set("messages", Collections.emptyList());
+    viewModel.onResponse(getMessagesResponse);
+
+    verify(savedStateHandle).set(KEY_MESSAGES, messages);
   }
 
 }

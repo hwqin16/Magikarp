@@ -10,7 +10,6 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
-import com.android.volley.VolleyError;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.magikarp.android.data.MapsRepository;
 import com.magikarp.android.data.model.GetMessagesResponse;
@@ -22,7 +21,7 @@ import java.util.List;
  * Class to provide map items from the map item repository.
  */
 public class MapsViewModel extends ViewModel
-    implements Response.Listener<GetMessagesResponse>, ErrorListener {
+    implements Response.Listener<GetMessagesResponse> {
 
   @VisibleForTesting
   static final String KEY_MESSAGES = "messages";
@@ -57,24 +56,23 @@ public class MapsViewModel extends ViewModel
   /**
    * Set the query to send to the maps repository.
    *
-   * @param userId     user ID
-   * @param bounds     the geographic bounds of the query
-   * @param maxRecords the maximum number of records to return
+   * @param userId        user ID
+   * @param bounds        the geographic bounds of the query
+   * @param maxRecords    the maximum number of records to return
+   * @param errorListener error listener
    */
-  public void setMapsQuery(@Nullable String userId, @NonNull LatLngBounds bounds, int maxRecords) {
-    mapsRepository.getMessages(userId, bounds, maxRecords, this, this);
+  public void setMapsQuery(@Nullable String userId, @NonNull LatLngBounds bounds, int maxRecords,
+                           @Nullable ErrorListener errorListener) {
+    mapsRepository.getMessages(userId, bounds, maxRecords, this, errorListener);
   }
 
   @Override
   public void onResponse(GetMessagesResponse response) {
     final List<Message> messages = response.getMessages();
-    // Messages list from the server should not be null, but checking will ensure app doesn't crash.
-    savedStateHandle.set(KEY_MESSAGES, (messages == null) ? Collections.emptyList() : messages);
-  }
-
-  @Override
-  public void onErrorResponse(VolleyError error) {
-    savedStateHandle.set(KEY_MESSAGES, Collections.emptyList());
+    // Only update messages if there is new content.
+    if ((messages != null) && !messages.isEmpty()) {
+      savedStateHandle.set(KEY_MESSAGES, messages);
+    }
   }
 
 }
