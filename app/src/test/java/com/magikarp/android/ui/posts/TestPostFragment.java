@@ -733,7 +733,9 @@ public class TestPostFragment {
     final String fileUrl = "file:///example.jpg";
     fragment.imageUrl = fileUrl;
     final PostFragment spy = spy(fragment);
-    doThrow(SecurityException.class).when(spy).uploadPost(any());
+    doNothing().when(spy).uploadPost(any());
+    doThrow(SecurityException.class).when(postRepository)
+        .uploadFile(any(Uri.class), anyString(), any());
 
     spy.uploadFile("text");
 
