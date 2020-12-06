@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import com.android.volley.VolleyError;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -33,6 +34,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.magikarp.android.R;
 import com.magikarp.android.data.model.Message;
 import com.magikarp.android.ui.app.GoogleSignInViewModel;
@@ -50,6 +52,8 @@ public class MapsFragment extends Fragment
 
   @VisibleForTesting
   ActivityResultLauncher<String> requestPermissionLauncher;
+  @VisibleForTesting
+  boolean wasQueryError = false;
   @VisibleForTesting
   Bundle arguments;
   @VisibleForTesting
@@ -220,7 +224,17 @@ public class MapsFragment extends Fragment
     final boolean isUserData = arguments.getBoolean(context.getString(R.string.args_is_user_data));
     final String id = (isUserData) ? googleSignInAccount.getId() : null;
     mapsViewModel.setMapsQuery(id, googleMap.getProjection().getVisibleRegion().latLngBounds,
-        maxRecords);
+        maxRecords, this::onMapsQueryError);
+  }
+
+  @VisibleForTesting
+  void onMapsQueryError(VolleyError error) {
+    // Don't show error if already shown once.
+    if (!wasQueryError && (activity != null)) {
+      Snackbar.make(activity.findViewById(android.R.id.content), R.string.failure_network_error,
+          Snackbar.LENGTH_LONG).show();
+      wasQueryError = true;
+    }
   }
 
   /**
@@ -261,6 +275,8 @@ public class MapsFragment extends Fragment
             .position(new LatLng(message.getLatitude(), message.getLongitude())));
         marker.setTag(message);
       }
+      // Reset query error status.
+      wasQueryError = false;
     }
   }
 

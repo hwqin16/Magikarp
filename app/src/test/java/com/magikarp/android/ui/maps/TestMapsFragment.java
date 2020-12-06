@@ -16,6 +16,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -38,6 +39,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
@@ -45,6 +47,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.VolleyError;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
@@ -106,6 +110,7 @@ public class TestMapsFragment {
   public void setup() {
     closeable = MockitoAnnotations.openMocks(this);
     context = ApplicationProvider.getApplicationContext();
+    context.setTheme(R.style.Theme_Magikarp);
     fragment =
         new MapsFragment(requestPermissionLauncher, arguments, context, activity, googleMap,
             googleSignInAccount, mapsViewModel, preferences);
@@ -296,8 +301,9 @@ public class TestMapsFragment {
 
   @Test
   public void testOnCameraIdleIsUserData() {
+    final String userId = "userId";
     when(arguments.getBoolean(context.getString(R.string.args_is_user_data))).thenReturn(true);
-    when(googleSignInAccount.getId()).thenReturn("userId");
+    when(googleSignInAccount.getId()).thenReturn(userId);
     final LatLngBounds latLngBounds =
         new LatLngBounds(new LatLng(1.0d, 2.0d), new LatLng(3.0d, 4.0d));
     final VisibleRegion visibleRegion =
@@ -310,7 +316,8 @@ public class TestMapsFragment {
 
     fragment.onCameraIdle();
 
-    verify(mapsViewModel).setMapsQuery("userId", latLngBounds, 100);
+    verify(mapsViewModel)
+        .setMapsQuery(eq(userId), eq(latLngBounds), eq(100), any(ErrorListener.class));
   }
 
   @Test
@@ -329,7 +336,42 @@ public class TestMapsFragment {
 
     fragment.onCameraIdle();
 
-    verify(mapsViewModel).setMapsQuery(null, latLngBounds, 100);
+    verify(mapsViewModel)
+        .setMapsQuery(eq(null), eq(latLngBounds), eq(100), any(ErrorListener.class));
+  }
+
+  @Test
+  public void testOnMapsQueryError() {
+    final VolleyError error = mock(VolleyError.class);
+    fragment.wasQueryError = false;
+    when(activity.findViewById(android.R.id.content)).thenReturn(new CoordinatorLayout(context));
+
+    fragment.onMapsQueryError(error);
+
+    verify(activity).findViewById(android.R.id.content);
+    assertTrue(fragment.wasQueryError);
+  }
+
+  @Test
+  public void testOnMapsQueryErrorWasQueryError() {
+    final VolleyError error = mock(VolleyError.class);
+    fragment.wasQueryError = true;
+    when(activity.findViewById(android.R.id.content)).thenReturn(new CoordinatorLayout(context));
+
+    fragment.onMapsQueryError(error);
+
+    verify(activity, never()).findViewById(anyInt());
+  }
+
+  @Test
+  public void testOnMapsQueryErrorActivityNull() {
+    final VolleyError error = mock(VolleyError.class);
+    fragment.wasQueryError = false;
+    fragment.activity = null;
+
+    fragment.onMapsQueryError(error);
+
+    assertFalse(fragment.wasQueryError);
   }
 
   @Test
@@ -399,19 +441,21 @@ public class TestMapsFragment {
     messages.add(message);
     final Marker marker = mock(Marker.class);
     when(googleMap.addMarker(any(MarkerOptions.class))).thenReturn(marker);
+    fragment.wasQueryError = true;
 
     fragment.onMessagesChanged(messages);
 
     verify(googleMap).clear();
     verify(googleMap, times(3)).addMarker(any(MarkerOptions.class));
     verify(marker, times(3)).setTag(message);
+    assertFalse(fragment.wasQueryError);
   }
 
   @Test
   public void testOnMessagesChangedGoogleMapNull() {
     final Message message =
         new Message("id", "userId", "imageUrl", "text", 1.0d, 2.0d, "timestamp");
-    List<Message> messages = new ArrayList<>(3);
+    final List<Message> messages = new ArrayList<>(3);
     messages.add(message);
     messages.add(message);
     messages.add(message);
