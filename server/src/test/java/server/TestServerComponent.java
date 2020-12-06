@@ -77,6 +77,26 @@ public class TestServerComponent {
 
   @Test
   @Order(3)
+  public void getByBoundingBoxAtEdgesTest() {
+    FindMessagesByBoundingBoxRequest request = new FindMessagesByBoundingBoxRequest(
+        -90.0,
+        90.0,
+        -180.0,
+        180.0,
+        0
+    );
+    HttpResponse<String> response = Unirest.post(endpoint)
+        .body(gson.toJson(request))
+        .asString();
+
+    MessagesResponse messages = gson.fromJson(response.getBody(), MessagesResponse.class);
+
+    assertEquals(0, messages.getMessages().size());
+    assertEquals(0, messages.getRecordCount());
+  }
+
+  @Test
+  @Order(4)
   public void getByBoundingBoxLatitudeFlippedTest() {
     FindMessagesByBoundingBoxRequest request = new FindMessagesByBoundingBoxRequest(
         helper.getLatitude() + 0.5,
@@ -96,7 +116,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(4)
+  @Order(5)
   public void getByBoundingBoxLongitudeFlippedTest() {
     FindMessagesByBoundingBoxRequest request = new FindMessagesByBoundingBoxRequest(
         helper.getLatitude() - 0.5,
@@ -116,7 +136,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(5)
+  @Order(6)
   public void updatePostTestFail() {
     String recordId = getFirstRecordIdFromHelper();
 
@@ -133,7 +153,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(6)
+  @Order(7)
   public void updatePostTest() {
     String recordId = getFirstRecordIdFromHelper();
 
@@ -150,7 +170,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(7)
+  @Order(8)
   public void getByUserIdTest() {
     HttpResponse<String> response =
         Unirest.post(endpoint + helper.getUserId()).asString();
@@ -165,7 +185,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(8)
+  @Order(9)
   public void deletePostTestFailed() {
     String recordId = getFirstRecordIdFromHelper();
 
@@ -178,7 +198,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(9)
+  @Order(10)
   public void deletePostTest() {
     String recordId = getFirstRecordIdFromHelper();
 
@@ -191,7 +211,7 @@ public class TestServerComponent {
   }
 
   @Test
-  @Order(10)
+  @Order(11)
   public void getByBoundingBoxInvalidInputsTest() {
     String invalidLatitudeBottom = "Invalid latitude_bottom";
     String invalidLatitudeTop = "Invalid latitude_top";
