@@ -420,7 +420,7 @@ public class PostFragment extends Fragment {
       try {
         final InputStream inputStream = contentResolver.openInputStream(imageUri);
         imageView.setImageBitmap(BitmapFactory.decodeStream(inputStream));
-      } catch (final FileNotFoundException exception) {
+      } catch (FileNotFoundException | SecurityException exception) {
         this.imageUrl = null;
         imageView.setImageResource(R.drawable.background_broken_image);
         Toast.makeText(context, context.getString(R.string.failure_load_image), Toast.LENGTH_SHORT)

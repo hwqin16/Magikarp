@@ -596,6 +596,16 @@ public class TestPostFragment {
   }
 
   @Test
+  public void testLoadImageFileSchemaSecurityException() throws FileNotFoundException {
+    final String imageUrl = "file:///images/image.png";
+    doThrow(SecurityException.class).when(contentResolver).openInputStream(any(Uri.class));
+
+    fragment.loadImage(imageUrl);
+
+    assertNull(fragment.imageUrl);
+  }
+
+  @Test
   public void testOnLocationButtonClickLocationListenerNotNullWithLocation() {
     final Location location = mock(Location.class);
     when(location.getLatitude()).thenReturn(1.0d);
