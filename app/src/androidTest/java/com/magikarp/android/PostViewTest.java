@@ -49,10 +49,10 @@ public class PostViewTest {
 
     mainActivity.getScenario().onActivity(activity -> {
       final View mapContainer = activity.findViewById(R.id.map_container);
-      final MapsFragment fragment = (MapsFragment) FragmentManager.findFragment(mapContainer);
+      final MapsFragment fragment = FragmentManager.findFragment(mapContainer);
       fragment.onMarkerClick(marker);
     });
 
-    onView(withId(R.id.create_post_caption)).check(matches(isDisplayed())).check(matches(withText(text)));
+    onView(withId(R.id.edit_text)).check(matches(isDisplayed())).check(matches(withText(text)));
   }
 }
