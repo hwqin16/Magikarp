@@ -23,7 +23,6 @@ import com.magikarp.android.di.HiltQualifiers.UrlDeleteMessage;
 import com.magikarp.android.di.HiltQualifiers.UrlNewMessage;
 import com.magikarp.android.di.HiltQualifiers.UrlUpdateMessage;
 import com.magikarp.android.network.GsonRequest;
-import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -157,9 +156,10 @@ public class PostRepository {
    * @param fileUri       the URI of the image on the local device
    * @param fileExtension file extension of file
    * @param listener      listener for uploaded URI response
+   * @throws SecurityException if a security violation occurs
    */
   public void uploadFile(@NonNull Uri fileUri, @NonNull String fileExtension,
-                         @Nullable UploadUriListener listener) {
+                         @Nullable UploadUriListener listener) throws SecurityException {
     final StorageReference reference = storageReference
         .child(IMAGES_DIRECTORY + fileNameGenerator.getFileName(fileUri, fileExtension));
     final UploadTask uploadTask = reference.putFile(fileUri);

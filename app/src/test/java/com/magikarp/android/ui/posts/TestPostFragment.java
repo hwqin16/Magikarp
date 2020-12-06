@@ -729,6 +729,20 @@ public class TestPostFragment {
   }
 
   @Test
+  public void testUploadFileFileSchemeThrowsSecurityException() {
+    final String fileUrl = "file:///example.jpg";
+    fragment.imageUrl = fileUrl;
+    final PostFragment spy = spy(fragment);
+    doThrow(SecurityException.class).when(spy).uploadPost(any());
+
+    spy.uploadFile("text");
+
+    verify(postRepository).uploadFile(eq(Uri.parse(fileUrl)), anyString(),
+        any(UploadUriListener.class));
+    verify(spy, never()).uploadPost(any());
+  }
+
+  @Test
   public void testOnFileUploaded() {
     final Uri originalUri = mock(Uri.class);
     final Uri uploadedUri = Uri.parse("http://www.example.com");
