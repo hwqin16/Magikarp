@@ -83,7 +83,7 @@ public class PostEditorTest {
     final String content = "Some Content Here";
     onView(withId(R.id.menu_upload_content)).check(matches(isDisplayed()));
     onView(withId(R.id.menu_get_location)).check(matches(isDisplayed()));
-    onView(withId(R.id.create_post_caption)).perform(typeText(content))
+    onView(withId(R.id.edit_text)).perform(typeText(content))
         .check(matches(isDisplayed())).check(matches(withText(content)));
   }
 
