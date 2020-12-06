@@ -472,7 +472,13 @@ public class PostFragment extends Fragment {
     // Check for a image URI on local filesystem and upload to server.
     final Uri uri = Uri.parse(imageUrl);
     if (!uri.getScheme().contains(URI_SCHEME_HTTP)) {
-      postRepository.uploadFile(uri, "jpg", this::onFileUploaded);
+      try {
+        postRepository.uploadFile(uri, "jpg", this::onFileUploaded);
+      } catch (SecurityException exception) {
+        binding.createPostLocalImage.setImageResource(R.drawable.background_broken_image);
+        Toast.makeText(context, context.getString(R.string.failure_load_image), Toast.LENGTH_LONG)
+            .show();
+      }
     } else {
       uploadPost(text);
     }
