@@ -7,7 +7,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -45,6 +44,7 @@ public class MainActivityTest {
    */
   @Test
   public void testOpenDefaultDrawerNotLoggedIn() {
+    intentsRule.getScenario().onActivity(MainActivity::setLoggedOutUi);
     onView(withId(R.id.map_container)).check(matches(isDisplayed()));
     onView(withContentDescription(R.string.nav_app_bar_open_drawer_description))
         .check(matches(isDisplayed()));
