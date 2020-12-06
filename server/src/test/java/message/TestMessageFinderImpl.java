@@ -96,6 +96,16 @@ public class TestMessageFinderImpl {
   }
 
   @Test
+  public void testIsOnBoundedBoxEdgeWithWrap() {
+    assertTrue(MessageFinderImpl.isInsideBoundedBox(0.0, 0.0, 0.0, true));
+  }
+
+  @Test
+  public void testIsOnBoundedBoxEdgeWithoutWrap() {
+    assertTrue(MessageFinderImpl.isInsideBoundedBox(0.0, 0.0, 0.0, false));
+  }
+
+  @Test
   public void testFilterMessageInBoundedBox() {
     Message message = mock(Message.class);
     when(message.getLatitude()).thenReturn(0.0);
@@ -126,6 +136,17 @@ public class TestMessageFinderImpl {
     GeoPoint greaterPoint = new GeoPoint(1.0, 1.0);
 
     assertFalse(MessageFinderImpl.filterMessage(message, lesserPoint, greaterPoint, false, false));
+  }
+
+  @Test
+  public void testFilterMessageOnBoundedBox() {
+    Message message = mock(Message.class);
+    when(message.getLatitude()).thenReturn(0.0);
+    when(message.getLongitude()).thenReturn(0.0);
+    GeoPoint lesserPoint = new GeoPoint(0.0, 0.0);
+    GeoPoint greaterPoint = new GeoPoint(0.0, 0.0);
+
+    assertTrue(MessageFinderImpl.filterMessage(message, lesserPoint, greaterPoint, false, false));
   }
 
   /**
@@ -187,6 +208,43 @@ public class TestMessageFinderImpl {
     MessageFinderImpl messageFinder = new MessageFinderImpl(mockFirestore);
 
     int limit = 10;
+    List<Message> messages = messageFinder.findByBoundingBox(
+        new GeoPoint(-90, -180),
+        new GeoPoint(90, 180),
+        limit,
+        false,
+        false
+    );
+
+    assertEquals(documentDataList.size(), messages.size());
+    for (int i = 0; i < messages.size(); i++) {
+      assertMessageEqualToDocumentData(messages.get(i), documentDataList.get(i));
+    }
+  }
+
+  @Test
+  public void testFindByBoundingBoxAtLimit() throws ExecutionException, InterruptedException {
+    List<Map<String, Object>> documentDataList = Arrays.asList(
+        getRandomDocumentData(),
+        getRandomDocumentData(),
+        getRandomDocumentData(),
+        getRandomDocumentData(),
+        getRandomDocumentData()
+    );
+    List<QueryDocumentSnapshot> mockQueryDocumentSnapshots =
+        getMockQueryDocumentSnapshotsFromDocumentDataList(documentDataList);
+    QuerySnapshot mockQuerySnapshot = mock(QuerySnapshot.class);
+    when(mockQuerySnapshot.getDocuments()).thenReturn(mockQueryDocumentSnapshots);
+    SettableApiFuture<QuerySnapshot> futureMockQuerySnapshot = SettableApiFuture.create();
+    futureMockQuerySnapshot.set(mockQuerySnapshot);
+    CollectionReference mockMessageCollection = mock(CollectionReference.class);
+    when(mockMessageCollection.get()).thenReturn(futureMockQuerySnapshot);
+    Firestore mockFirestore = mock(Firestore.class);
+    when(mockFirestore.collection(Constants.COLLECTION_PATH)).thenReturn(mockMessageCollection);
+
+    MessageFinderImpl messageFinder = new MessageFinderImpl(mockFirestore);
+
+    int limit = 5;
     List<Message> messages = messageFinder.findByBoundingBox(
         new GeoPoint(-90, -180),
         new GeoPoint(90, 180),
